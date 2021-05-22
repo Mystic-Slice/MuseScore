@@ -190,9 +190,7 @@ InspectorSectionView {
                 RadioButtonGroup {
                     id: horizontalAlignmentButtonList
 
-                    anchors.left: parent.left
-                    anchors.right: parent.horizontalCenter
-                    anchors.rightMargin: 2
+                     anchors.horizontalCenter: parent.horizontalCenter
 
                     height: 30
 
@@ -230,9 +228,8 @@ InspectorSectionView {
                 RadioButtonGroup {
                     id: verticalAlignmentButtonList
 
-                    anchors.left: parent.horizontalCenter
-                    anchors.leftMargin: 2
-                    anchors.right: parent.right
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.top: horizontalAlignmentButtonList.bottom
 
                     height: 30
 
