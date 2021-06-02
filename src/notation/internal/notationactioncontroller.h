@@ -150,6 +150,7 @@ private:
     void resetBeamMode();
     void resetShapesAndPosition();
 
+    void openEditChordSymbolDialog();
     void openEditStyleDialog();
     void openPageSettingsDialog();
     void openStaffProperties();

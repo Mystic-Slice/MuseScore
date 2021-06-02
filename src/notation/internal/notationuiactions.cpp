@@ -207,6 +207,11 @@ const UiActionList NotationUiActions::m_actions = {
              QT_TRANSLATE_NOOP("action", "Delete the selected element(s)"),
              IconCode::Code::DELETE_TANK
              ),
+    UiAction("edit-chordsymbol",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Chord Symbol editor"),
+             QT_TRANSLATE_NOOP("action", "Chord symbol style editor")
+             ),
     UiAction("edit-style",
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Style..."),

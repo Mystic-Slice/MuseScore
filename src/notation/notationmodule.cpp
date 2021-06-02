@@ -111,6 +111,8 @@ void NotationModule::resolveImports()
 
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
     if (ir) {
+        ir->registerUri(Uri("musescore://notation/chordsymbolstyleeditor"),
+                        ContainerMeta(ContainerType::QmlDialog,"MuseScore/NotationScene/ChordSymbolStyleEditor.qml"));
         ir->registerUri(Uri("musescore://notation/style"),
                         ContainerMeta(ContainerType::QWidgetDialog, qRegisterMetaType<EditStyle>("EditStyle")));
 

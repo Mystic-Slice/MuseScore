@@ -177,6 +177,7 @@ void NotationActionController::init()
     dispatcher()->reg(this, "append-vbox", [this]() { appendBox(BoxType::Vertical); });
     dispatcher()->reg(this, "append-textframe", [this]() { appendBox(BoxType::Text); });
 
+    dispatcher()->reg(this, "edit-chordsymbol", this, &NotationActionController::openEditChordSymbolDialog);
     dispatcher()->reg(this, "edit-style", this, &NotationActionController::openEditStyleDialog);
     dispatcher()->reg(this, "page-settings", this, &NotationActionController::openPageSettingsDialog);
     dispatcher()->reg(this, "staff-properties", this, &NotationActionController::openStaffProperties);
@@ -1385,6 +1386,11 @@ void NotationActionController::selectMeasuresCountAndAppend()
     if (measureCount.ret) {
         appendBoxes(BoxType::Measure, measureCount.val.toInt());
     }
+}
+
+void NotationActionController::openEditChordSymbolDialog()
+{
+    interactive()->open("musescore://notation/chordsymbolstyleeditor");
 }
 
 void NotationActionController::openEditStyleDialog()
