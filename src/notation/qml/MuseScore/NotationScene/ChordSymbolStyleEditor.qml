@@ -32,154 +32,44 @@ import "internal"
 StyledDialogView {
     id: root
 
-    contentWidth: 280
-    contentHeight: 600
+    contentWidth: 400
+    contentHeight: 500
     margins: 12
 
-    modal: true
-
-    NoteInputBarCustomiseModel {
-        id: customiseModel
+    ChordSymbolStyle {
+        id: chordSymbolStyle
     }
 
-    Component.onCompleted: {
-        customiseModel.load()
-    }
+    Column{
+        // Add canvas here
+        Rectangle{
+            id: canvas
+            anchors.left: root.left
+            anchors.right: root.right
+            anchors.top: root.top
+            height: 200
+            color: "red"
 
-    ColumnLayout {
-        anchors.fill: parent
-
-        spacing: 0
-
-        StyledTextLabel {
-            Layout.alignment: Qt.AlignTop
-            Layout.fillWidth: true
-            Layout.topMargin: 8
-
-            text: qsTrc("notation", "Customise toolbar")
-            horizontalAlignment: Text.AlignLeft
-            font: ui.theme.largeBodyBoldFont
         }
 
-        RowLayout {
-            Layout.fillWidth: true
-            Layout.alignment: Qt.AlignTop
-            Layout.topMargin: 20
+        Column {
+            anchors.left: root.left
+            anchors.right: root.right
+            anchors.top: canvas.bottom
 
-            height: childrenRect.height
+            spacing: 20
+            enabled: withTempo.checked
 
-            FlatButton {
-                Layout.fillWidth: true
-
-                text: qsTrc("notation", "Add separator line")
-
-                enabled: customiseModel.isAddSeparatorAvailable
-
-                onClicked: {
-                    customiseModel.addSeparatorLine()
-                }
-            }
-
-            FlatButton {
-                Layout.alignment: Qt.AlignRight
-                Layout.preferredWidth: 30
-
-                icon: IconCode.DELETE_TANK
-                enabled: customiseModel.isRemovingAvailable
-
-                onClicked: {
-                    customiseModel.removeSelectedRows()
-                }
-            }
-
-            FlatButton {
-                Layout.alignment: Qt.AlignRight
-                Layout.preferredWidth: 30
-
-                icon: IconCode.ARROW_UP
-                enabled: customiseModel.isMovingUpAvailable
-
-                onClicked: {
-                    customiseModel.moveSelectedRowsUp()
-                    Qt.callLater(view.positionViewAtSelectedItems)
-                }
-            }
-
-            FlatButton {
-                Layout.alignment: Qt.AlignRight
-                Layout.preferredWidth: 30
-
-                icon: IconCode.ARROW_DOWN
-                enabled: customiseModel.isMovingDownAvailable
-
-                onClicked: {
-                    customiseModel.moveSelectedRowsDown()
-                    Qt.callLater(view.positionViewAtSelectedItems)
-                }
-            }
-        }
-
-        ListView {
-            id: view
-
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            Layout.topMargin: 12
-
-            spacing: 0
-
-            model: customiseModel
-
-            boundsBehavior: Flickable.StopAtBounds
-            clip: true
-
-            function positionViewAtSelectedItems() {
-                var selectedIndexes = customiseModel.selectionModel.selectedIndexes
-                for (var _index in selectedIndexes) {
-                    positionViewAtIndex(selectedIndexes[_index].row, ListView.Contain)
-                }
-            }
-
-            ScrollBar.vertical: StyledScrollBar {
-
-                anchors.top: parent.top
-                anchors.bottom: parent.bottom
-                anchors.right: parent.right
-
-                visible: view.contentHeight > view.height
-                z: 1
-            }
-
-            delegate: ListItemBlank {
-                height: 38
-
-                isSelected: selectedRole
-
-                onClicked: {
-                    customiseModel.selectRow(index)
+            Row{
+                StyledTextLabel {
+                    text: "Extension Scaling"
+                    font: ui.theme.headerFont
                 }
 
-                Loader {
-                    property var delegateType: Boolean(itemRole) ? itemRole.type : NoteInputBarItem.UNDEFINED
-
-                    height: parent.height
-                    width: parent.width
-
-                    sourceComponent: delegateType === NoteInputBarItem.ACTION ? actionComponent : separatorLineComponent
-
-                    Component {
-                        id: actionComponent
-
-                        NoteInputBarActionDelegate {}
-                    }
-
-                    Component {
-                        id: separatorLineComponent
-
-                        StyledTextLabel {
-                            anchors.centerIn: parent
-                            text: Boolean(itemRole) ? itemRole.title : ""
-                        }
+                SpinBox{
+                    stepSize: 1
+                    onValueChanged: {
+                        chordSymbolStyle.extensionMagChanged(value.toFixed(2));
                     }
                 }
             }

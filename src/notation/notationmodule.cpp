@@ -38,6 +38,7 @@
 #include "internal/mscznotationreader.h"
 #include "internal/msczmetareader.h"
 
+#include "view/chordsymbolsstylemodel.h"
 #include "view/notationpaintview.h"
 #include "view/notationaccessibilitymodel.h"
 #include "view/zoomcontrolmodel.h"
@@ -161,6 +162,7 @@ void NotationModule::registerResources()
 
 void NotationModule::registerUiTypes()
 {
+    qmlRegisterType<chordsymbolsstylemodel>("MuseScore.NotationScene", 1, 0, "ChordSymbolStyle");
     qmlRegisterType<NotationPaintView>("MuseScore.NotationScene", 1, 0, "NotationPaintView");
     qmlRegisterType<NotationAccessibilityModel>("MuseScore.NotationScene", 1, 0, "NotationAccessibilityModel");
     qmlRegisterType<ZoomControlModel>("MuseScore.NotationScene", 1, 0, "ZoomControlModel");

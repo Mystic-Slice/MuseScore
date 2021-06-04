@@ -116,6 +116,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/notationviewinputcontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/view/zoomcontrolmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/zoomcontrolmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/chordsymbolsstylemodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/chordsymbolsstylemodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/concertpitchcontrolmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/concertpitchcontrolmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/viewmodecontrolmodel.cpp
