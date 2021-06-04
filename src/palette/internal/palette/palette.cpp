@@ -38,7 +38,6 @@
 
 #include "libmscore/element.h"
 #include "libmscore/style.h"
-#include "libmscore/sym.h"
 #include "libmscore/symbol.h"
 #include "libmscore/score.h"
 #include "libmscore/image.h"
@@ -64,7 +63,7 @@
 #include "libmscore/slur.h"
 #include "libmscore/fret.h"
 
-#include "libmscore/draw/qpainterprovider.h"
+#include "engraving/draw/qpainterprovider.h"
 
 #include "translation.h"
 
@@ -1070,8 +1069,8 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
         QString tag = currentCell->tag;
         if (!tag.isEmpty()) {
             painter.setPen(configuration()->gridColor());
-            QFont f(painter.font());
-            f.setPointSize(12);
+            mu::draw::Font f(painter.font());
+            f.setPointSizeF(12.0);
             painter.setFont(f);
             if (tag == "ShowMore") {
                 painter.drawText(idxRect(idx), Qt::AlignCenter, "???");
