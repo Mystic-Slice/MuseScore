@@ -17,6 +17,7 @@ public:
     explicit chordsymbolsstylemodel(QObject *parent = nullptr);
 
     void extensionMagChanged(double value);
+    Q_INVOKABLE int setExtensionMag(double value);
 
 signals:
 

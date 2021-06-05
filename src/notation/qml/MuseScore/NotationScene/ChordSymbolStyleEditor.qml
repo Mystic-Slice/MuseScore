@@ -36,43 +36,65 @@ StyledDialogView {
     contentHeight: 500
     margins: 12
 
+    function changeExtensionMag(val){
+        var x = 1;
+        x = chordSymbolStyle.setExtensionMag(val);
+        name.text = qsTr("Hi");
+        if(x === 0)button.text = qsTr("Yes");
+
+    }
+
     ChordSymbolStyle {
         id: chordSymbolStyle
     }
 
     Column{
-        // Add canvas here
+        width: root.width
+        height: root.height
         Rectangle{
             id: canvas
-            anchors.left: root.left
-            anchors.right: root.right
-            anchors.top: root.top
+            width: parent.width
             height: 200
-            color: "red"
-
-        }
-
-        Column {
-            anchors.left: root.left
-            anchors.right: root.right
-            anchors.top: canvas.bottom
-
-            spacing: 20
-            enabled: withTempo.checked
-
-            Row{
-                StyledTextLabel {
-                    text: "Extension Scaling"
-                    font: ui.theme.headerFont
-                }
-
-                SpinBox{
-                    stepSize: 1
-                    onValueChanged: {
-                        chordSymbolStyle.extensionMagChanged(value.toFixed(2));
-                    }
-                }
+            color: "steelblue"
+            Text {
+                id: name
+                text: qsTr("HelloWorld")
             }
+
         }
+        Button{
+            id: button
+
+            onClicked: changeExtensionMag(2.00)
+            text: qsTr("No");
+        }
+        SpinBox{
+            id: spinBox
+
+            onValueChanged: changeExtensionMag(value)
+        }
+
+
+            SpinBox{
+                property int decimals: 1
+                property real realValue: 1.0
+                property real realFrom: 0.0
+                property real realTo: 10.0
+                property real realStepSize: 0.1
+                property real factor: Math.pow(10, decimals)
+                id: spinbox
+                stepSize: realStepSize*factor
+                value: realValue*factor
+                to : realTo*factor
+                from : realFrom*factor
+                validator: DoubleValidator {
+                    bottom: Math.min(spinbox.from, spinbox.to)*spinbox.factor
+                    top:  Math.max(spinbox.from, spinbox.to)*spinbox.factor
+                }
+                textFromValue: function(value, locale) {
+                            return parseFloat(value*1.0/factor).toFixed(decimals);
+                        }
+                onValueChanged: changeExtensionMag((value*1.0/factor).toFixed(decimals))
+            }
     }
 }

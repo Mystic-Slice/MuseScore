@@ -11,4 +11,11 @@ void chordsymbolsstylemodel::extensionMagChanged(double value){
     globalContext()->currentNotation()->style()->setStyleValue(id, value);
 }
 
+int chordsymbolsstylemodel::setExtensionMag(double value){
+    StyleId id = StyleId::chordExtensionMag;
+    globalContext()->currentNotation()->style()->setStyleValue(id, value);
+    return 0;
 }
+
+}
+
