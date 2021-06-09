@@ -123,7 +123,8 @@ StyledPopupView {
         }
 
         var itemHeight = (view.contentHeight - view.spacing * (model.length - 1)) / model.length
-        root.contentHeight = view.contentHeight - sepCount * (itemHeight - prv.separatorHeight) + 8
+        root.contentHeight = view.contentHeight - sepCount * (itemHeight - prv.separatorHeight) +
+                prv.viewVerticalMargin * 2
     }
 
     QtObject {
@@ -140,6 +141,7 @@ StyledPopupView {
             Math.max(itemLeftPartWidth + itemRightPartWidth, root.minimumMenuWidth)
 
         readonly property int separatorHeight: 1
+        readonly property int viewVerticalMargin: 4
 
         readonly property int iconAndCheckMarkMode: {
             if (prv.hasItemsWithIconAndCheckable) {
@@ -162,8 +164,8 @@ StyledPopupView {
         id: view
 
         anchors.fill: parent
-        anchors.topMargin: 4
-        anchors.bottomMargin: 4
+        anchors.topMargin: prv.viewVerticalMargin
+        anchors.bottomMargin: prv.viewVerticalMargin
 
         spacing: 0
         interactive: false
