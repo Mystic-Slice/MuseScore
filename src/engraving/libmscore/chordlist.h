@@ -280,6 +280,17 @@ public:
     bool loaded() const;
     void unload();
     ChordSymbol symbol(const QString& s) const { return symbols.value(s); }
+
+    QString getDefaultSymbol(QString s){ return defaultChordSymbols.value(s); }
+
+private:
+    QMap<QString, QString> defaultChordSymbols = {
+        {"major","triangle"},
+        {"minor","-"},
+        {"augmented","+"},
+        {"diminished","circle"},
+        {"half-diminished","oslash"}
+    };
 };
 }     // namespace Ms
 #endif

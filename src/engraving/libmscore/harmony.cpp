@@ -1681,6 +1681,7 @@ void Harmony::render(const QList<RenderAction>& renderList, qreal& x, qreal& y, 
     qreal _spatium = spatium();
     qreal mag      = magS();
     int items = 0;
+    QString qual = parsedForm()->quality();
 
 // qDebug("===");
     for (const RenderAction& a : renderList) {
@@ -1689,9 +1690,13 @@ void Harmony::render(const QList<RenderAction>& renderList, qreal& x, qreal& y, 
             items++;
             TextSegment* ts = new TextSegment(fontList[fontIdx], x, y);
             ChordSymbol cs = chordList->symbol(a.text);
-            if(items == 1 && parsedForm()->quality() == "major"){
-                cs = chordList->symbol("M");
+            if(items == 1){
+                QString def = chordList->getDefaultSymbol(qual);
+                cs = chordList->symbol(def);
             }
+//            if(items == 1 && parsedForm()->quality() == "major"){
+//                cs = chordList->symbol("M");
+//            }
 //            if(a.text == "maj"||a.text == "M"||a.text == "Maj"||a.text == "Ma"||a.text == "ma"||a.text == "major"||a.text == "^"){
 //                cs = chordList->symbol("M");
 //            }
@@ -1703,8 +1708,12 @@ void Harmony::render(const QList<RenderAction>& renderList, qreal& x, qreal& y, 
 //                if(a.text == "maj"||a.text == "M"||a.text == "Maj"||a.text == "Ma"||a.text == "ma"||a.text == "major"||a.text == "^"){
 //                    ts->setText("M");
 //                }
-                if(items == 1 && parsedForm()->quality() == "major"){
-                    ts->setText("M");
+//                if(items == 1 && parsedForm()->quality() == "major"){
+//                    ts->setText("M");
+//                }
+                if(items == 1){
+                    QString def = chordList->getDefaultSymbol(qual);
+                    ts->setText(def);
                 }
             }
             if (_harmonyType == HarmonyType::NASHVILLE) {
