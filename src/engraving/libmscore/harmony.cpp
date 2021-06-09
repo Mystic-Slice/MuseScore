@@ -1687,11 +1687,17 @@ void Harmony::render(const QList<RenderAction>& renderList, qreal& x, qreal& y, 
         if (a.type == RenderAction::RenderActionType::SET) {
             TextSegment* ts = new TextSegment(fontList[fontIdx], x, y);
             ChordSymbol cs = chordList->symbol(a.text);
+            if(a.text == "maj"||a.text == "M"||a.text == "Maj"||a.text == "Ma"||a.text == "ma"||a.text == "major"||a.text == "^"){
+                cs = chordList->symbol("M");
+            }
             if (cs.isValid()) {
                 ts->m_font = fontList[cs.fontIdx];
                 ts->setText(cs.value);
             } else {
                 ts->setText(a.text);
+                if(a.text == "maj"||a.text == "M"||a.text == "Maj"||a.text == "Ma"||a.text == "ma"||a.text == "major"||a.text == "^"){
+                    ts->setText("M");
+                }
             }
             if (_harmonyType == HarmonyType::NASHVILLE) {
                 qreal nmag = chordList->nominalMag();
