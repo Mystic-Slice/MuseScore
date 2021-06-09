@@ -44,6 +44,10 @@ StyledDialogView {
 
     }
 
+    function setStandardChord(str){
+        chordSymbolStyle.setStandardChords(str);
+    }
+
     ChordSymbolStyle {
         id: chordSymbolStyle
     }
@@ -63,10 +67,16 @@ StyledDialogView {
 
         }
         Button{
-            id: button
+            id: buttonstd
 
-            onClicked: changeExtensionMag(2.00)
-            text: qsTr("No");
+            onClicked: setStandardChord("std")
+            text: qsTr("std");
+        }
+        Button{
+            id: buttonjazz
+
+            onClicked: setStandardChord("jazz")
+            text: qsTr("jazz");
         }
         SpinBox{
             id: spinBox

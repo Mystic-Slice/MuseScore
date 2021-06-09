@@ -16,6 +16,13 @@ int chordsymbolsstylemodel::setExtensionMag(double value){
     globalContext()->currentNotation()->style()->setStyleValue(id, value);
     return 0;
 }
-
+void chordsymbolsstylemodel::setStandardChords(QString s){
+    if(s == "std"){
+        s = "chords_std.xml";
+    }else if(s == "jazz"){
+        s = "chords_jazz.xml";
+    }
+    globalContext()->currentNotation()->style()->setStyleValue(StyleId::chordDescriptionFile,s);
+}
 }
 
