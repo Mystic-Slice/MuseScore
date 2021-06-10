@@ -1510,6 +1510,30 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
         _renderList.clear();
     }
     bool adjust = cl ? cl->autoAdjust() : false;
+
+    // Mystic
+
+
+    bool metFirstModifier = false;
+    bool isNumber = false;
+    int numModifers = 0;
+    double moveup = 10.0;
+    for(const ChordToken& tok: qAsConst(_tokenList)){
+        if (tok.tokenClass == ChordTokenClass::MODIFIER) {
+            numModifers++;
+        }
+    }
+    for(auto f: cl->fonts){
+        if(f.fontClass == "modifier"){
+            moveup = f.mag*10;
+            break;
+        }
+    }
+    numModifers/=2;
+    numModifers--;
+
+    // Mystic
+
     for (const ChordToken& tok : qAsConst(_tokenList)) {
         QString n = tok.names.first();
         QList<RenderAction> rl;
@@ -1544,6 +1568,33 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
         if (tok.tokenClass == ChordTokenClass::MODIFIER && p == 0.0) {
             adjust = false;
         }
+
+
+        // Mystic Slice
+
+
+        if(tok.tokenClass == ChordTokenClass::MODIFIER && metFirstModifier && !isNumber){
+            RenderAction getPos = RenderAction(RenderAction::RenderActionType::POP);
+            _renderList.append(getPos);
+            metFirstModifier = true;
+        }
+        if(tok.tokenClass == ChordTokenClass::MODIFIER && !isNumber){
+            RenderAction savePos = RenderAction(RenderAction::RenderActionType::PUSH);
+            _renderList.append(savePos);
+            metFirstModifier = true;
+
+        }
+
+        if(tok.tokenClass == ChordTokenClass::MODIFIER){
+            RenderAction m1 = RenderAction(RenderAction::RenderActionType::MOVE);
+            m1.movex = 0.0;
+            m1.movey = -numModifers*moveup;
+            _renderList.append(m1);
+        }
+
+        //MysticSlice
+
+
         // build render list
         if (p != 0.0) {
             RenderAction m1 = RenderAction(RenderAction::RenderActionType::MOVE);
@@ -1564,6 +1615,20 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
             m2.movex = 0.0;
             m2.movey = -p;
             _renderList.append(m2);
+        }
+        //MysticSlice
+        if(tok.tokenClass == ChordTokenClass::MODIFIER){
+            RenderAction m2 = RenderAction(RenderAction::RenderActionType::MOVE);
+            m2.movex = 0.0;
+            m2.movey = +numModifers*moveup;
+            _renderList.append(m2);
+        }
+        if(isNumber){
+            numModifers--;
+        }
+
+        if(tok.tokenClass == ChordTokenClass::MODIFIER){
+            isNumber = isNumber ? 0:1;
         }
     }
     return _renderList;
