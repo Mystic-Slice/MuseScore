@@ -281,7 +281,7 @@ public:
     void unload();
     ChordSymbol symbol(const QString& s) const { return symbols.value(s); }
 
-    QString getDefaultSymbol(QString s){ return defaultChordSymbols.value(s); }
+    QString getDefaultSymbol(QString s) const { return defaultChordSymbols.value(s); }
 
 private:
     QMap<QString, QString> defaultChordSymbols = {

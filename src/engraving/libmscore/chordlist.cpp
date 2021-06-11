@@ -1513,6 +1513,9 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
 
     // Mystic
 
+    QString def = cl->getDefaultSymbol(_quality);
+    int numQuality = 0;
+
 
     bool metFirstModifier = false;
     bool isNumber = false;
@@ -1521,6 +1524,9 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
     for(const ChordToken& tok: qAsConst(_tokenList)){
         if (tok.tokenClass == ChordTokenClass::MODIFIER) {
             numModifers++;
+        }
+        if (tok.tokenClass == ChordTokenClass::QUALITY){
+            numQuality++;
         }
     }
     for(auto f: cl->fonts){
@@ -1532,7 +1538,12 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
     numModifers/=2;
     numModifers--;
 
-    // Mystic
+    if(numQuality == 0){
+        RenderAction a(RenderAction::RenderActionType::SET);
+        a.text = cl->getDefaultSymbol("major");
+        _renderList.append(a);
+    }
+    // slice
 
     for (const ChordToken& tok : qAsConst(_tokenList)) {
         QString n = tok.names.first();
@@ -1570,9 +1581,7 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
         }
 
 
-        // Mystic Slice
-
-
+        // Mystic
         if(tok.tokenClass == ChordTokenClass::MODIFIER && metFirstModifier && !isNumber){
             RenderAction getPos = RenderAction(RenderAction::RenderActionType::POP);
             _renderList.append(getPos);
@@ -1592,7 +1601,7 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
             _renderList.append(m1);
         }
 
-        //MysticSlice
+        //Mystic
 
 
         // build render list
@@ -1602,21 +1611,29 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
             m1.movey = p;
             _renderList.append(m1);
         }
-        if (found) {
-            _renderList.append(rl);
-        } else {
-            // no definition for token, so render as literal
+        //Mystic
+        if (tok.tokenClass != ChordTokenClass::QUALITY) {
+            if (found) {
+                _renderList.append(rl);
+            } else {
+                // no definition for token, so render as literal
+                RenderAction a(RenderAction::RenderActionType::SET);
+                a.text = tok.names.first();
+                _renderList.append(a);
+            }
+        }else{
             RenderAction a(RenderAction::RenderActionType::SET);
-            a.text = tok.names.first();
+            a.text = def;
             _renderList.append(a);
         }
+        //slice
         if (p != 0.0) {
             RenderAction m2 = RenderAction(RenderAction::RenderActionType::MOVE);
             m2.movex = 0.0;
             m2.movey = -p;
             _renderList.append(m2);
         }
-        //MysticSlice
+        //Mystic
         if(tok.tokenClass == ChordTokenClass::MODIFIER){
             RenderAction m2 = RenderAction(RenderAction::RenderActionType::MOVE);
             m2.movex = 0.0;
@@ -1630,6 +1647,7 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
         if(tok.tokenClass == ChordTokenClass::MODIFIER){
             isNumber = isNumber ? 0:1;
         }
+        //slice
     }
     return _renderList;
 }
