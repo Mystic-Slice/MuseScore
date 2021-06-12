@@ -1513,6 +1513,7 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
 
     // Mystic
 
+    // For quality
     QString def = cl->getDefaultSymbol(_quality);
     int numQuality = 0;
 
@@ -1525,6 +1526,7 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
         if (tok.tokenClass == ChordTokenClass::MODIFIER) {
             numModifers++;
         }
+        // For quality
         if (tok.tokenClass == ChordTokenClass::QUALITY){
             numQuality++;
         }
@@ -1538,6 +1540,7 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
     numModifers/=2;
     numModifers--;
 
+    // For quality --> implicit major
     if(numQuality == 0){
         RenderAction a(RenderAction::RenderActionType::SET);
         a.text = cl->getDefaultSymbol("major");
@@ -1582,6 +1585,7 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
 
 
         // Mystic
+        // For modifiers
         if(tok.tokenClass == ChordTokenClass::MODIFIER && metFirstModifier && !isNumber){
             RenderAction getPos = RenderAction(RenderAction::RenderActionType::POP);
             _renderList.append(getPos);
@@ -1601,7 +1605,7 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
             _renderList.append(m1);
         }
 
-        //Mystic
+        // Slice
 
 
         // build render list
@@ -1611,7 +1615,9 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
             m1.movey = p;
             _renderList.append(m1);
         }
-        //Mystic
+        // Mystic
+
+        // For quality
         if (tok.tokenClass != ChordTokenClass::QUALITY) {
             if (found) {
                 _renderList.append(rl);
@@ -1634,6 +1640,7 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
             _renderList.append(m2);
         }
         //Mystic
+        // For modifier
         if(tok.tokenClass == ChordTokenClass::MODIFIER){
             RenderAction m2 = RenderAction(RenderAction::RenderActionType::MOVE);
             m2.movex = 0.0;
