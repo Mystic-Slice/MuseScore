@@ -21,52 +21,61 @@
  */
 import QtQuick 2.0
 import QtQuick.Controls 2.0
-import MuseScore.Inspector 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
-import "../../../common"
 
 FocusableItem {
+    id: root
 
     property alias chordStylesModel: grid.model
 
-    height: 2*grid.cellHeight
+    height: grid.height
 
         Component {
             id: styleDelegate
 
-            Column{
+            FlatButton {
+                id: button
 
-                FlatButton {
-                    id: button
-
-                    anchors.margins: 5
-                    width: grid.cellWidth
-                    height: grid.cellHeight
-
-                    Text {
-                        text: styleName
-                        horizontalAlignment: button.horizontalCenter
-                        verticalAlignment: button.verticalCenter
-                        wrapMode: Text.Wrap
-                    }
-                }
+                width: grid.cellWidth-5
+                height: grid.cellHeight-5
 
                 Text {
-                    id: label
-                    text: qsTr(styleName)
+                    text: styleName
+
+                    width: button.width
+                    height: button.height
+
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                    wrapMode: Text.Wrap
+                }
+
+                onClicked: {
+                    chordStylesModel.setChordStyle(styleName)
+                    grid.currentIndex = index
                 }
             }
-
         }
+
         GridView {
             id: grid
 
-            anchors.fill: parent
+            anchors.left: root.left
+            anchors.right: root.right
 
-            cellWidth: grid.width/2;
-            cellHeight: 80
+            height: 2*cellHeight
+            width: 2*cellWidth
+
+            cellWidth: 120
+            cellHeight: 60
 
             delegate: styleDelegate
+            clip: true
+
+            highlight: Rectangle {
+                color: ui.theme.accentColor
+                radius: 3
+            }
         }
 }
