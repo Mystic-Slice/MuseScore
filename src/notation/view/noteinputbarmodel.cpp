@@ -608,6 +608,11 @@ MenuItemList NoteInputBarModel::tupletItems() const
 MenuItemList NoteInputBarModel::addItems() const
 {
     MenuItemList items = {
+        makeMenuItem("tempo"),
+        makeMenuItem("chord-text"),
+        makeMenuItem("lyrics"),
+        makeMenuItem("fingering-text"),
+        makeSeparator(),
         makeMenu(qtrc("notation", "Notes"), notesItems()),
         makeMenu(qtrc("notation", "Intervals"), intervalsItems()),
         makeMenu(qtrc("notation", "Measures"), measuresItems()),
@@ -710,15 +715,11 @@ MenuItemList NoteInputBarModel::textItems() const
         makeMenuItem("expression-text"),
         makeMenuItem("rehearsalmark-text"),
         makeMenuItem("instrument-change-text"),
-        makeMenuItem("fingering-text"),
         makeSeparator(),
         makeMenuItem("sticking-text"),
-        makeMenuItem("chord-text"),
         makeMenuItem("roman-numeral-text"),
         makeMenuItem("nashville-number-text"),
-        makeMenuItem("lyrics"),
-        makeMenuItem("figured-bass"),
-        makeMenuItem("tempo")
+        makeMenuItem("figured-bass")
     };
 
     return items;
