@@ -1473,6 +1473,11 @@ inline uint qHash(Sid id)
 //    the name "Style" gives problems with some microsoft
 //    header files...
 //---------------------------------------------------------
+struct ChordSymbolStyle{
+    QString styleName;
+    QString fileName;
+    QHash<QString,QHash<QString,bool>> styleDefaults;
+};
 
 class MStyle
 {
@@ -1485,6 +1490,21 @@ class MStyle
 
 public:
     MStyle();
+
+    QList<ChordSymbolStyle> _chordSymbolStylesList = {
+        {"Standard","chords_std.xml",{
+             {"major",{{"maj",0},{"Ma",1}}},
+             {"minor",{{"min",0},{"m",1}}},
+         }
+        },{"Jazz","chords_jazz.xml",{
+               {"major",{{"maj",0},{"Ma",1}}},
+               {"minor",{{"min",0},{"m",1}}},
+           }
+        }
+    };
+    QList<ChordSymbolStyle> getChordStyles(){
+        return _chordSymbolStylesList;
+    }
 
     void precomputeValues();
     const QVariant& value(Sid idx) const;

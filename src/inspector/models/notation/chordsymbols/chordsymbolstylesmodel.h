@@ -51,16 +51,22 @@ private:
         FileRole
     };
     // TODO: Reconsider the required roles (attributes)
-    struct ChordSymbolStyle{
-        QString styleName;
-        QString file;
-    };
+//    struct ChordSymbolStyle{
+//        QString styleName;
+//        QString file;
+//    };
     // TODO: Make the list dynamic (get info from styles)
-    QList<ChordSymbolStyle> m_styles = {
-        {"Standard","chords_std.xml"},
-        {"Jazz","chords_jazz.xml"},
-        {"Jazz","chord_jazz.xml"}
-    };
+//    struct ChordSymbolStyle{
+//        QString styleName;
+//        QString fileName;
+//        QHash<QString,QHash<QString,bool>> styleDefaults;
+//    };
+    QList<Ms::ChordSymbolStyle> m_styles;
+//    QList<ChordSymbolStyle> m_styles = {
+//        {"Standard","chords_std.xml"},
+//        {"Jazz","chords_jazz.xml"},
+//        {"Jazz","chord_jazz.xml"}
+//    };
 };
 }
 #endif // CHORDSYMBOLSTYLESMODEL_H
