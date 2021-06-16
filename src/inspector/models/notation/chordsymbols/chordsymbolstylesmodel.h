@@ -61,7 +61,7 @@ private:
 //        QString fileName;
 //        QHash<QString,QHash<QString,bool>> styleDefaults;
 //    };
-    QList<Ms::ChordSymbolStyle> m_styles;
+    QList<ChordSymbolStyle> m_styles;
 //    QList<ChordSymbolStyle> m_styles = {
 //        {"Standard","chords_std.xml"},
 //        {"Jazz","chords_jazz.xml"},

@@ -26,7 +26,7 @@ using namespace mu::notation;
 ChordSymbolStylesModel::ChordSymbolStylesModel(QObject* parent)
     : QAbstractListModel(parent)
 {
-    m_styles = globalContext()->currentNotation()->score()->style().getChordStyles();
+    m_styles = globalContext()->currentNotation()->score()->style().getChordStyles2();
 
 }
 int ChordSymbolStylesModel::rowCount(const QModelIndex&) const
@@ -46,7 +46,7 @@ QVariant ChordSymbolStylesModel::data(const QModelIndex &index, int role) const{
         return QVariant();
     }
 
-    Ms::ChordSymbolStyle chordSymbolStyle = m_styles.at(index.row());
+    ChordSymbolStyle chordSymbolStyle = m_styles.at(index.row());
 
     switch (role) {
         case StyleNameRole:
