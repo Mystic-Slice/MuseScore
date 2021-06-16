@@ -6,29 +6,31 @@
 #include "system/ifilesystem.h"
 #include "engraving/libmscore/xml.h"
 
-struct ChordSymbolStyle{
-    QString styleName;
-    QString fileName;
-    QHash<QString,QHash<QString,bool>> styleDefaults;
-};
-
-namespace mu::notation{
 class ChordSymbolStyleManager
 {
-    INJECT(notation, framework::IGlobalConfiguration, globalConfiguration)
-    INJECT(notation, system::IFileSystem, fileSystem)
+    INJECT(notation, mu::framework::IGlobalConfiguration, globalConfiguration)
+    INJECT(notation, mu::system::IFileSystem, fileSystem)
 public:
     ChordSymbolStyleManager();
-    mu::io::paths scanFileSystemForChordStyles() const;
-    QList<ChordSymbolStyle> retrieveChordStyles();
-    bool isChordSymbolStylesFile(io::path& f) const;
-    void extractChordStyleInfo(io::path& f);
+    mu::io::paths scanFileSystemForChordStyles();
+    void retrieveChordStyles();
+    bool isChordSymbolStylesFile(mu::io::path& f);
+    void extractChordStyleInfo(mu::io::path& f);
 
-    QList<ChordSymbolStyle> _chordStyles;
-
-    QList<ChordSymbolStyle> getChordStyles(){
+    QList<Ms::ChordSymbolStyle> _chordStyles = {
+        {"Standard","chords_std.xml",{
+             {"major",{{"maj",0},{"Ma",1}}},
+             {"minor",{{"min",0},{"m",1}}},
+         }
+        },{"Jazz","chords_jazz.xml",{
+               {"major",{{"maj",0},{"Ma",1}}},
+               {"minor",{{"min",0},{"m",1}}},
+           }
+        }
+    };
+    QList<Ms::ChordSymbolStyle> getChordStyles(){
         return _chordStyles;
     }
 };
-}
+
 #endif // CHORDSYMBOLSTYLEMANAGER_H

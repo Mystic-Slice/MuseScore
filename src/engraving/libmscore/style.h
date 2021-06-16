@@ -30,9 +30,7 @@
 #include "chordlist.h"
 #include "types.h"
 #include "qtenum.h"
-
-#include "notation/internal/chordsymbolstylemanager.h"
-
+//#include "notation/internal/chordsymbolstylemanager.h"
 #include "draw/geometry.h"
 
 namespace Ms {
@@ -1475,7 +1473,11 @@ inline uint qHash(Sid id)
 //    the name "Style" gives problems with some microsoft
 //    header files...
 //---------------------------------------------------------
-
+struct ChordSymbolStyle{
+    QString styleName;
+    QString fileName;
+    QHash<QString,QHash<QString,bool>> styleDefaults;
+};
 class MStyle
 {
     std::array<QVariant, int(Sid::STYLES)> _values;
@@ -1502,11 +1504,11 @@ public:
     QList<ChordSymbolStyle> getChordStyles(){
         return _chordSymbolStylesList;
     }
-    mu::notation::ChordSymbolStyleManager* styleManager = new mu::notation::ChordSymbolStyleManager();
-    QList<ChordSymbolStyle> _chordSymbolStylesList2 = styleManager->getChordStyles();
-    QList<ChordSymbolStyle> getChordStyles2(){
-        return _chordSymbolStylesList2;
-    }
+//    ChordSymbolStyleManager* styleManager;
+//    QList<ChordSymbolStyle> _chordSymbolStylesList2 = styleManager->getChordStyles();
+//    QList<ChordSymbolStyle> getChordStyles2(){
+//        return _chordSymbolStylesList2;
+//    }
 
 //=========================================================================================================
 

@@ -2,44 +2,39 @@
 #include "framework/global/io/path.h"
 
 
-namespace mu::notation{
 ChordSymbolStyleManager::ChordSymbolStyleManager()
 {
     retrieveChordStyles();
 }
-QList<ChordSymbolStyle> ChordSymbolStyleManager::retrieveChordStyles()
+void ChordSymbolStyleManager::retrieveChordStyles()
 {
-    QList<ChordSymbolStyle> result;
-    io::paths chordStyleFiles = scanFileSystemForChordStyles();
+    mu::io::paths chordStyleFiles = scanFileSystemForChordStyles();
 
-    for (io::path& file: chordStyleFiles) {
+    for (mu::io::path& file: chordStyleFiles) {
         if(isChordSymbolStylesFile(file)){
             extractChordStyleInfo(file);
         }
     }
-
-    return result;
 }
 
-mu::io::paths ChordSymbolStyleManager::scanFileSystemForChordStyles() const
+mu::io::paths ChordSymbolStyleManager::scanFileSystemForChordStyles()
 {
-    io::paths result;
+    mu::io::paths result;
 
-    io::path dirPath = globalConfiguration()->sharePath();
-    RetVal<io::paths> files = fileSystem()->scanFiles(dirPath, { "*.xml" });
+    mu::io::path dirPath = globalConfiguration()->sharePath();
+    mu::RetVal<mu::io::paths> files = fileSystem()->scanFiles(dirPath, { "*.xml" });
 
     result.insert(result.end(), files.val.begin(), files.val.end());
-
     return result;
 }
-bool ChordSymbolStyleManager::isChordSymbolStylesFile(io::path& f) const{
+bool ChordSymbolStyleManager::isChordSymbolStylesFile(mu::io::path& f) {
     bool isStyleFile = false;
     QString path = f.toQString();
     QFile file(path);
     Ms::XmlReader e(&file);
 
     while (e.readNextStartElement()) {
-        if (e.name() == "museScore") {
+        if (e.name().toString() == "museScore") {
             if(e.attribute("type")=="chordStyle"){
                 isStyleFile = true;
                 break;
@@ -48,7 +43,7 @@ bool ChordSymbolStyleManager::isChordSymbolStylesFile(io::path& f) const{
     }
     return isStyleFile;
 }
-void ChordSymbolStyleManager::extractChordStyleInfo(io::path& f) {
+void ChordSymbolStyleManager::extractChordStyleInfo(mu::io::path& f) {
     QString path = f.toQString();
     QFile file(path);
     Ms::XmlReader e(&file);
@@ -66,5 +61,4 @@ void ChordSymbolStyleManager::extractChordStyleInfo(io::path& f) {
                  {"minor",{{"min",0},{"m",1}}},
     };
     _chordStyles.push_back({styleName,path,dummyDefaults});
-}
 }

@@ -26,7 +26,8 @@
 #include <QAbstractListModel>
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
-
+#include "engraving/libmscore/style.h"
+#include "notation/internal/chordsymbolstylemanager.h"
 
 namespace mu::inspector {
 class ChordSymbolStylesModel : public QAbstractListModel
@@ -61,7 +62,8 @@ private:
 //        QString fileName;
 //        QHash<QString,QHash<QString,bool>> styleDefaults;
 //    };
-    QList<ChordSymbolStyle> m_styles;
+    QList<Ms::ChordSymbolStyle> m_styles;
+    ChordSymbolStyleManager* styleManager;
 //    QList<ChordSymbolStyle> m_styles = {
 //        {"Standard","chords_std.xml"},
 //        {"Jazz","chords_jazz.xml"},
