@@ -1,5 +1,6 @@
 #include "chordsymbolstylemanager.h"
 #include "framework/global/io/path.h"
+#include "engraving/libmscore/mscore.h"
 
 
 ChordSymbolStyleManager::ChordSymbolStyleManager()
@@ -8,9 +9,9 @@ ChordSymbolStyleManager::ChordSymbolStyleManager()
 }
 void ChordSymbolStyleManager::retrieveChordStyles()
 {
-    mu::io::paths chordStyleFiles = scanFileSystemForChordStyles();
+    mu::io::paths filesFound = scanFileSystemForChordStyles();
 
-    for (mu::io::path& file: chordStyleFiles) {
+    for (mu::io::path& file: filesFound) {
         if(isChordSymbolStylesFile(file)){
             extractChordStyleInfo(file);
         }
@@ -21,7 +22,7 @@ mu::io::paths ChordSymbolStyleManager::scanFileSystemForChordStyles()
 {
     mu::io::paths result;
 
-    mu::io::path dirPath = globalConfiguration()->sharePath();
+    mu::io::path dirPath = Ms::MScore::globalShare();
     mu::RetVal<mu::io::paths> files = fileSystem()->scanFiles(dirPath, { "*.xml" });
 
     result.insert(result.end(), files.val.begin(), files.val.end());
@@ -32,11 +33,21 @@ bool ChordSymbolStyleManager::isChordSymbolStylesFile(mu::io::path& f) {
     QString path = f.toQString();
     QFile file(path);
     Ms::XmlReader e(&file);
+    QFileInfo fi(path);
 
+    if (!file.open(QIODevice::ReadOnly)) {
+        return isStyleFile;
+    }
     while (e.readNextStartElement()) {
-        if (e.name().toString() == "museScore") {
+        if (e.name() == "museScore") {
             if(e.attribute("type")=="chordStyle"){
                 isStyleFile = true;
+                _chordStyles.push_back(
+                {e.attribute("styleName"),fi.fileName(),{
+                        {"major",{{"maj",0},{"Ma",1}}},
+                        {"minor",{{"min",0},{"m",1}}},
+                    }
+                 });
                 break;
             }
         }
@@ -47,7 +58,7 @@ void ChordSymbolStyleManager::extractChordStyleInfo(mu::io::path& f) {
     QString path = f.toQString();
     QFile file(path);
     Ms::XmlReader e(&file);
-    QString styleName = "";
+    QString styleName = "Sample";
     while (e.readNextStartElement()) {
         if (e.name() == "museScore") {
             if(e.attribute("type")=="chordStyle"){
@@ -60,5 +71,6 @@ void ChordSymbolStyleManager::extractChordStyleInfo(mu::io::path& f) {
                  {"major",{{"maj",0},{"Ma",1}}},
                  {"minor",{{"min",0},{"m",1}}},
     };
-    _chordStyles.push_back({styleName,path,dummyDefaults});
+    QFileInfo fi(path);
+//    _chordStyles.push_back({styleName,fi.fileName(),dummyDefaults});
 }

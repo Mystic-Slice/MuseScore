@@ -17,7 +17,7 @@ public:
     bool isChordSymbolStylesFile(mu::io::path& f);
     void extractChordStyleInfo(mu::io::path& f);
 
-    QList<Ms::ChordSymbolStyle> _chordStyles = {
+    QList<Ms::ChordSymbolStyle> _chordStyles;/* = {
         {"Standard","chords_std.xml",{
              {"major",{{"maj",0},{"Ma",1}}},
              {"minor",{{"min",0},{"m",1}}},
@@ -27,7 +27,7 @@ public:
                {"minor",{{"min",0},{"m",1}}},
            }
         }
-    };
+    };*/
     QList<Ms::ChordSymbolStyle> getChordStyles(){
         return _chordStyles;
     }
