@@ -435,7 +435,7 @@ Score* Score::clone()
         }
     }
 
-    masterScore()->initExcerpt(excerpt);
+    masterScore()->initExcerpt(excerpt, true);
     masterScore()->removeExcerpt(excerpt);
 
     return excerpt->partScore();
@@ -2001,7 +2001,7 @@ void Score::setSelection(const Selection& s)
 //   getText
 //---------------------------------------------------------
 
-Text* Score::getText(Tid tid)
+Text* Score::getText(Tid tid) const
 {
     MeasureBase* m = first();
     if (m && m->isVBox()) {
@@ -2039,7 +2039,7 @@ void Score::setMetaTag(const QString& tag, const QString& val)
 //   addExcerpt
 //---------------------------------------------------------
 
-void MasterScore::addExcerpt(Excerpt* ex)
+void MasterScore::addExcerpt(Excerpt* ex, int index)
 {
     Score* score = ex->partScore();
 
@@ -2086,7 +2086,7 @@ void MasterScore::addExcerpt(Excerpt* ex)
         }
         ex->setTracks(tracks);
     }
-    excerpts().append(ex);
+    excerpts().insert(index < 0 ? excerpts().size() : index, ex);
     setExcerptsChanged(true);
 }
 
@@ -2520,6 +2520,13 @@ void Score::cmdRemovePart(Part* part)
         return;
     }
 
+    QList<Excerpt*> excerpts;
+    for (Excerpt* excerpt: masterScore()->excerpts()) {
+        if (excerpt->containsPart(part)) {
+            excerpts.append(excerpt);
+        }
+    }
+
     int sidx   = staffIdx(part);
     int n      = part->nstaves();
 
@@ -2528,6 +2535,12 @@ void Score::cmdRemovePart(Part* part)
     }
 
     undoRemovePart(part, sidx);
+
+    for (Excerpt* excerpt: excerpts) {
+        if (excerpt->isEmpty()) {
+            masterScore()->undo(new RemoveExcerpt(excerpt));
+        }
+    }
 }
 
 //---------------------------------------------------------
@@ -2571,17 +2584,6 @@ void Score::removePart(Part* part)
     }
 
     _parts.removeAt(index);
-
-    if (_excerpt) {
-        for (Part* excerptPart : _excerpt->parts()) {
-            if (excerptPart->id() != part->id()) {
-                continue;
-            }
-
-            _excerpt->parts().removeOne(excerptPart);
-            break;
-        }
-    }
 
     masterScore()->rebuildMidiMapping();
     setInstrumentsChanged(true);
@@ -2765,6 +2767,46 @@ void Score::adjustKeySigs(int sidx, int eidx, KeyList km)
             s->add(keysig);
         }
     }
+}
+
+//---------------------------------------------------------
+//   getKeyList
+//      This is taken from MuseScore::editInstrList()
+//---------------------------------------------------------
+
+KeyList Score::keyList() const
+{
+    // find the keylist of the first pitched staff
+    KeyList tmpKeymap;
+    Staff* firstStaff = nullptr;
+    for (Staff* s : masterScore()->staves()) {
+        if (!s->isDrumStaff(Fraction(0, 1))) {
+            KeyList* km = s->keyList();
+            tmpKeymap.insert(km->begin(), km->end());
+            firstStaff = s;
+            break;
+        }
+    }
+
+    Key normalizedC = Key::C;
+    // normalize the keyevents to concert pitch if necessary
+    if (firstStaff && !masterScore()->styleB(Ms::Sid::concertPitch) && firstStaff->part()->instrument()->transpose().chromatic) {
+        int interval = firstStaff->part()->instrument()->transpose().chromatic;
+        normalizedC = transposeKey(normalizedC, interval);
+        for (auto i = tmpKeymap.begin(); i != tmpKeymap.end(); ++i) {
+            int tick = i->first;
+            Key oKey = i->second.key();
+            tmpKeymap[tick].setKey(transposeKey(oKey, interval));
+        }
+    }
+
+    // create initial keyevent for transposing instrument if necessary
+    auto i = tmpKeymap.begin();
+    if (i == tmpKeymap.end() || i->first != 0) {
+        tmpKeymap[0].setKey(normalizedC);
+    }
+
+    return tmpKeymap;
 }
 
 //---------------------------------------------------------
@@ -2994,7 +3036,7 @@ void Score::padToggle(Pad p, const EditData& ed)
             _is.setRest(!_is.rest());
             _is.setAccidentalType(AccidentalType::NONE);
         } else if (selection().isNone()) {
-            ed.view->startNoteEntryMode();
+            ed.view()->startNoteEntryMode();
             _is.setDuration(TDuration::DurationType::V_QUARTER);
             _is.setRest(true);
         } else {
@@ -3145,12 +3187,12 @@ void Score::padToggle(Pad p, const EditData& ed)
         if (cr) {
             crs.push_back(cr);
         } else {
-            ed.view->startNoteEntryMode();
+            ed.view()->startNoteEntryMode();
             deselect(e);
         }
     } else if (selection().isNone() && p != Pad::REST) {
         TDuration td = _is.duration();
-        ed.view->startNoteEntryMode();
+        ed.view()->startNoteEntryMode();
         _is.setDuration(td);
         _is.setAccidentalType(AccidentalType::NONE);
     } else {

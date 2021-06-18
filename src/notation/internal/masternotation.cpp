@@ -71,6 +71,11 @@ Meta MasterNotation::metaInfo() const
     return meta;
 }
 
+void MasterNotation::setMetaInfo(const Meta& meta)
+{
+    Notation::setMetaInfo(meta);
+}
+
 mu::Ret MasterNotation::load(const io::path& path)
 {
     TRACEFUNC;
@@ -563,11 +568,13 @@ void MasterNotation::initExcerpts(const QList<Ms::Excerpt*>& scoreExcerpts)
     ExcerptNotationList notationExcerpts;
 
     for (Ms::Excerpt* excerpt : excerpts) {
-        masterScore()->initExcerpt(excerpt);
+        masterScore()->initExcerpt(excerpt, true);
         notationExcerpts.push_back(std::make_shared<ExcerptNotation>(excerpt));
     }
 
     doSetExcerpts(notationExcerpts);
+
+    updateExcerpts();
 
     m_parts->partsChanged().onNotify(this, [this]() {
         notifyAboutNotationChanged();
@@ -615,7 +622,7 @@ void MasterNotation::createNonexistentExcerpts(const ExcerptNotationList& newExc
 
         if (isNewExcerpt && isEmpty) {
             Ms::Excerpt* excerpt = new Ms::Excerpt(masterScore());
-            masterScore()->initExcerpt(excerpt);
+            masterScore()->initExcerpt(excerpt, false);
             get_impl(excerptNotation)->setExcerpt(excerpt);
         }
     }
@@ -626,8 +633,13 @@ void MasterNotation::updateExcerpts()
     ExcerptNotationList newExcerpts;
 
     for (IExcerptNotationPtr excerpt : m_excerpts.val) {
-        if (!get_impl(excerpt)->excerpt()->isEmpty()) {
+        Ms::Excerpt* ex = get_impl(excerpt)->excerpt();
+        if (!ex->isEmpty()) {
             newExcerpts.push_back(excerpt);
+        } else {
+            if (masterScore()->excerpts().contains(ex)) {
+                masterScore()->undo(new Ms::RemoveExcerpt(ex));
+            }
         }
     }
 
@@ -653,7 +665,7 @@ void MasterNotation::updateExcerpts()
 IExcerptNotationPtr MasterNotation::createExcerpt(Part* part)
 {
     Ms::Excerpt* excerpt = Ms::Excerpt::createExcerptFromPart(part);
-    masterScore()->initExcerpt(excerpt);
+    masterScore()->initExcerpt(excerpt, false);
 
     return std::make_shared<ExcerptNotation>(excerpt);
 }
@@ -694,8 +706,8 @@ mu::Ret MasterNotation::saveSelectionOnScore(const mu::io::path& path)
     return ret;
 }
 
-mu::Ret MasterNotation::writeToDevice(system::IODevice& destinationDevice)
+mu::Ret MasterNotation::writeToDevice(io::Device& destinationDevice)
 {
-    bool ok = score()->saveCompressedFile(&destinationDevice, score()->title(), false);
+    bool ok = score()->saveCompressedFile(&destinationDevice, score()->title() + ".mscx", false);
     return ok;
 }

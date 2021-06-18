@@ -30,6 +30,7 @@
 #include "log.h"
 #include "convertercodes.h"
 #include "stringutils.h"
+#include "compat/backendapi.h"
 
 using namespace mu::converter;
 
@@ -123,4 +124,32 @@ mu::RetVal<ConverterController::BatchJob> ConverterController::parseBatchJob(con
 
     rv.ret = make_ret(Ret::Code::Ok);
     return rv;
+}
+
+mu::Ret ConverterController::exportScoreMedia(const mu::io::path& in, const mu::io::path& out, const mu::io::path& highlightConfigPath)
+{
+    TRACEFUNC;
+
+    return BackendApi::exportScoreMedia(in, out, highlightConfigPath);
+}
+
+mu::Ret ConverterController::exportScoreMeta(const mu::io::path& in, const mu::io::path& out)
+{
+    TRACEFUNC;
+
+    return BackendApi::exportScoreMeta(in, out);
+}
+
+mu::Ret ConverterController::exportScoreParts(const mu::io::path& in, const mu::io::path& out)
+{
+    TRACEFUNC;
+
+    return BackendApi::exportScoreParts(in, out);
+}
+
+mu::Ret ConverterController::exportScorePartsPdfs(const mu::io::path& in, const mu::io::path& out)
+{
+    TRACEFUNC;
+
+    return BackendApi::exportScorePartsPdfs(in, out);
 }

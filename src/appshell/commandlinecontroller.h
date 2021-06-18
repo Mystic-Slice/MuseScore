@@ -42,10 +42,22 @@ class CommandLineController
 public:
     CommandLineController() = default;
 
+    enum class ConvertType {
+        File,
+        Batch,
+        ExportScoreMedia,
+        ExportScoreMeta,
+        ExportScoreParts,
+        ExportScorePartsPdf
+    };
+
     struct ConverterTask {
-        bool isBatchMode = false;
+        ConvertType type = ConvertType::File;
+
         QString inputFile;
         QString outputFile;
+
+        QVariant data;
     };
 
     void parse(const QStringList& args);

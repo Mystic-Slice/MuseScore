@@ -22,6 +22,7 @@
 #include "filescorecontroller.h"
 
 #include <QObject>
+#include <QBuffer>
 
 #include "log.h"
 #include "translation.h"
@@ -39,6 +40,7 @@ void FileScoreController::init()
     dispatcher()->reg(this, "file-open", this, &FileScoreController::openScore);
     dispatcher()->reg(this, "file-import", this, &FileScoreController::importScore);
     dispatcher()->reg(this, "file-new", this, &FileScoreController::newScore);
+    dispatcher()->reg(this, "file-close", this, &FileScoreController::closeScore);
 
     dispatcher()->reg(this, "file-save", this, &FileScoreController::saveScore);
     dispatcher()->reg(this, "file-save-as", this, &FileScoreController::saveScoreAs);
@@ -78,6 +80,21 @@ INotationSelectionPtr FileScoreController::currentNotationSelection() const
 Ret FileScoreController::openScore(const io::path& scorePath)
 {
     return doOpenScore(scorePath);
+}
+
+bool FileScoreController::isScoreOpened(const io::path& scorePath) const
+{
+    auto notation = globalContext()->currentMasterNotation();
+    if (!notation) {
+        return false;
+    }
+
+    LOGD() << "notation->path: " << notation->path() << ", check path: " << scorePath;
+    if (notation->path() == scorePath) {
+        return true;
+    }
+
+    return false;
 }
 
 void FileScoreController::openScore(const actions::ActionData& args)
@@ -135,6 +152,11 @@ void FileScoreController::newScore()
     if (!ret) {
         LOGE() << ret.toString();
     }
+}
+
+void FileScoreController::closeScore()
+{
+    globalContext()->setCurrentMasterNotation(nullptr);
 }
 
 void FileScoreController::saveScore()
@@ -196,7 +218,51 @@ void FileScoreController::saveSelection()
 
 void FileScoreController::saveOnline()
 {
-    NOT_IMPLEMENTED;
+    IMasterNotationPtr master = globalContext()->currentMasterNotation();
+    if (!master) {
+        return;
+    }
+
+    QBuffer* scoreData = new QBuffer();
+    scoreData->open(QIODevice::WriteOnly);
+
+    Ret ret = master->writeToDevice(*scoreData);
+
+    if (!ret) {
+        LOGE() << ret.toString();
+        return;
+    }
+
+    scoreData->close();
+    scoreData->open(QIODevice::ReadOnly);
+
+    ProgressChannel progressCh = uploadingService()->progressChannel();
+    progressCh.onReceive(this, [](const Progress& progress) {
+        LOGD() << "Uploading progress: " << progress.current << "/" << progress.total;
+    }, Asyncable::AsyncMode::AsyncSetRepeat);
+
+    async::Channel<QUrl> sourceUrlCh = uploadingService()->sourceUrlReceived();
+    sourceUrlCh.onReceive(this, [master, scoreData](const QUrl& url) {
+        scoreData->deleteLater();
+
+        LOGD() << "Source url received: " << url;
+        QString newSource = url.toString();
+
+        Meta meta = master->metaInfo();
+        if (meta.source == newSource) {
+            return;
+        }
+
+        meta.source = newSource;
+        master->setMetaInfo(meta);
+
+        if (master->created().val) {
+            master->save();
+        }
+    }, Asyncable::AsyncMode::AsyncSetRepeat);
+
+    Meta meta = master->metaInfo();
+    uploadingService()->uploadScore(*scoreData, meta.title, meta.source);
 }
 
 void FileScoreController::importPdf()
@@ -244,6 +310,11 @@ io::path FileScoreController::selectScoreSavingFile(const io::path& defaultFileP
 Ret FileScoreController::doOpenScore(const io::path& filePath)
 {
     TRACEFUNC;
+
+    if (multiInstancesProvider()->isScoreAlreadyOpened(filePath)) {
+        multiInstancesProvider()->activateWindowWithScore(filePath);
+        return make_ret(Ret::Code::Ok);
+    }
 
     auto notation = notationCreator()->newMasterNotation();
     IF_ASSERT_FAILED(notation) {

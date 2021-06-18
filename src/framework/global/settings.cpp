@@ -28,9 +28,13 @@
 #include <QStandardPaths>
 #include <QDir>
 
+#include "multiinstances/resourcelockguard.h"
+
 using namespace mu;
 using namespace mu::framework;
 using namespace mu::async;
+
+static const std::string MULTI_INSTANCES_LOCK_NAME("settings");
 
 Settings* Settings::instance()
 {
@@ -102,6 +106,8 @@ Settings::Items Settings::readItems() const
 {
     Items result;
 
+    mi::ResourceLockGuard resource_lock(multiInstancesProvider(), MULTI_INSTANCES_LOCK_NAME);
+
     for (const QString& key : m_settings->allKeys()) {
         Item item;
         item.key = Key(std::string(), key.toStdString());
@@ -146,10 +152,16 @@ void Settings::setValue(const Key& key, const Val& value)
         async::Channel<Val> channel = it->second;
         channel.send(value);
     }
+
+    if (multiInstancesProvider()) {
+        multiInstancesProvider()->settingsSetValue(key.key, value);
+    }
 }
 
 void Settings::writeValue(const Key& key, const Val& value)
 {
+    mi::ResourceLockGuard resource_lock(multiInstancesProvider(), MULTI_INSTANCES_LOCK_NAME);
+
     // TODO: implement writing/reading first part of key (module name)
     m_settings->setValue(QString::fromStdString(key.key), value.toQVariant());
 }
@@ -207,6 +219,10 @@ void Settings::beginTransaction()
 
     m_localSettings = m_items;
     m_isTransactionStarted = true;
+
+    if (multiInstancesProvider()) {
+        multiInstancesProvider()->settingsBeginTransaction();
+    }
 }
 
 void Settings::commitTransaction()
@@ -229,6 +245,10 @@ void Settings::commitTransaction()
     }
 
     m_localSettings.clear();
+
+    if (multiInstancesProvider()) {
+        multiInstancesProvider()->settingsCommitTransaction();
+    }
 }
 
 void Settings::rollbackTransaction()
@@ -246,6 +266,10 @@ void Settings::rollbackTransaction()
     }
 
     m_localSettings.clear();
+
+    if (multiInstancesProvider()) {
+        multiInstancesProvider()->settingsRollbackTransaction();
+    }
 }
 
 Settings::Item& Settings::findItem(const Key& key) const
