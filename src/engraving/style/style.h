@@ -39,29 +39,10 @@ namespace Ms {
 class XmlWriter;
 struct ChordDescription;
 
-struct ChordSymbolStyle {
-    QString styleName;
-    QString fileName;
-    QHash<QString, QHash<QString, bool>> styleDefaults;
-};
-
 class MStyle
 {
 public:
     MStyle();
-
-    QList<ChordSymbolStyle> _chordSymbolStylesList = {
-        // Sample styles for testing
-        { "Standard", "chords_std.xml", {
-              { "major", { { "maj", 0 }, { "Ma", 1 } } },
-              { "minor", { { "min", 0 }, { "m", 1 } } },
-          }
-        }, { "Jazz", "chords_jazz.xml", {
-                 { "major", { { "maj", 0 }, { "Ma", 1 } } },
-                 { "minor", { { "min", 0 }, { "m", 1 } } },
-             }
-        }
-    };
 
     //! TODO Can be optimized
     const QVariant& styleV(Sid idx) const { return value(idx); }
@@ -86,7 +67,6 @@ public:
     ChordList* chordList() { return &m_chordList; }
     void setCustomChordList(bool t) { m_customChordList = t; }
     void checkChordList();
-    QList<ChordSymbolStyle> getChordStyles() { return _chordSymbolStylesList; }
 
     bool load(QFile* qf, bool ign = false);
     void load(XmlReader& e);
