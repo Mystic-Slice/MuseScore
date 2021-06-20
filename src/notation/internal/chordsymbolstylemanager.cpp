@@ -105,5 +105,35 @@ void ChordSymbolStyleManager::extractChordStyleInfo(mu::io::path& f)
         { "minor", { { "min", 0 }, { "m", 1 } } },
     };
 
-    _chordStyles.push_back({ styleName, fi.fileName(), dummyDefaults });
+    _chordStyles.push_back({ styleName, path, dummyDefaults });
+}
+
+QHash<QString, QList<QString>> ChordSymbolStyleManager::getQualitySymbols(QString path){
+    QHash<QString, QList<QString>> qualitySymbols;
+    QFile file(path);
+    Ms::XmlReader e(&file);
+
+    if (!file.open(QIODevice::ReadOnly)) {
+        return qualitySymbols;
+    }
+    while(e.readNextStartElement()){
+        if (e.name() == "museScore") {
+            if (e.attribute("type") == "chordStyle") {
+                while(e.readNextStartElement()){
+                    if(e.name() == "quality"){
+                        QString qual = e.attribute("q");
+                        QList<QString> rep;
+                        while(e.readNextStartElement()){
+                            if(e.name() == "sym"){
+                                rep.push_back(e.readElementText());
+                            }
+                        }
+                        qualitySymbols.insert(qual,rep);
+                    }
+                }
+            }
+        }
+    }
+
+    return qualitySymbols;
 }
