@@ -96,6 +96,11 @@ Rectangle {
             }
         }
 
+        ListView {
+            model: chordSymbolEditorModel.chordSpellingList
+            delegate: Text { text: modelData }
+        }
+
         Rectangle {
             width: root.width
             height: 2
@@ -136,12 +141,12 @@ Rectangle {
 
             ChordSymbolEditorBasic {
                 width: root.width
-                height: 200
+                height: 10
             }
 
             ChordSymbolEditorAdvanced {
                 width: root.width
-                height: 200
+                height: 10
             }
         }
     }
