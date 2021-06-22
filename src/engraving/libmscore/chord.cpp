@@ -3655,7 +3655,7 @@ void Chord::layoutArticulations()
     }
     const Staff* st = staff();
     const StaffType* staffType = st->staffTypeForElement(this);
-    qreal mag            = (staffType->small() ? score()->styleD(Sid::smallStaffMag) : 1.0) * staffType->userMag();
+    qreal mag            = (staffType->isSmall() ? score()->styleD(Sid::smallStaffMag) : 1.0) * staffType->userMag();
     qreal _spatium       = score()->spatium() * mag;
     qreal _spStaff       = _spatium * staffType->lineDistance().val();
 

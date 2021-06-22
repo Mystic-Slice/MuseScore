@@ -145,7 +145,7 @@ void EditStaff::setStaff(Staff* s, const Fraction& tick)
     // set dlg controls
     spinExtraDistance->setValue(s->userDist() / score->spatium());
     invisible->setChecked(m_staff->invisible(Fraction(0, 1)));
-    small->setChecked(stt->small());
+    smallStaffCheckBox->setChecked(stt->isSmall());
     color->setColor(stt->color());
     partName->setText(part->partName());
     cutaway->setChecked(m_staff->cutaway());
@@ -175,7 +175,7 @@ void EditStaff::updateStaffType(const Ms::StaffType& staffType)
     showTimesig->setChecked(staffType.genTimesig());
     showBarlines->setChecked(staffType.showBarlines());
     invisible->setChecked(staffType.invisible());
-    small->setChecked(staffType.small());
+    smallStaffCheckBox->setChecked(staffType.isSmall());
     staffGroupName->setText(qtrc("Staff type group name", staffType.groupName()));
 }
 
@@ -484,7 +484,7 @@ void EditStaff::applyStaffProperties()
     config.visibleLines = invisible->isChecked();
     config.userDistance = spinExtraDistance->value() * m_orgStaff->score()->spatium();
     config.scale = mag->value() / 100.0;
-    config.small = small->isChecked();
+    config.isSmall = smallStaffCheckBox->isChecked();
     config.cutaway = cutaway->isChecked();
     config.showIfEmpty = showIfEmpty->isChecked();
     config.linesCount = lines->value();

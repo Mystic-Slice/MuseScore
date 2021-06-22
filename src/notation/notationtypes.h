@@ -517,7 +517,7 @@ struct StaffConfig
     bool visibleLines = false;
     qreal userDistance = 0.0;
     double scale = 0.0;
-    bool small = false;
+    bool isSmall = false;
     bool cutaway = false;
     bool showIfEmpty = false;
     bool showClef = false;
