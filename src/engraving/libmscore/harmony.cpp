@@ -219,7 +219,12 @@ Harmony::Harmony(const Harmony& h)
     _leftParen  = h._leftParen;
     _rightParen = h._rightParen;
     _degreeList = h._degreeList;
-    _parsedForm = h._parsedForm ? new ParsedChord(*h._parsedForm) : 0;
+    if(h._parsedForm){
+        _parsedForm = new ParsedChord(*h._parsedForm);
+//        _parsedForm->_score = score();
+    }else{
+        _parsedForm = 0;
+    }
     _harmonyType = h._harmonyType;
     _textName   = h._textName;
     _userName   = h._userName;
@@ -696,6 +701,7 @@ const ChordDescription* Harmony::parseHarmony(const QString& ss, int* root, int*
         delete _parsedForm;
         _parsedForm = 0;
     }
+//    _parsedForm->_score=score();
     _textName.clear();
     bool useLiteral = false;
     if (ss.endsWith(' ')) {
@@ -786,6 +792,7 @@ const ChordDescription* Harmony::parseHarmony(const QString& ss, int* root, int*
         cd = descr(s);
     } else {
         _parsedForm = new ParsedChord();
+//        _parsedForm->_score = score();
         _parsedForm->parse(s, cl, syntaxOnly, preferMinor);
         // parser prepends "=" to name of implied minor chords
         // use this here as well
@@ -2014,6 +2021,7 @@ const ParsedChord* Harmony::parsedForm()
     if (!_parsedForm) {
         ChordList* cl = score()->style().chordList();
         _parsedForm = new ParsedChord();
+//        _parsedForm->_score = score();
         _parsedForm->parse(_textName, cl, false);
     }
     return _parsedForm;

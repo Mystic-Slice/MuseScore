@@ -94,6 +94,10 @@ Rectangle {
                 height: listCellHeight
                 width: listCellWidth
                 text: modelData
+                onClicked: {
+                    editorModel.setQualitySymbol("major",modelData);
+                    majorSeventhGridView.currentIndex = index
+                }
             }
 
             boundsBehavior: Flickable.StopAtBounds
@@ -123,6 +127,10 @@ Rectangle {
                 height: listCellHeight
                 width: listCellWidth
                 text: modelData
+                onClicked: {
+                    editorModel.setQualitySymbol("half-diminished",modelData);
+                    halfDiminishedGridView.currentIndex = index
+                }
             }
 
             boundsBehavior: Flickable.StopAtBounds
@@ -152,6 +160,11 @@ Rectangle {
                 height: listCellHeight
                 width: listCellWidth
                 text: modelData
+
+                onClicked: {
+                    editorModel.setQualitySymbol("minor",modelData);
+                    minorGridView.currentIndex = index
+                }
             }
 
             boundsBehavior: Flickable.StopAtBounds
@@ -181,6 +194,10 @@ Rectangle {
                 height: listCellHeight
                 width: listCellWidth
                 text: modelData
+                onClicked: {
+                    editorModel.setQualitySymbol("augmented",modelData);
+                    augmentedGridView.currentIndex = index
+                }
             }
 
             boundsBehavior: Flickable.StopAtBounds
@@ -210,6 +227,10 @@ Rectangle {
                 height: listCellHeight
                 width: listCellWidth
                 text: modelData
+                onClicked: {
+                    editorModel.setQualitySymbol("diminished",modelData);
+                    diminishedGridView.currentIndex = index
+                }
             }
 
             boundsBehavior: Flickable.StopAtBounds

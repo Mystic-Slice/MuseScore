@@ -443,6 +443,17 @@ static const StyleType styleTypes[] {
     { Sid::chordExtensionAdjust,    "chordExtensionAdjust",    QVariant(0.0) },
     { Sid::chordModifierMag,        "chordModifierMag",        QVariant(1.0) },
     { Sid::chordModifierAdjust,     "chordModifierAdjust",     QVariant(0.0) },
+    //===========================================================================
+    // Mystic Slice was here
+    //===========================================================================
+    { Sid::chordQualityMajorSeventh, "chordQualityMajorSeventh", QVariant(QString("maj7"))},
+    { Sid::chordQualityHalfDiminished, "chordQualityHalfDiminished", QVariant(QString("m7b5"))},
+    { Sid::chordQualityMinor, "chordQualityMinor", QVariant(QString("m"))},
+    { Sid::chordQualityAugmented, "chordQualityAugmented", QVariant(QString("aug"))},
+    { Sid::chordQualityDiminished, "chordQualityDiminished", QVariant(QString("dim"))},
+    //===========================================================================
+    // Mystic Slice was here
+    //===========================================================================
     { Sid::concertPitch,            "concertPitch",            QVariant(false) },
 
     { Sid::createMultiMeasureRests, "createMultiMeasureRests", QVariant(false) },
@@ -2811,6 +2822,7 @@ void MStyle::checkChordList()
             _chordList.read("chords.xml");
         }
         _chordList.read(value(Sid::chordDescriptionFile).toString());
+        setUpQualitySymbols();
     }
 }
 
@@ -2822,6 +2834,21 @@ void MStyle::setChordList(ChordList* cl, bool custom)
 {
     _chordList       = *cl;
     _customChordList = custom;
+    setUpQualitySymbols();
+}
+
+void MStyle::setUpQualitySymbols(){
+//    { Sid::chordQualityMajorSeventh, "chordQualityMajorSeventh", QVariant(QString("maj7"))},
+//    { Sid::chordQualityHalfDiminished, "chordQualityHalfDiminished", QVariant(QString("m7b5"))},
+//    { Sid::chordQualityMinor, "chordQualityMinor", QVariant(QString("m"))},
+//    { Sid::chordQualityAugmented, "chordQualityAugmented", QVariant(QString("aug"))},
+//    { Sid::chordQualityDiminished, "chordQualityDiminished", QVariant(QString("dim"))},
+    _chordList.qualitySymbols.clear();
+    _chordList.qualitySymbols.insert("minor",value(Sid::chordQualityMinor).toString());
+    _chordList.qualitySymbols.insert("half-diminished",value(Sid::chordQualityHalfDiminished).toString());
+    _chordList.qualitySymbols.insert("major7th",value(Sid::chordQualityMajorSeventh).toString());
+    _chordList.qualitySymbols.insert("diminished",value(Sid::chordQualityDiminished).toString());
+    _chordList.qualitySymbols.insert("augmented",value(Sid::chordQualityAugmented).toString());
 }
 
 //---------------------------------------------------------
@@ -3063,6 +3090,7 @@ void MStyle::load(XmlReader& e)
         } else if (tag == "ChordList") {
             _chordList.unload();
             _chordList.read(e);
+            setUpQualitySymbols();
             _customChordList = true;
             chordListTag = true;
         } else if (tag == "lyricsDashMaxLegth") { // pre-3.6 typo

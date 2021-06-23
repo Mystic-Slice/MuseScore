@@ -22,8 +22,8 @@
 
 #include "config.h"
 #include "chordlist.h"
-#include "score.h"
 #include "xml.h"
+#include "score.h"
 #include "pitchspelling.h"
 #include "mscore.h"
 
@@ -1553,14 +1553,28 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
             m1.movey = p;
             _renderList.append(m1);
         }
-        if (found) {
-            _renderList.append(rl);
-        } else {
-            // no definition for token, so render as literal
+        //====================================================================
+        // Mystic
+
+        // For quality
+        if (tok.tokenClass == ChordTokenClass::QUALITY) {
             RenderAction a(RenderAction::RenderActionType::SET);
-            a.text = tok.names.first();
+            QString def = "min";
+            def = cl->qualitySymbols.value(_quality);
+            a.text = def;
             _renderList.append(a);
+        }else {
+            if (found) {
+                _renderList.append(rl);
+            } else {
+                // no definition for token, so render as literal
+                RenderAction a(RenderAction::RenderActionType::SET);
+                a.text = tok.names.first();
+                _renderList.append(a);
+            }
         }
+        //slice
+        //======================================================================
         if (p != 0.0) {
             RenderAction m2 = RenderAction(RenderAction::RenderActionType::MOVE);
             m2.movex = 0.0;

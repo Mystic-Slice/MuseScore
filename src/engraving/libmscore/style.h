@@ -432,6 +432,17 @@ enum class Sid {
     chordExtensionAdjust,
     chordModifierMag,
     chordModifierAdjust,
+    //===========================================================================
+    // Mystic Slice was here
+    //===========================================================================
+    chordQualityMajorSeventh,
+    chordQualityHalfDiminished,
+    chordQualityMinor,
+    chordQualityAugmented,
+    chordQualityDiminished,
+    //===========================================================================
+    // Mystic Slice was here
+    //===========================================================================
     concertPitch,
     createMultiMeasureRests,
     minEmptyMeasures,
@@ -1510,6 +1521,7 @@ public:
     void setChordList(ChordList*, bool custom = true);      // Style gets ownership of ChordList
     void setCustomChordList(bool t) { _customChordList = t; }
     void checkChordList();
+    void setUpQualitySymbols();
 
     bool load(QFile* qf, bool ign = false);
     void load(XmlReader& e);
