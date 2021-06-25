@@ -67,6 +67,7 @@ public:
     ChordList* chordList() { return &m_chordList; }
     void setCustomChordList(bool t) { m_customChordList = t; }
     void checkChordList();
+    void setUpQualitySymbols();
 
     bool load(QFile* qf, bool ign = false);
     void load(XmlReader& e);

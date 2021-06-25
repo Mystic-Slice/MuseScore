@@ -119,6 +119,7 @@ void MStyle::checkChordList()
             m_chordList.read("chords.xml");
         }
         m_chordList.read(value(Sid::chordDescriptionFile).toString());
+        setUpQualitySymbols();
     }
 }
 
@@ -330,6 +331,7 @@ void MStyle::load(XmlReader& e)
         } else if (tag == "ChordList") {
             m_chordList.unload();
             m_chordList.read(e);
+            setUpQualitySymbols();
             m_customChordList = true;
             chordListTag = true;
         } else if (tag == "lyricsDashMaxLegth") { // pre-3.6 typo
@@ -365,6 +367,16 @@ void MStyle::load(XmlReader& e)
     if (!chordListTag) {
         checkChordList();
     }
+}
+
+void MStyle::setUpQualitySymbols()
+{
+    m_chordList.qualitySymbols.clear();
+    m_chordList.qualitySymbols.insert("minor", value(Sid::chordQualityMinor).toString());
+    m_chordList.qualitySymbols.insert("half-diminished", value(Sid::chordQualityHalfDiminished).toString());
+    m_chordList.qualitySymbols.insert("major7th", value(Sid::chordQualityMajorSeventh).toString());
+    m_chordList.qualitySymbols.insert("diminished", value(Sid::chordQualityDiminished).toString());
+    m_chordList.qualitySymbols.insert("augmented", value(Sid::chordQualityAugmented).toString());
 }
 
 void MStyle::save(XmlWriter& xml, bool optimize)
