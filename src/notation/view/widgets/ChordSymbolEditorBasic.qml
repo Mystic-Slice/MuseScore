@@ -95,7 +95,7 @@ Rectangle {
                 width: listCellWidth
                 text: modelData
                 onClicked: {
-                    editorModel.setQualitySymbol("major",modelData);
+                    editorModel.setQualitySymbol("major7th",modelData);
                     majorSeventhGridView.currentIndex = index
                 }
             }

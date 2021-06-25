@@ -446,7 +446,7 @@ static const StyleType styleTypes[] {
     //===========================================================================
     // Mystic Slice was here
     //===========================================================================
-    { Sid::chordQualityMajorSeventh, "chordQualityMajorSeventh", QVariant(QString("maj7"))},
+    { Sid::chordQualityMajorSeventh, "chordQualityMajorSeventh", QVariant(QString("triangle 7"))},
     { Sid::chordQualityHalfDiminished, "chordQualityHalfDiminished", QVariant(QString("m7b5"))},
     { Sid::chordQualityMinor, "chordQualityMinor", QVariant(QString("m"))},
     { Sid::chordQualityAugmented, "chordQualityAugmented", QVariant(QString("aug"))},
