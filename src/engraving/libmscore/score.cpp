@@ -4950,6 +4950,20 @@ void Score::changeSelectedNotesVoice(int voice)
     setLayoutAll();
 }
 
+//---------------------------------------------------------
+//   setUpQualitySymbols
+//    updates the chordlist
+//---------------------------------------------------------
+void Score::setUpQualitySymbols()
+{
+    _chordList.qualitySymbols.clear();
+    _chordList.qualitySymbols.insert("minor", style().value(Sid::chordQualityMinor).toString());
+    _chordList.qualitySymbols.insert("half-diminished", style().value(Sid::chordQualityHalfDiminished).toString());
+    _chordList.qualitySymbols.insert("major7th", style().value(Sid::chordQualityMajorSeventh).toString());
+    _chordList.qualitySymbols.insert("diminished", style().value(Sid::chordQualityDiminished).toString());
+    _chordList.qualitySymbols.insert("augmented", style().value(Sid::chordQualityAugmented).toString());
+}
+
 #if 0
 //---------------------------------------------------------
 //   cropPage - crop a single page score to the content
