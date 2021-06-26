@@ -57,6 +57,7 @@ Rectangle {
                     cellWidth: listCellWidth + listCellMargin
 
                     model: editorModel.chordSpellingList
+                    currentIndex: editorModel.chordSpellingIndex
 
                     delegate: FlatButton {
                         height: listCellHeight
@@ -66,7 +67,6 @@ Rectangle {
 
                         onClicked: {
                             editorModel.setChordSpelling(modelData);
-                            chordSpellingGridView.currentIndex = index
                         }
                     }
 

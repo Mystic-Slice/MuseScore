@@ -30,7 +30,8 @@ ChordSymbolEditorModel::ChordSymbolEditorModel(QObject* parent)
     setQualitySymbolsLists();
     initChordSpellingList();
     initCurrentStyleIndex();
-    setUpQualitySymbolsIndices();
+    updatePropertyIndices();
+    updateQualitySymbolsIndices();
 }
 
 int ChordSymbolEditorModel::rowCount(const QModelIndex&) const
@@ -98,6 +99,11 @@ QStringList ChordSymbolEditorModel::diminishedList() const
     return m_diminishedList;
 }
 
+int ChordSymbolEditorModel::chordSpellingIndex() const
+{
+    return m_chordSpellingIndex;
+}
+
 int ChordSymbolEditorModel::currentStyleIndex() const
 {
     return m_currentStyleIndex;
@@ -154,7 +160,20 @@ void ChordSymbolEditorModel::initCurrentStyleIndex()
     emit currentStyleIndexChanged();
 }
 
-void ChordSymbolEditorModel::setUpQualitySymbolsIndices()
+void ChordSymbolEditorModel::updatePropertyIndices()
+{
+    // Will include extension, scaling and stuff in the future
+    for (auto& spelling: m_chordSpellingList) {
+        Ms::Sid id = chordSpellingMap.value(spelling);
+        bool isCurrentChordSpelling = globalContext()->currentNotation()->style()->styleValue(id).toBool();
+        if(isCurrentChordSpelling){
+            m_chordSpellingIndex = m_chordSpellingList.indexOf(spelling);
+        }
+    }
+    emit chordSpellingIndexChanged();
+}
+
+void ChordSymbolEditorModel::updateQualitySymbolsIndices()
 {
     QHash<QString, Ms::Sid> qualityToSid = {
         { "major7th", Ms::Sid::chordQualityMajorSeventh },
@@ -259,7 +278,11 @@ void ChordSymbolEditorModel::setQualitySymbol(QString quality, QString symbol)
 
     Ms::Sid id = qualityToSid.value(quality);
     globalContext()->currentNotation()->style()->setStyleValue(id, symbol);
-    setUpQualitySymbolsIndices();
+    updateQualitySymbolsIndices();
+    // Temporary hack to get the chord symbols to refresh
+    globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordDescriptionFile, "dummy");
+    globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordDescriptionFile, m_styles[m_currentStyleIndex].fileName);
+
 }
 
 void ChordSymbolEditorModel::setChordStyle(QString styleName)
@@ -278,24 +301,18 @@ void ChordSymbolEditorModel::setChordStyle(QString styleName)
 
     globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordDescriptionFile, descriptionFileName);
     setQualitySymbolsLists();
-    setUpQualitySymbolsIndices();
+    updateQualitySymbolsIndices();
+    // Temporary hack to get the chord symbols to refresh
+    globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordDescriptionFile, "dummy");
+    globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordDescriptionFile, descriptionFileName);
 
     emit currentStyleIndexChanged();
 }
 
 void ChordSymbolEditorModel::setChordSpelling(QString newSpelling)
 {
-    QHash<QString, Ms::Sid> chordSpellingMap = {
-        { "Standard", Ms::Sid::useStandardNoteNames },
-        { "German", Ms::Sid::useGermanNoteNames },
-        { "German Full", Ms::Sid::useFullGermanNoteNames },
-        { "Solfege", Ms::Sid::useSolfeggioNoteNames },
-        { "French", Ms::Sid::useFrenchNoteNames }
-    };
-
-    for (auto i = chordSpellingMap.begin(); i != chordSpellingMap.end(); ++i) {
-        QString spelling = i.key();
-        Ms::Sid id = i.value();
+    for (auto& spelling: m_chordSpellingList) {
+        Ms::Sid id = chordSpellingMap.value(spelling);
 
         if (spelling == newSpelling) {
             globalContext()->currentNotation()->style()->setStyleValue(id, true);
@@ -303,4 +320,5 @@ void ChordSymbolEditorModel::setChordSpelling(QString newSpelling)
             globalContext()->currentNotation()->style()->setStyleValue(id, false);
         }
     }
+    updatePropertyIndices();
 }

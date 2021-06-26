@@ -43,6 +43,7 @@ class ChordSymbolEditorModel : public QAbstractListModel
     Q_PROPERTY(QStringList augmentedList READ augmentedList NOTIFY augmentedListChanged)
     Q_PROPERTY(QStringList diminishedList READ diminishedList NOTIFY diminishedListChanged)
 
+    Q_PROPERTY(int chordSpellingIndex READ chordSpellingIndex NOTIFY chordSpellingIndexChanged)
     Q_PROPERTY(int currentStyleIndex READ currentStyleIndex NOTIFY currentStyleIndexChanged)
     Q_PROPERTY(int majorSeventhIndex READ majorSeventhIndex NOTIFY majorSeventhIndexChanged)
     Q_PROPERTY(int halfDiminishedIndex READ halfDiminishedIndex NOTIFY halfDiminishedIndexChanged)
@@ -64,6 +65,7 @@ public:
     QStringList augmentedList() const;
     QStringList diminishedList() const;
 
+    int chordSpellingIndex() const;
     int currentStyleIndex() const;
     int majorSeventhIndex() const;
     int halfDiminishedIndex() const;
@@ -73,7 +75,8 @@ public:
 
     void initChordSpellingList();
     void initCurrentStyleIndex();
-    void setUpQualitySymbolsIndices();
+    void updatePropertyIndices();
+    void updateQualitySymbolsIndices();
     void setQualitySymbolsLists();
 
     Q_INVOKABLE void setChordStyle(QString styleName);
@@ -88,6 +91,7 @@ signals:
     void augmentedListChanged();
     void diminishedListChanged();
 
+    void chordSpellingIndexChanged();
     void currentStyleIndexChanged();
     void majorSeventhIndexChanged();
     void halfDiminishedIndexChanged();
@@ -112,12 +116,21 @@ private:
     QStringList m_augmentedList;
     QStringList m_diminishedList;
 
+    int m_chordSpellingIndex;
     int m_currentStyleIndex;
     int m_majorSeventhIndex;
     int m_halfDiminishedIndex;
     int m_minorIndex;
     int m_augmentedIndex;
     int m_diminishedIndex;
+
+    QHash<QString, Ms::Sid> chordSpellingMap = {
+        { "Standard", Ms::Sid::useStandardNoteNames },
+        { "German", Ms::Sid::useGermanNoteNames },
+        { "German Full", Ms::Sid::useFullGermanNoteNames },
+        { "Solfege", Ms::Sid::useSolfeggioNoteNames },
+        { "French", Ms::Sid::useFrenchNoteNames }
+    };
 };
 
 #endif // CHORDSYMBOLEDITORMODEL_H
