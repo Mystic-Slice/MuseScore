@@ -60,7 +60,6 @@ Rectangle {
 
             onClicked: {
                 chordSymbolEditorModel.setChordStyle(styleName)
-                grid.currentIndex = index
             }
         }
     }
@@ -87,6 +86,7 @@ Rectangle {
             cellHeight: 80
 
             model: chordSymbolEditorModel
+            currentIndex: chordSymbolEditorModel.currentStyleIndex
 
             delegate: chordStyleDelegate
             clip: true
