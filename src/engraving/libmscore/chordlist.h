@@ -168,6 +168,12 @@ public:
     bool operator==(const ParsedChord& c) const { return this->_handle == c._handle; }
     bool operator!=(const ParsedChord& c) const { return !(*this == c); }
     ParsedChord();
+    //---------------------------------------------------------
+    //   Mystic Slice
+    //---------------------------------------------------------
+    void respellQualitySymbols(const ChordList* cl);
+    QList<int> skipList; // Indexes to be skipped while rendering
+    QList<int> removeAfterRenderList; // Indexes that were added by the program which must be removed after it is done
 private:
     QString _name;
     QString _handle;
