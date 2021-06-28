@@ -1525,40 +1525,43 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
     // half-diminished chords
     bool isHalfDiminished = false;
     bool hasSevenFlatFive = false;
-    bool flatStopped = false;
     if (_quality == "minor" && _extension == "7" && _modifiers.contains("<b5>")) {
         isHalfDiminished = true;
     }
 
-    for (const ChordToken& tok : qAsConst(_tokenList)) {
+    for (int index = 0;index < _tokenList.size();index++) {
+        const ChordToken& tok = _tokenList.at(index);
         // Skip the extension 7 of Major 7th chords if needed
-        if (isMajorSeventh
-            && !hasSeven
-            && (tok.tokenClass == ChordTokenClass::EXTENSION)
-            && tok.names.contains("7")) {
-            continue;
+        if (isMajorSeventh && !hasSeven) {
+            // Skip extension 7
+            if ((tok.tokenClass == ChordTokenClass::EXTENSION) && tok.names.contains("7")) {
+                continue;
+            }
         }
 
         // Skip the extension 7 and modifier b5 of Half-diminished chords if needed
-        if (isHalfDiminished
-            && !hasSevenFlatFive
-            && (tok.tokenClass == ChordTokenClass::EXTENSION)
-            && tok.names.contains("7")) {
-            continue;
-        }
-        if (isHalfDiminished
-            && !hasSevenFlatFive
-            && (tok.tokenClass == ChordTokenClass::MODIFIER)
-            && tok.names.contains("5")) {
-            continue;
-        }
-        if (isHalfDiminished
-            && !hasSevenFlatFive
-            && !flatStopped
-            && (tok.tokenClass == ChordTokenClass::MODIFIER)
-            && tok.names.contains("b")) {
-            flatStopped = true;
-            continue;
+        if (isHalfDiminished && !hasSevenFlatFive) {
+            // Skip seven
+            if((tok.tokenClass == ChordTokenClass::EXTENSION) && tok.names.contains("7")) {
+                continue;
+            }
+
+            // Skip 5
+            if ((tok.tokenClass == ChordTokenClass::MODIFIER) && tok.names.contains("5")) {
+                // To ensure other modifiers like b9 are safe
+                if(_tokenList.at(index-1).names.contains("b")){
+                    continue;
+                }
+            }
+
+            // Skip flat
+            if ((tok.tokenClass == ChordTokenClass::MODIFIER) && tok.names.contains("b")) {
+                // To ensure other modifiers like b9 are safe
+                if(_tokenList.at(index+1).names.contains("5")){
+                    continue;
+                }
+            }
+
         }
 
         QString n = tok.names.first();
