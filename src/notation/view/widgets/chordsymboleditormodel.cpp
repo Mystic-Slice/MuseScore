@@ -30,6 +30,7 @@ ChordSymbolEditorModel::ChordSymbolEditorModel(QObject* parent)
     setQualitySymbolsLists();
     initChordSpellingList();
     initCurrentStyleIndex();
+    initProperties();
     updatePropertyIndices();
     updateQualitySymbolsIndices();
 }
@@ -134,10 +135,42 @@ int ChordSymbolEditorModel::diminishedIndex() const
     return m_diminishedIndex;
 }
 
+qreal ChordSymbolEditorModel::extensionMag() const
+{
+    return m_extensionMag;
+}
+
+qreal ChordSymbolEditorModel::extensionAdjust() const
+{
+    return m_extensionAdjust;
+}
+
+qreal ChordSymbolEditorModel::modifierMag() const
+{
+    return m_modifierMag;
+}
+
+qreal ChordSymbolEditorModel::modifierAdjust() const
+{
+    return m_modifierAdjust;
+}
+
 void ChordSymbolEditorModel::initChordSpellingList()
 {
     m_chordSpellingList << "Standard" << "German" << "German Full" << "Solfege" << "French";
     emit chordSpellingListChanged();
+}
+
+void ChordSymbolEditorModel::initProperties()
+{
+    m_extensionMag = globalContext()->currentNotation()->style()->styleValue(Ms::Sid::chordExtensionMag).toReal();
+    m_extensionAdjust = globalContext()->currentNotation()->style()->styleValue(Ms::Sid::chordExtensionAdjust).toReal();
+    m_modifierMag = globalContext()->currentNotation()->style()->styleValue(Ms::Sid::chordModifierMag).toReal();
+    m_modifierAdjust = globalContext()->currentNotation()->style()->styleValue(Ms::Sid::chordModifierAdjust).toReal();
+    emit extensionMagChanged();
+    emit extensionAdjustChanged();
+    emit modifierMagChanged();
+    emit modifierAdjustChanged();
 }
 
 void ChordSymbolEditorModel::initCurrentStyleIndex()
@@ -330,4 +363,27 @@ void ChordSymbolEditorModel::setChordSpelling(QString newSpelling)
     }
 
     updatePropertyIndices();
+}
+
+void ChordSymbolEditorModel::setProperty(QString property, qreal val)
+{
+
+    if(property == "ExtensionMag") {
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordExtensionMag, val);
+        m_extensionMag = val;
+        emit extensionMagChanged();
+    } else if (property == "ExtensionAdjust") {
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordExtensionAdjust, val);
+        m_extensionAdjust = val;
+        emit extensionAdjustChanged();
+    } else if (property == "ModifierMag") {
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordModifierMag, val);
+        m_modifierMag= val;
+        emit modifierMagChanged();
+    } else if (property == "ModifierAdjust") {
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordModifierAdjust, val);
+        m_modifierAdjust = val;
+        emit modifierAdjustChanged();
+    }
+
 }

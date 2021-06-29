@@ -51,6 +51,11 @@ class ChordSymbolEditorModel : public QAbstractListModel
     Q_PROPERTY(int augmentedIndex READ augmentedIndex NOTIFY augmentedIndexChanged)
     Q_PROPERTY(int diminishedIndex READ diminishedIndex NOTIFY diminishedIndexChanged)
 
+    Q_PROPERTY(qreal extensionMag READ extensionMag NOTIFY extensionMagChanged)
+    Q_PROPERTY(qreal extensionAdjust READ extensionAdjust NOTIFY extensionAdjustChanged)
+    Q_PROPERTY(qreal modifierMag READ modifierMag NOTIFY modifierMagChanged)
+    Q_PROPERTY(qreal modifierAdjust READ modifierAdjust NOTIFY modifierAdjustChanged)
+
 public:
     ChordSymbolEditorModel(QObject* parent = nullptr);
 
@@ -73,8 +78,14 @@ public:
     int augmentedIndex() const;
     int diminishedIndex() const;
 
+    qreal extensionMag() const;
+    qreal extensionAdjust() const;
+    qreal modifierMag() const;
+    qreal modifierAdjust() const;
+
     void initChordSpellingList();
     void initCurrentStyleIndex();
+    void initProperties();
     void updatePropertyIndices();
     void updateQualitySymbolsIndices();
     void setQualitySymbolsLists();
@@ -83,6 +94,7 @@ public:
     Q_INVOKABLE void setChordStyle(QString styleName);
     Q_INVOKABLE void setChordSpelling(QString spelling);
     Q_INVOKABLE void setQualitySymbol(QString quality, QString symbol);
+    Q_INVOKABLE void setProperty(QString property, qreal val);
 
 signals:
     void chordSpellingListChanged();
@@ -99,6 +111,11 @@ signals:
     void minorIndexChanged();
     void augmentedIndexChanged();
     void diminishedIndexChanged();
+
+    void extensionMagChanged();
+    void extensionAdjustChanged();
+    void modifierMagChanged();
+    void modifierAdjustChanged();
 
 private:
     enum RoleNames {
@@ -124,6 +141,11 @@ private:
     int m_minorIndex;
     int m_augmentedIndex;
     int m_diminishedIndex;
+
+    qreal m_extensionMag;
+    qreal m_extensionAdjust;
+    qreal m_modifierMag;
+    qreal m_modifierAdjust;
 
     QHash<QString, Ms::Sid> chordSpellingMap = {
         { "Standard", Ms::Sid::useStandardNoteNames },

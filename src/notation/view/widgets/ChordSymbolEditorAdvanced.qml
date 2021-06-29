@@ -27,20 +27,110 @@ import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
 
 Item {
+    id: root
 
-    Rectangle {
-        width: root.width
-        height: root.height/2
+    property var editorModel: null
 
-        color: "red"
+    Row{
+        Column{
+            id: leftColumn
 
-        StyledTextLabel {
-            id: name
+            StyledTextLabel{
+                text: qsTrc("notation","Extensions")
+            }
 
-            anchors.fill: parent
+            Row{
+                Column{
+                    StyledTextLabel{
+                        text: qsTrc("notation","Vertical Offset")
+                    }
 
-            text: qsTr("Coming Soon...")
-            font.pixelSize: 30
+                    IncrementalPropertyControl {
+                        id: extensionAdjustSpinBox
+
+                        width: root.width/4
+
+                        currentValue: editorModel.extensionAdjust
+
+                        step: 1
+                        minValue: 0.1
+                        maxValue: 10
+
+                        onValueEdited: editorModel.setProperty("ExtensionAdjust", newValue)
+                    }
+                }
+
+                Column{
+                    StyledTextLabel{
+                        text: qsTrc("notation","Scaling")
+                    }
+
+                    IncrementalPropertyControl {
+                        id: extensionMagSpinBox
+
+                        width: root.width/4
+
+                        currentValue: editorModel.extensionMag
+
+                        step: 0.1
+                        minValue: 0.1
+                        maxValue: 10
+
+                        onValueEdited: editorModel.setProperty("ExtensionMag", newValue)
+                    }
+                }
+
+            }
+
+            StyledTextLabel{
+                text: qsTrc("notation","Alterations")
+            }
+
+            Row{
+                Column{
+                    StyledTextLabel{
+                        text: qsTrc("notation","Vertical Offset")
+                    }
+
+                    IncrementalPropertyControl {
+                        id: modifierAdjustSpinBox
+
+                        width: root.width/4
+
+                        currentValue: editorModel.modifierAdjust
+
+                        step: 1
+                        minValue: 0.1
+                        maxValue: 10
+
+                        onValueEdited: editorModel.setProperty("ModifierAdjust", newValue)
+                    }
+                }
+
+                Column{
+                    StyledTextLabel{
+                        text: qsTrc("notation","Scaling")
+                    }
+
+                    IncrementalPropertyControl {
+                        id: modifierMagSpinBox
+
+                        width: root.width/4
+
+                        currentValue: editorModel.modifierMag
+
+                        step: 0.1
+                        minValue: 0.1
+                        maxValue: 10
+
+                        onValueEdited: editorModel.setProperty("ModifierMag", newValue)
+                    }
+                }
+
+            }
+        }
+        Column{
+            id: rightColumn
         }
     }
 }
