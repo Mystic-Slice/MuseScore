@@ -53,7 +53,7 @@ Item {
                         currentValue: editorModel.extensionAdjust
 
                         step: 1
-                        minValue: 0.1
+                        minValue: -10
                         maxValue: 10
 
                         onValueEdited: editorModel.setProperty("ExtensionAdjust", newValue)
@@ -73,7 +73,7 @@ Item {
                         currentValue: editorModel.extensionMag
 
                         step: 0.1
-                        minValue: 0.1
+                        minValue: -10
                         maxValue: 10
 
                         onValueEdited: editorModel.setProperty("ExtensionMag", newValue)
@@ -100,7 +100,7 @@ Item {
                         currentValue: editorModel.modifierAdjust
 
                         step: 1
-                        minValue: 0.1
+                        minValue: -10
                         maxValue: 10
 
                         onValueEdited: editorModel.setProperty("ModifierAdjust", newValue)
@@ -120,13 +120,142 @@ Item {
                         currentValue: editorModel.modifierMag
 
                         step: 0.1
-                        minValue: 0.1
+                        minValue: -10
                         maxValue: 10
 
                         onValueEdited: editorModel.setProperty("ModifierMag", newValue)
                     }
                 }
 
+            }
+            StyledTextLabel{
+                text: qsTrc("notation","Positioning")
+            }
+
+            Column{
+                StyledTextLabel{
+                    text: qsTrc("notation","Minimum chord spacing")
+                }
+
+                IncrementalPropertyControl {
+                    id: chordSpacingSpinBox
+
+                    width: root.width/4
+
+                    currentValue: editorModel.minHarmonyDistance
+                    measureUnitsSymbol: qsTrc("notation", "sp")
+
+                    step: 0.1
+                    minValue: -50
+                    maxValue: 10
+
+                    onValueEdited: editorModel.setProperty("minHarmonyDistance", newValue)
+                }
+            }
+
+            Column{
+                StyledTextLabel{
+                    text: qsTrc("notation","Minimum barline distance")
+                }
+
+                IncrementalPropertyControl {
+                    id: barlineDistanceSpinBox
+
+                    width: root.width/4
+
+                    currentValue: editorModel.maxHarmonyBarDistance
+                    measureUnitsSymbol: qsTrc("notation", "sp")
+
+                    step: 0.5
+                    minValue: -50
+                    maxValue: 50
+
+                    onValueEdited: editorModel.setProperty("maxHarmonyBarDistance", newValue)
+                }
+            }
+
+            Column{
+                StyledTextLabel{
+                    text: qsTrc("notation","Distance to fretboard diagram")
+                }
+
+                IncrementalPropertyControl {
+                    id: distToFretboardSpinBox
+
+                    width: root.width/4
+
+                    currentValue: editorModel.harmonyFretDistance
+                    measureUnitsSymbol: qsTrc("notation", "sp")
+
+                    step: 0.5
+                    minValue: -10000
+                    maxValue: 10000
+
+                    onValueEdited: editorModel.setProperty("HarmonyFretDistance", newValue)
+                }
+            }
+            Row{
+                Column{
+                    StyledTextLabel{
+                        text: qsTrc("notation","Minimum shift above")
+                    }
+
+                    IncrementalPropertyControl {
+                        id: shiftBelowSpinBox
+
+                        width: root.width/4
+
+                        currentValue: editorModel.maxChordShiftAbove
+                        measureUnitsSymbol: qsTrc("notation", "sp")
+
+                        step: 0.5
+                        minValue: 0
+                        maxValue: 100
+
+                        onValueEdited: editorModel.setProperty("maxChordShiftAbove", newValue)
+                    }
+                }
+
+                Column{
+                    StyledTextLabel{
+                        text: qsTrc("notation","Minimum shift below")
+                    }
+
+                    IncrementalPropertyControl {
+                        id: shiftAboveSpinBox
+
+                        width: root.width/4
+
+                        currentValue: editorModel.maxChordShiftBelow
+                        measureUnitsSymbol: qsTrc("notation", "sp")
+
+                        step: 0.5
+                        minValue: 0
+                        maxValue: 100
+
+                        onValueEdited: editorModel.setProperty("maxChordShiftBelow", newValue)
+                    }
+                }
+
+            }
+            Column{
+                StyledTextLabel{
+                    text: qsTrc("notation","Capo fret position")
+                }
+
+                IncrementalPropertyControl {
+                    id: capoFretSpinBox
+
+                    width: root.width/4
+
+                    currentValue: editorModel.modifierMag
+
+                    step: 0.1
+                    minValue: 0
+                    maxValue: 11
+
+                    onValueEdited: editorModel.setProperty("ModifierMag", newValue)
+                }
             }
         }
         Column{

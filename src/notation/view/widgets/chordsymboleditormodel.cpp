@@ -155,6 +155,27 @@ qreal ChordSymbolEditorModel::modifierAdjust() const
     return m_modifierAdjust;
 }
 
+qreal ChordSymbolEditorModel::harmonyFretDistance() const
+{
+    return m_harmonyFretDistance;
+}
+qreal ChordSymbolEditorModel::minHarmonyDistance() const
+{
+    return m_minHarmonyDistance;
+}
+qreal ChordSymbolEditorModel::maxHarmonyBarDistance() const
+{
+    return m_maxHarmonyBarDistance;
+}
+qreal ChordSymbolEditorModel::maxChordShiftAbove() const
+{
+    return m_maxChordShiftAbove;
+}
+qreal ChordSymbolEditorModel::maxChordShiftBelow() const
+{
+    return m_maxChordShiftBelow;
+}
+
 void ChordSymbolEditorModel::initChordSpellingList()
 {
     m_chordSpellingList << "Standard" << "German" << "German Full" << "Solfege" << "French";
@@ -167,10 +188,26 @@ void ChordSymbolEditorModel::initProperties()
     m_extensionAdjust = globalContext()->currentNotation()->style()->styleValue(Ms::Sid::chordExtensionAdjust).toReal();
     m_modifierMag = globalContext()->currentNotation()->style()->styleValue(Ms::Sid::chordModifierMag).toReal();
     m_modifierAdjust = globalContext()->currentNotation()->style()->styleValue(Ms::Sid::chordModifierAdjust).toReal();
+    m_harmonyFretDistance = globalContext()->currentNotation()->style()->styleValue(Ms::Sid::harmonyFretDist).toReal();
+    m_minHarmonyDistance = globalContext()->currentNotation()->style()->styleValue(Ms::Sid::minHarmonyDistance).toReal();
+    m_maxHarmonyBarDistance = globalContext()->currentNotation()->style()->styleValue(Ms::Sid::maxHarmonyBarDistance).toReal();
+    m_maxChordShiftAbove = globalContext()->currentNotation()->style()->styleValue(Ms::Sid::maxChordShiftAbove).toReal();
+    m_maxChordShiftBelow = globalContext()->currentNotation()->style()->styleValue(Ms::Sid::maxChordShiftBelow).toReal();
+
+    //    { StyleId::harmonyFretDist,         false, harmonyFretDist,         0 },
+    //    { StyleId::minHarmonyDistance,      false, minHarmonyDistance,      0 },
+    //    { StyleId::maxHarmonyBarDistance,   false, maxHarmonyBarDistance,   0 },
+    //    { StyleId::maxChordShiftAbove,      false, maxChordShiftAbove,      resetMaxChordShiftAbove },
+    //    { StyleId::maxChordShiftBelow,      false, maxChordShiftBelow,      resetMaxChordShiftBelow },
     emit extensionMagChanged();
     emit extensionAdjustChanged();
     emit modifierMagChanged();
     emit modifierAdjustChanged();
+    emit harmonyFretDistanceChanged();
+    emit minHarmonyDistanceChanged();
+    emit maxHarmonyBarDistanceChanged();
+    emit maxChordShiftAboveChanged();
+    emit maxChordShiftBelowChanged();
 }
 
 void ChordSymbolEditorModel::initCurrentStyleIndex()
@@ -384,6 +421,26 @@ void ChordSymbolEditorModel::setProperty(QString property, qreal val)
         globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordModifierAdjust, val);
         m_modifierAdjust = val;
         emit modifierAdjustChanged();
+    } else if (property == "HarmonyFretDistance") {
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::harmonyFretDist, val);
+        m_harmonyFretDistance = val;
+        emit harmonyFretDistanceChanged();
+    } else if (property == "minHarmonyDistance") {
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::minHarmonyDistance, val);
+        m_minHarmonyDistance = val;
+        emit minHarmonyDistanceChanged();
+    } else if (property == "maxHarmonyBarDistance") {
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::maxHarmonyBarDistance, val);
+        m_maxHarmonyBarDistance = val;
+        emit maxHarmonyBarDistanceChanged();
+    } else if (property == "maxChordShiftAbove") {
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::maxChordShiftAbove, val);
+        m_maxChordShiftAbove = val;
+        emit maxChordShiftAboveChanged();
+    } else if (property == "maxChordShiftBelow") {
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::maxChordShiftBelow, val);
+        m_maxChordShiftBelow = val;
+        emit maxChordShiftBelowChanged();
     }
 
 }

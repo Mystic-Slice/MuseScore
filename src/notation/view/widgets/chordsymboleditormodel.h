@@ -55,7 +55,17 @@ class ChordSymbolEditorModel : public QAbstractListModel
     Q_PROPERTY(qreal extensionAdjust READ extensionAdjust NOTIFY extensionAdjustChanged)
     Q_PROPERTY(qreal modifierMag READ modifierMag NOTIFY modifierMagChanged)
     Q_PROPERTY(qreal modifierAdjust READ modifierAdjust NOTIFY modifierAdjustChanged)
+    Q_PROPERTY(qreal harmonyFretDistance READ harmonyFretDistance NOTIFY harmonyFretDistanceChanged)
+    Q_PROPERTY(qreal minHarmonyDistance READ minHarmonyDistance NOTIFY minHarmonyDistanceChanged)
+    Q_PROPERTY(qreal maxHarmonyBarDistance READ maxHarmonyBarDistance NOTIFY maxHarmonyBarDistanceChanged)
+    Q_PROPERTY(qreal maxChordShiftAbove READ maxChordShiftAbove NOTIFY maxChordShiftAboveChanged)
+    Q_PROPERTY(qreal maxChordShiftBelow READ maxChordShiftBelow NOTIFY maxChordShiftBelowChanged)
 
+//    { StyleId::harmonyFretDist,         false, harmonyFretDist,         0 },
+//    { StyleId::minHarmonyDistance,      false, minHarmonyDistance,      0 },
+//    { StyleId::maxHarmonyBarDistance,   false, maxHarmonyBarDistance,   0 },
+//    { StyleId::maxChordShiftAbove,      false, maxChordShiftAbove,      resetMaxChordShiftAbove },
+//    { StyleId::maxChordShiftBelow,      false, maxChordShiftBelow,      resetMaxChordShiftBelow },
 public:
     ChordSymbolEditorModel(QObject* parent = nullptr);
 
@@ -82,6 +92,12 @@ public:
     qreal extensionAdjust() const;
     qreal modifierMag() const;
     qreal modifierAdjust() const;
+    qreal harmonyFretDistance() const;
+    qreal minHarmonyDistance() const;
+    qreal maxHarmonyBarDistance() const;
+    qreal maxChordShiftAbove() const;
+    qreal maxChordShiftBelow() const;
+
 
     void initChordSpellingList();
     void initCurrentStyleIndex();
@@ -116,6 +132,11 @@ signals:
     void extensionAdjustChanged();
     void modifierMagChanged();
     void modifierAdjustChanged();
+    void harmonyFretDistanceChanged();
+    void minHarmonyDistanceChanged();
+    void maxHarmonyBarDistanceChanged();
+    void maxChordShiftAboveChanged();
+    void maxChordShiftBelowChanged();
 
 private:
     enum RoleNames {
@@ -146,6 +167,11 @@ private:
     qreal m_extensionAdjust;
     qreal m_modifierMag;
     qreal m_modifierAdjust;
+    qreal m_harmonyFretDistance;
+    qreal m_minHarmonyDistance;
+    qreal m_maxHarmonyBarDistance;
+    qreal m_maxChordShiftAbove;
+    qreal m_maxChordShiftBelow;
 
     QHash<QString, Ms::Sid> chordSpellingMap = {
         { "Standard", Ms::Sid::useStandardNoteNames },
