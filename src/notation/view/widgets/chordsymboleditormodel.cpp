@@ -159,21 +159,30 @@ qreal ChordSymbolEditorModel::harmonyFretDistance() const
 {
     return m_harmonyFretDistance;
 }
+
 qreal ChordSymbolEditorModel::minHarmonyDistance() const
 {
     return m_minHarmonyDistance;
 }
+
 qreal ChordSymbolEditorModel::maxHarmonyBarDistance() const
 {
     return m_maxHarmonyBarDistance;
 }
+
 qreal ChordSymbolEditorModel::maxChordShiftAbove() const
 {
     return m_maxChordShiftAbove;
 }
+
 qreal ChordSymbolEditorModel::maxChordShiftBelow() const
 {
     return m_maxChordShiftBelow;
+}
+
+qreal ChordSymbolEditorModel::capoFretPosition() const
+{
+    return m_capoFretPosition;
 }
 
 void ChordSymbolEditorModel::initChordSpellingList()
@@ -193,12 +202,8 @@ void ChordSymbolEditorModel::initProperties()
     m_maxHarmonyBarDistance = globalContext()->currentNotation()->style()->styleValue(Ms::Sid::maxHarmonyBarDistance).toReal();
     m_maxChordShiftAbove = globalContext()->currentNotation()->style()->styleValue(Ms::Sid::maxChordShiftAbove).toReal();
     m_maxChordShiftBelow = globalContext()->currentNotation()->style()->styleValue(Ms::Sid::maxChordShiftBelow).toReal();
+    m_capoFretPosition = globalContext()->currentNotation()->style()->styleValue(Ms::Sid::capoPosition).toReal();
 
-    //    { StyleId::harmonyFretDist,         false, harmonyFretDist,         0 },
-    //    { StyleId::minHarmonyDistance,      false, minHarmonyDistance,      0 },
-    //    { StyleId::maxHarmonyBarDistance,   false, maxHarmonyBarDistance,   0 },
-    //    { StyleId::maxChordShiftAbove,      false, maxChordShiftAbove,      resetMaxChordShiftAbove },
-    //    { StyleId::maxChordShiftBelow,      false, maxChordShiftBelow,      resetMaxChordShiftBelow },
     emit extensionMagChanged();
     emit extensionAdjustChanged();
     emit modifierMagChanged();
@@ -441,6 +446,10 @@ void ChordSymbolEditorModel::setProperty(QString property, qreal val)
         globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::maxChordShiftBelow, val);
         m_maxChordShiftBelow = val;
         emit maxChordShiftBelowChanged();
+    } else if (property == "capoPosition") {
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::capoPosition, val);
+        m_capoFretPosition = val;
+        emit capoFretPositionChanged();
     }
 
 }

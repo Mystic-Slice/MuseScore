@@ -60,6 +60,7 @@ class ChordSymbolEditorModel : public QAbstractListModel
     Q_PROPERTY(qreal maxHarmonyBarDistance READ maxHarmonyBarDistance NOTIFY maxHarmonyBarDistanceChanged)
     Q_PROPERTY(qreal maxChordShiftAbove READ maxChordShiftAbove NOTIFY maxChordShiftAboveChanged)
     Q_PROPERTY(qreal maxChordShiftBelow READ maxChordShiftBelow NOTIFY maxChordShiftBelowChanged)
+    Q_PROPERTY(qreal capoFretPosition READ capoFretPosition NOTIFY capoFretPositionChanged)
 
 //    { StyleId::harmonyFretDist,         false, harmonyFretDist,         0 },
 //    { StyleId::minHarmonyDistance,      false, minHarmonyDistance,      0 },
@@ -97,7 +98,7 @@ public:
     qreal maxHarmonyBarDistance() const;
     qreal maxChordShiftAbove() const;
     qreal maxChordShiftBelow() const;
-
+    qreal capoFretPosition() const;
 
     void initChordSpellingList();
     void initCurrentStyleIndex();
@@ -137,6 +138,7 @@ signals:
     void maxHarmonyBarDistanceChanged();
     void maxChordShiftAboveChanged();
     void maxChordShiftBelowChanged();
+    void capoFretPositionChanged();
 
 private:
     enum RoleNames {
@@ -172,6 +174,7 @@ private:
     qreal m_maxHarmonyBarDistance;
     qreal m_maxChordShiftAbove;
     qreal m_maxChordShiftBelow;
+    qreal m_capoFretPosition;
 
     QHash<QString, Ms::Sid> chordSpellingMap = {
         { "Standard", Ms::Sid::useStandardNoteNames },
