@@ -51,6 +51,8 @@ class ChordSymbolEditorModel : public QAbstractListModel
     Q_PROPERTY(int augmentedIndex READ augmentedIndex NOTIFY augmentedIndexChanged)
     Q_PROPERTY(int diminishedIndex READ diminishedIndex NOTIFY diminishedIndexChanged)
 
+    Q_PROPERTY(qreal qualityMag READ qualityMag NOTIFY qualityMagChanged)
+    Q_PROPERTY(qreal qualityAdjust READ qualityAdjust NOTIFY qualityAdjustChanged)
     Q_PROPERTY(qreal extensionMag READ extensionMag NOTIFY extensionMagChanged)
     Q_PROPERTY(qreal extensionAdjust READ extensionAdjust NOTIFY extensionAdjustChanged)
     Q_PROPERTY(qreal modifierMag READ modifierMag NOTIFY modifierMagChanged)
@@ -89,6 +91,8 @@ public:
     int augmentedIndex() const;
     int diminishedIndex() const;
 
+    qreal qualityMag() const;
+    qreal qualityAdjust() const;
     qreal extensionMag() const;
     qreal extensionAdjust() const;
     qreal modifierMag() const;
@@ -129,6 +133,8 @@ signals:
     void augmentedIndexChanged();
     void diminishedIndexChanged();
 
+    void qualityMagChanged();
+    void qualityAdjustChanged();
     void extensionMagChanged();
     void extensionAdjustChanged();
     void modifierMagChanged();
@@ -165,6 +171,8 @@ private:
     int m_augmentedIndex;
     int m_diminishedIndex;
 
+    qreal m_qualityMag;
+    qreal m_qualityAdjust;
     qreal m_extensionMag;
     qreal m_extensionAdjust;
     qreal m_modifierMag;

@@ -439,6 +439,8 @@ static const StyleType styleTypes[] {
     { Sid::chordStyle,              "chordStyle",              QVariant(QString("std")) },
     { Sid::chordsXmlFile,           "chordsXmlFile",           QVariant(false) },
     { Sid::chordDescriptionFile,    "chordDescriptionFile",    QVariant(QString("chords_std.xml")) },
+    { Sid::chordQualityMag,         "chordQualityMag",         QVariant(1.0) },
+    { Sid::chordQualityAdjust,      "chordQualityAdjust",      QVariant(0.0) },
     { Sid::chordExtensionMag,       "chordExtensionMag",       QVariant(1.0) },
     { Sid::chordExtensionAdjust,    "chordExtensionAdjust",    QVariant(0.0) },
     { Sid::chordModifierMag,        "chordModifierMag",        QVariant(1.0) },
@@ -2808,11 +2810,13 @@ void MStyle::checkChordList()
 {
     // make sure we have a chordlist
     if (!_chordList.loaded()) {
+        qreal qmag = value(Sid::chordQualityMag).toDouble();
+        qreal qadjust = value(Sid::chordQualityAdjust).toDouble();
         qreal emag = value(Sid::chordExtensionMag).toDouble();
         qreal eadjust = value(Sid::chordExtensionAdjust).toDouble();
         qreal mmag = value(Sid::chordModifierMag).toDouble();
         qreal madjust = value(Sid::chordModifierAdjust).toDouble();
-        _chordList.configureAutoAdjust(emag, eadjust, mmag, madjust);
+        _chordList.configureAutoAdjust(qmag, qadjust, emag, eadjust, mmag, madjust);
         if (value(Sid::chordsXmlFile).toBool()) {
             _chordList.read("chords.xml");
         }

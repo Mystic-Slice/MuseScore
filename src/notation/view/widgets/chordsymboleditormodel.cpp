@@ -135,6 +135,16 @@ int ChordSymbolEditorModel::diminishedIndex() const
     return m_diminishedIndex;
 }
 
+qreal ChordSymbolEditorModel::qualityMag() const
+{
+    return m_qualityMag;
+}
+
+qreal ChordSymbolEditorModel::qualityAdjust() const
+{
+    return m_qualityAdjust;
+}
+
 qreal ChordSymbolEditorModel::extensionMag() const
 {
     return m_extensionMag;
@@ -193,6 +203,8 @@ void ChordSymbolEditorModel::initChordSpellingList()
 
 void ChordSymbolEditorModel::initProperties()
 {
+    m_qualityMag = globalContext()->currentNotation()->style()->styleValue(Ms::Sid::chordQualityMag).toReal();
+    m_qualityAdjust = globalContext()->currentNotation()->style()->styleValue(Ms::Sid::chordQualityAdjust).toReal();
     m_extensionMag = globalContext()->currentNotation()->style()->styleValue(Ms::Sid::chordExtensionMag).toReal();
     m_extensionAdjust = globalContext()->currentNotation()->style()->styleValue(Ms::Sid::chordExtensionAdjust).toReal();
     m_modifierMag = globalContext()->currentNotation()->style()->styleValue(Ms::Sid::chordModifierMag).toReal();
@@ -204,6 +216,8 @@ void ChordSymbolEditorModel::initProperties()
     m_maxChordShiftBelow = globalContext()->currentNotation()->style()->styleValue(Ms::Sid::maxChordShiftBelow).toReal();
     m_capoFretPosition = globalContext()->currentNotation()->style()->styleValue(Ms::Sid::capoPosition).toReal();
 
+    emit qualityMagChanged();
+    emit qualityAdjustChanged();
     emit extensionMagChanged();
     emit extensionAdjustChanged();
     emit modifierMagChanged();
@@ -410,7 +424,15 @@ void ChordSymbolEditorModel::setChordSpelling(QString newSpelling)
 void ChordSymbolEditorModel::setProperty(QString property, qreal val)
 {
 
-    if(property == "ExtensionMag") {
+    if (property == "QualityMag") {
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityMag, val);
+        m_qualityMag = val;
+        emit qualityMagChanged();
+    } else if(property == "QualityAdjust") {
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityAdjust, val);
+        m_qualityAdjust = val;
+        emit qualityAdjustChanged();
+    } else if(property == "ExtensionMag") {
         globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordExtensionMag, val);
         m_extensionMag = val;
         emit extensionMagChanged();

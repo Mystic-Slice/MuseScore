@@ -428,6 +428,8 @@ enum class Sid {
     chordStyle,
     chordsXmlFile,
     chordDescriptionFile,
+    chordQualityMag,
+    chordQualityAdjust,
     chordExtensionMag,
     chordExtensionAdjust,
     chordModifierMag,

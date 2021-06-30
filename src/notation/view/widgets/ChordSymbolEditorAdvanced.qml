@@ -34,6 +34,7 @@ Item {
     Flickable{
         id: flickable
 
+        // Just to make it scroll
         height: 200
         width: root.width
 
@@ -47,6 +48,53 @@ Item {
         Row{
             Column{
                 id: leftColumn
+
+                StyledTextLabel{
+                    text: qsTrc("notation","Quality")
+                }
+
+                Row{
+                    Column{
+                        StyledTextLabel{
+                            text: qsTrc("notation","Vertical Offset")
+                        }
+
+                        IncrementalPropertyControl {
+                            id: qualityAdjustSpinBox
+
+                            width: root.width/4
+
+                            currentValue: editorModel.qualityAdjust
+
+                            step: 1
+                            minValue: -10
+                            maxValue: 10
+
+                            onValueEdited: editorModel.setProperty("QualityAdjust", newValue)
+                        }
+                    }
+
+                    Column{
+                        StyledTextLabel{
+                            text: qsTrc("notation","Scaling")
+                        }
+
+                        IncrementalPropertyControl {
+                            id: qualityMagSpinBox
+
+                            width: root.width/4
+
+                            currentValue: editorModel.qualityMag
+
+                            step: 0.1
+                            minValue: -10
+                            maxValue: 10
+
+                            onValueEdited: editorModel.setProperty("QualityMag", newValue)
+                        }
+                    }
+
+                }
 
                 StyledTextLabel{
                     text: qsTrc("notation","Extensions")

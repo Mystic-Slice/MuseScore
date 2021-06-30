@@ -1481,6 +1481,8 @@ qreal ChordList::position(const QStringList& names, ChordTokenClass ctc) const
 {
     QString name = names.empty() ? "" : names.first();
     switch (ctc) {
+    case ChordTokenClass::QUALITY:
+        return _qadjust;
     case ChordTokenClass::EXTENSION:
         return _eadjust;
     case ChordTokenClass::MODIFIER: {
@@ -1904,8 +1906,10 @@ int ChordList::privateID = -1000;
 //   configureAutoAdjust
 //---------------------------------------------------------
 
-void ChordList::configureAutoAdjust(qreal emag, qreal eadjust, qreal mmag, qreal madjust)
+void ChordList::configureAutoAdjust(qreal qmag, qreal qadjust, qreal emag, qreal eadjust, qreal mmag, qreal madjust)
 {
+    _qmag = qmag;
+    _qadjust = qadjust;
     _emag = emag;
     _eadjust = eadjust;
     _mmag = mmag;
@@ -1988,6 +1992,8 @@ void ChordList::read(XmlReader& e)
                     f.mag *= _emag;
                 } else if (f.fontClass == "modifier") {
                     f.mag *= _mmag;
+                } else if (f.fontClass == "quality") {
+                    f.mag *= _qmag;
                 }
             }
             fonts.append(f);
