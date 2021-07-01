@@ -434,6 +434,7 @@ enum class Sid {
     chordExtensionAdjust,
     chordModifierMag,
     chordModifierAdjust,
+    chordQualitySelectionHistory,
     chordQualityMajorSeventh,
     chordQualityHalfDiminished,
     chordQualityMinor,

@@ -446,6 +446,7 @@ static const StyleType styleTypes[] {
     { Sid::chordModifierMag,        "chordModifierMag",        QVariant(1.0) },
     { Sid::chordModifierAdjust,     "chordModifierAdjust",     QVariant(0.0) },
 
+    { Sid::chordQualitySelectionHistory, "chordQualitySelectionHistory", QVariant(QString("Standard|maj 7,m 7 b5,mi,aug,dim,omit")) },
     { Sid::chordQualityMajorSeventh, "chordQualityMajorSeventh", QVariant(QString("maj 7")) },
     { Sid::chordQualityHalfDiminished, "chordQualityHalfDiminished", QVariant(QString("m 7 b5")) },
     { Sid::chordQualityMinor,       "chordQualityMinor",       QVariant(QString("mi")) },

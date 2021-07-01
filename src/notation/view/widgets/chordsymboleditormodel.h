@@ -109,6 +109,9 @@ public:
     void updatePropertyIndices();
     void updateQualitySymbolsIndices();
     void setQualitySymbolsLists();
+    void stringifyAndSaveSelectionHistory();
+    void extractSelectionHistory(QString selectionHistory);
+    void updateSelectionHistory(QString currentStyle);
 
     Q_INVOKABLE void setChordStyle(QString styleName);
     Q_INVOKABLE void setChordSpelling(QString spelling);
@@ -155,6 +158,7 @@ private:
     QList<Ms::ChordSymbolStyle> m_styles;
     ChordSymbolStyleManager* styleManager;
     QHash<QString, QStringList> m_qualitySymbols;
+    QHash<QString, QStringList> m_selectionHistory;
 
     QStringList m_chordSpellingList;
     QStringList m_majorSeventhList;
