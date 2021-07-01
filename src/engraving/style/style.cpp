@@ -110,11 +110,13 @@ void MStyle::checkChordList()
 {
     // make sure we have a chordlist
     if (!m_chordList.loaded()) {
+        qreal qmag = value(Sid::chordQualityMag).toDouble();
+        qreal qadjust = value(Sid::chordQualityAdjust).toDouble();
         qreal emag = value(Sid::chordExtensionMag).toDouble();
         qreal eadjust = value(Sid::chordExtensionAdjust).toDouble();
         qreal mmag = value(Sid::chordModifierMag).toDouble();
         qreal madjust = value(Sid::chordModifierAdjust).toDouble();
-        m_chordList.configureAutoAdjust(emag, eadjust, mmag, madjust);
+        m_chordList.configureAutoAdjust(qmag, qadjust, emag, eadjust, mmag, madjust);
         if (value(Sid::chordsXmlFile).toBool()) {
             m_chordList.read("chords.xml");
         }
@@ -372,11 +374,13 @@ void MStyle::load(XmlReader& e)
 void MStyle::setUpQualitySymbols()
 {
     m_chordList.qualitySymbols.clear();
+    m_chordList.qualitySymbols.insert("major", "");
     m_chordList.qualitySymbols.insert("minor", value(Sid::chordQualityMinor).toString());
     m_chordList.qualitySymbols.insert("half-diminished", value(Sid::chordQualityHalfDiminished).toString());
     m_chordList.qualitySymbols.insert("major7th", value(Sid::chordQualityMajorSeventh).toString());
     m_chordList.qualitySymbols.insert("diminished", value(Sid::chordQualityDiminished).toString());
     m_chordList.qualitySymbols.insert("augmented", value(Sid::chordQualityAugmented).toString());
+    m_chordList.qualitySymbols.insert("omit", value(Sid::chordModifierOmit).toString());
 }
 
 void MStyle::save(XmlWriter& xml, bool optimize)
