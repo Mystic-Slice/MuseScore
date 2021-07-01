@@ -48,6 +48,10 @@
     <sym>m 7 b5</sym>
     <sym>min 7 b5</sym>
   </quality>
+  <modifier m = "omit">
+    <sym>omit</sym>
+    <sym>no</sym>
+  </modifier>
 
 <!--
       Part I: font list

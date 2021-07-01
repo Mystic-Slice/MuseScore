@@ -37,11 +37,13 @@ Rectangle {
     Flickable {
         id: flickableContainer
 
-        height: root.height
+        height: 200
         width: root.width
 
         boundsBehavior: Flickable.StopAtBounds
         interactive: true
+
+        contentHeight: 400
 
         ScrollBar.vertical: StyledScrollBar {}
         Column{
@@ -242,6 +244,41 @@ Rectangle {
 
                         onClicked: {
                             editorModel.setQualitySymbol("diminished",modelData);
+                        }
+                    }
+
+                    boundsBehavior: Flickable.StopAtBounds
+
+                    highlight: Rectangle {
+                        color: ui.theme.accentColor
+                        radius: 3
+                    }
+                }
+
+                GridView {
+                    id: omitGridView
+
+                    height: listCellHeight + 2*listCellMargin
+                    width: root.width
+
+                    anchors.left: flickableContainer.left
+
+                    anchors.top: diminishedGridView.bottom
+
+                    cellHeight: listCellHeight
+                    cellWidth: listCellWidth + listCellMargin
+
+                    model: editorModel.omitList
+                    currentIndex: editorModel.omitIndex
+
+                    delegate: FlatButton {
+                        height: listCellHeight
+                        width: listCellWidth
+                        anchors.rightMargin: listCellMargin
+                        text: modelData
+
+                        onClicked: {
+                            editorModel.setQualitySymbol("omit",modelData);
                         }
                     }
 

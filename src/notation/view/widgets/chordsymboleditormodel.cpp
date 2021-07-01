@@ -100,6 +100,11 @@ QStringList ChordSymbolEditorModel::diminishedList() const
     return m_diminishedList;
 }
 
+QStringList ChordSymbolEditorModel::omitList() const
+{
+    return m_omitList;
+}
+
 int ChordSymbolEditorModel::chordSpellingIndex() const
 {
     return m_chordSpellingIndex;
@@ -133,6 +138,11 @@ int ChordSymbolEditorModel::augmentedIndex() const
 int ChordSymbolEditorModel::diminishedIndex() const
 {
     return m_diminishedIndex;
+}
+
+int ChordSymbolEditorModel::omitIndex() const
+{
+    return m_omitIndex;
 }
 
 qreal ChordSymbolEditorModel::qualityMag() const
@@ -273,6 +283,7 @@ void ChordSymbolEditorModel::updateQualitySymbolsIndices()
         { "minor", Ms::Sid::chordQualityMinor },
         { "augmented", Ms::Sid::chordQualityAugmented },
         { "diminished", Ms::Sid::chordQualityDiminished },
+        { "omit", Ms::Sid::chordModifierOmit }
     };
 
     // Major Seventh
@@ -330,6 +341,17 @@ void ChordSymbolEditorModel::updateQualitySymbolsIndices()
         globalContext()->currentNotation()->style()->setStyleValue(id, m_diminishedList[0]);
     }
 
+    //omit
+    id = qualityToSid.value("omit");
+    currentSymbol = globalContext()->currentNotation()->style()->styleValue(id).toString();
+    if (m_omitList.contains(currentSymbol)) {
+        m_omitIndex = m_omitList.indexOf(currentSymbol);
+    } else {
+        //set the default
+        m_omitIndex = 0;
+        globalContext()->currentNotation()->style()->setStyleValue(id, m_omitList[0]);
+    }
+
     globalContext()->currentNotation()->score()->style().setUpQualitySymbols();
 
     emit majorSeventhIndexChanged();
@@ -337,6 +359,7 @@ void ChordSymbolEditorModel::updateQualitySymbolsIndices()
     emit minorIndexChanged();
     emit augmentedIndexChanged();
     emit diminishedIndexChanged();
+    emit omitIndexChanged();
 }
 
 void ChordSymbolEditorModel::refreshChordSymbols()
@@ -358,6 +381,7 @@ void ChordSymbolEditorModel::setQualitySymbolsLists()
     m_minorList = m_qualitySymbols["minor"];
     m_augmentedList = m_qualitySymbols["augmented"];
     m_diminishedList = m_qualitySymbols["diminished"];
+    m_omitList = m_qualitySymbols["omit"];
 
     // Notify QML ListViews about the change
     emit chordSpellingListChanged();
@@ -366,6 +390,7 @@ void ChordSymbolEditorModel::setQualitySymbolsLists()
     emit minorListChanged();
     emit augmentedListChanged();
     emit diminishedListChanged();
+    emit omitListChanged();
 }
 
 void ChordSymbolEditorModel::setQualitySymbol(QString quality, QString symbol)
@@ -376,6 +401,7 @@ void ChordSymbolEditorModel::setQualitySymbol(QString quality, QString symbol)
         { "minor", Ms::Sid::chordQualityMinor },
         { "augmented", Ms::Sid::chordQualityAugmented },
         { "diminished", Ms::Sid::chordQualityDiminished },
+        { "omit", Ms::Sid::chordModifierOmit }
     };
 
     Ms::Sid id = qualityToSid.value(quality);
@@ -423,16 +449,15 @@ void ChordSymbolEditorModel::setChordSpelling(QString newSpelling)
 
 void ChordSymbolEditorModel::setProperty(QString property, qreal val)
 {
-
     if (property == "QualityMag") {
         globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityMag, val);
         m_qualityMag = val;
         emit qualityMagChanged();
-    } else if(property == "QualityAdjust") {
+    } else if (property == "QualityAdjust") {
         globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityAdjust, val);
         m_qualityAdjust = val;
         emit qualityAdjustChanged();
-    } else if(property == "ExtensionMag") {
+    } else if (property == "ExtensionMag") {
         globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordExtensionMag, val);
         m_extensionMag = val;
         emit extensionMagChanged();
@@ -473,5 +498,4 @@ void ChordSymbolEditorModel::setProperty(QString property, qreal val)
         m_capoFretPosition = val;
         emit capoFretPositionChanged();
     }
-
 }

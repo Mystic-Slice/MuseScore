@@ -451,6 +451,7 @@ static const StyleType styleTypes[] {
     { Sid::chordQualityMinor,       "chordQualityMinor",       QVariant(QString("mi")) },
     { Sid::chordQualityAugmented,   "chordQualityAugmented",   QVariant(QString("aug")) },
     { Sid::chordQualityDiminished,  "chordQualityDiminished",  QVariant(QString("dim")) },
+    { Sid::chordModifierOmit,       "chordModifierOmit",       QVariant(QString("omit")) },
 
     { Sid::concertPitch,            "concertPitch",            QVariant(false) },
     { Sid::createMultiMeasureRests, "createMultiMeasureRests", QVariant(false) },
@@ -2839,11 +2840,13 @@ void MStyle::setChordList(ChordList* cl, bool custom)
 void MStyle::setUpQualitySymbols()
 {
     _chordList.qualitySymbols.clear();
+    _chordList.qualitySymbols.insert("major", "");
     _chordList.qualitySymbols.insert("minor", value(Sid::chordQualityMinor).toString());
     _chordList.qualitySymbols.insert("half-diminished", value(Sid::chordQualityHalfDiminished).toString());
     _chordList.qualitySymbols.insert("major7th", value(Sid::chordQualityMajorSeventh).toString());
     _chordList.qualitySymbols.insert("diminished", value(Sid::chordQualityDiminished).toString());
     _chordList.qualitySymbols.insert("augmented", value(Sid::chordQualityAugmented).toString());
+    _chordList.qualitySymbols.insert("omit", value(Sid::chordModifierOmit).toString());
 }
 
 //---------------------------------------------------------

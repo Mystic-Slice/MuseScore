@@ -439,6 +439,7 @@ enum class Sid {
     chordQualityMinor,
     chordQualityAugmented,
     chordQualityDiminished,
+    chordModifierOmit,
     concertPitch,
     createMultiMeasureRests,
     minEmptyMeasures,

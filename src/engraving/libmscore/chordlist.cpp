@@ -1521,7 +1521,7 @@ void ParsedChord::stripParenthesis()
 }
 
 //---------------------------------------------------------
-//   respellQualitySymbols
+//   respellQualitySymbols (also omit symbol)
 //---------------------------------------------------------
 
 void ParsedChord::respellQualitySymbols(const ChordList* cl)
@@ -1660,6 +1660,18 @@ void ParsedChord::respellQualitySymbols(const ChordList* cl)
                 qualTok.tokenClass = ChordTokenClass::QUALITY;
                 _tokenList.removeAt(index);
                 _tokenList.insert(index, qualTok);
+            }
+        }
+
+        // For omit/no modifier
+        if (tok.tokenClass == ChordTokenClass::MODIFIER && cl) {
+            if (tok.names.contains("omit") || tok.names.contains("no")) {
+                QString sym = cl->qualitySymbols.value("omit");
+                ChordToken omitTok;
+                omitTok.names += sym;
+                omitTok.tokenClass = ChordTokenClass::MODIFIER;
+                _tokenList.removeAt(index);
+                _tokenList.insert(index, omitTok);
             }
         }
     }
