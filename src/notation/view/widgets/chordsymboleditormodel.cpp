@@ -362,13 +362,6 @@ void ChordSymbolEditorModel::updateQualitySymbolsIndices()
     emit omitIndexChanged();
 }
 
-void ChordSymbolEditorModel::refreshChordSymbols()
-{
-    // Temporary hack to get the chord symbols to refresh
-    globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordDescriptionFile, "dummy");
-    globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordDescriptionFile, m_styles[m_currentStyleIndex].fileName);
-}
-
 void ChordSymbolEditorModel::setQualitySymbolsLists()
 {
     // Get the symbols from the file
@@ -407,7 +400,6 @@ void ChordSymbolEditorModel::setQualitySymbol(QString quality, QString symbol)
     Ms::Sid id = qualityToSid.value(quality);
     globalContext()->currentNotation()->style()->setStyleValue(id, symbol);
     updateQualitySymbolsIndices();
-    refreshChordSymbols();
 }
 
 void ChordSymbolEditorModel::setChordStyle(QString styleName)
@@ -427,7 +419,6 @@ void ChordSymbolEditorModel::setChordStyle(QString styleName)
     globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordDescriptionFile, descriptionFileName);
     setQualitySymbolsLists();
     updateQualitySymbolsIndices();
-    refreshChordSymbols();
 
     emit currentStyleIndexChanged();
 }
