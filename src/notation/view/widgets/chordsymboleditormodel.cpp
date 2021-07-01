@@ -32,7 +32,7 @@ ChordSymbolEditorModel::ChordSymbolEditorModel(QObject* parent)
     initCurrentStyleIndex();
     initProperties();
     updatePropertyIndices();
-    updateQualitySymbolsIndices();
+    updateQualitySymbolsIndices(true);
 }
 
 int ChordSymbolEditorModel::rowCount(const QModelIndex&) const
@@ -275,7 +275,7 @@ void ChordSymbolEditorModel::updatePropertyIndices()
     emit chordSpellingIndexChanged();
 }
 
-void ChordSymbolEditorModel::updateQualitySymbolsIndices()
+void ChordSymbolEditorModel::updateQualitySymbolsIndices(bool chordStyleChanged)
 {
     QHash<QString, Ms::Sid> qualityToSid = {
         { "major7th", Ms::Sid::chordQualityMajorSeventh },
@@ -291,7 +291,7 @@ void ChordSymbolEditorModel::updateQualitySymbolsIndices()
     // Major Seventh
     Ms::Sid id = qualityToSid.value("major7th");
     QString currentSymbol = globalContext()->currentNotation()->style()->styleValue(id).toString();
-    if (m_majorSeventhList.contains(currentSymbol)) {
+    if (!chordStyleChanged && m_majorSeventhList.contains(currentSymbol)) {
         m_majorSeventhIndex = m_majorSeventhList.indexOf(currentSymbol);
     } else if (m_selectionHistory.find(currentStyle) != m_selectionHistory.end()) {
         // check if current style present in m_selectionHistory
@@ -307,7 +307,7 @@ void ChordSymbolEditorModel::updateQualitySymbolsIndices()
     // Half Diminished
     id = qualityToSid.value("half-diminished");
     currentSymbol = globalContext()->currentNotation()->style()->styleValue(id).toString();
-    if (m_halfDiminishedList.contains(currentSymbol)) {
+    if (!chordStyleChanged && m_halfDiminishedList.contains(currentSymbol)) {
         m_halfDiminishedIndex = m_halfDiminishedList.indexOf(currentSymbol);
     } else if (m_selectionHistory.find(currentStyle) != m_selectionHistory.end()) {
         // check if current style present in m_selectionHistory
@@ -323,7 +323,7 @@ void ChordSymbolEditorModel::updateQualitySymbolsIndices()
     // Minor
     id = qualityToSid.value("minor");
     currentSymbol = globalContext()->currentNotation()->style()->styleValue(id).toString();
-    if (m_minorList.contains(currentSymbol)) {
+    if (!chordStyleChanged && m_minorList.contains(currentSymbol)) {
         m_minorIndex = m_minorList.indexOf(currentSymbol);
     } else if (m_selectionHistory.find(currentStyle) != m_selectionHistory.end()) {
         // check if current style present in m_selectionHistory
@@ -339,7 +339,7 @@ void ChordSymbolEditorModel::updateQualitySymbolsIndices()
     // Augmented
     id = qualityToSid.value("augmented");
     currentSymbol = globalContext()->currentNotation()->style()->styleValue(id).toString();
-    if (m_augmentedList.contains(currentSymbol)) {
+    if (!chordStyleChanged && m_augmentedList.contains(currentSymbol)) {
         m_augmentedIndex = m_augmentedList.indexOf(currentSymbol);
     } else if (m_selectionHistory.find(currentStyle) != m_selectionHistory.end()) {
         // check if current style present in m_selectionHistory
@@ -355,7 +355,7 @@ void ChordSymbolEditorModel::updateQualitySymbolsIndices()
     // Diminished
     id = qualityToSid.value("diminished");
     currentSymbol = globalContext()->currentNotation()->style()->styleValue(id).toString();
-    if (m_diminishedList.contains(currentSymbol)) {
+    if (!chordStyleChanged && m_diminishedList.contains(currentSymbol)) {
         m_diminishedIndex = m_diminishedList.indexOf(currentSymbol);
     } else if (m_selectionHistory.find(currentStyle) != m_selectionHistory.end()) {
         // check if current style present in m_selectionHistory
@@ -371,7 +371,7 @@ void ChordSymbolEditorModel::updateQualitySymbolsIndices()
     //omit
     id = qualityToSid.value("omit");
     currentSymbol = globalContext()->currentNotation()->style()->styleValue(id).toString();
-    if (m_omitList.contains(currentSymbol)) {
+    if (!chordStyleChanged && m_omitList.contains(currentSymbol)) {
         m_omitIndex = m_omitList.indexOf(currentSymbol);
     } else if (m_selectionHistory.find(currentStyle) != m_selectionHistory.end()) {
         // check if current style present in m_selectionHistory
@@ -436,7 +436,7 @@ void ChordSymbolEditorModel::setQualitySymbol(QString quality, QString symbol)
 
     Ms::Sid id = qualityToSid.value(quality);
     globalContext()->currentNotation()->style()->setStyleValue(id, symbol);
-    updateQualitySymbolsIndices();
+    updateQualitySymbolsIndices(false);
 }
 
 void ChordSymbolEditorModel::setChordStyle(QString styleName)
@@ -455,7 +455,7 @@ void ChordSymbolEditorModel::setChordStyle(QString styleName)
 
     globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordDescriptionFile, descriptionFileName);
     setQualitySymbolsLists();
-    updateQualitySymbolsIndices();
+    updateQualitySymbolsIndices(true);
 
     emit currentStyleIndexChanged();
 }

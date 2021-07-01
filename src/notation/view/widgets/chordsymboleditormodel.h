@@ -107,7 +107,7 @@ public:
     void initCurrentStyleIndex();
     void initProperties();
     void updatePropertyIndices();
-    void updateQualitySymbolsIndices();
+    void updateQualitySymbolsIndices(bool chordStyleChanged);
     void setQualitySymbolsLists();
     void stringifyAndSaveSelectionHistory();
     void extractSelectionHistory(QString selectionHistory);
