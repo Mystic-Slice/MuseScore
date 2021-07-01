@@ -1536,7 +1536,11 @@ void ParsedChord::respellQualitySymbols(const ChordList* cl)
     // Major seventh chords
     bool isMajorSeventh = false;
     bool hasSeven = true;
-    if ((_quality == "major" || _quality == "dominant") && _extension == "7") {
+    if ((_quality == "major" || _quality == "dominant") && (_extension.contains("7") || _modifierList.contains("7"))) {
+        if (_modifierList.contains("7")) {
+            _extension += "7";
+            _modifierList.removeAll("7");
+        }
         isMajorSeventh = true;
     }
 
@@ -1554,7 +1558,12 @@ void ParsedChord::respellQualitySymbols(const ChordList* cl)
     // Half-diminished chords with input: <minor>7b5
     bool isHalfDiminished = false;
     bool hasSevenFlatFive = false;
-    if (_quality == "minor" && _extension.contains("7") && _modifierList.contains("b5")) {
+    // 7 when surrounded by parenthesis is considered as modifier. Why??? Any reason??
+    if (_quality == "minor" && (_extension.contains("7") || _modifierList.contains("7")) && _modifierList.contains("b5")) {
+        if (_modifierList.contains("7")) {
+            _extension += "7";
+            _modifierList.removeAll("7");
+        }
         isHalfDiminished = true;
     }
 
