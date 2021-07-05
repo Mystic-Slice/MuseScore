@@ -1503,6 +1503,26 @@ qreal ChordList::position(const QStringList& names, ChordTokenClass ctc) const
 }
 
 //---------------------------------------------------------
+//   findModifierStartIndices
+//---------------------------------------------------------
+void ParsedChord::findModifierStartIndices()
+{
+    if (!modifierStartIndices.empty()) {
+        modifierStartIndices.clear();
+    }
+    QStringList start = { "b", "bb", "#", "##", "natural", "omit", "no", "add", "sus", "alt", "altb", "alt#" };
+    for (int index = 0; index < _tokenList.size(); index++) {
+        const ChordToken& tok = _tokenList.at(index);
+        if (tok.names.size() > 0) {
+            if (start.contains(tok.names.first())) {
+                modifierStartIndices.push_back(index);
+            }
+        }
+        qDebug() << tok.names;
+    }
+}
+
+//---------------------------------------------------------
 //   stripParenthesis
 //---------------------------------------------------------
 void ParsedChord::stripParenthesis()
@@ -1703,6 +1723,9 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
 
     stripParenthesis();
     respellQualitySymbols(cl);
+    findModifierStartIndices();
+    qDebug() << _modifierList;
+    qDebug() << modifierStartIndices;
 
     int index = 0;
     for (const ChordToken& tok : qAsConst(_tokenList)) {
@@ -1751,6 +1774,24 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
             m1.movey = p;
             _renderList.append(m1);
         }
+        // stacking
+        if (modifierStartIndices.contains(index)) {
+            if (index == modifierStartIndices.first()) {
+                RenderAction push = RenderAction(RenderAction::RenderActionType::PUSH);
+                _renderList.append(push);
+            } else {
+                RenderAction pop = RenderAction(RenderAction::RenderActionType::POP);
+                _renderList.append(pop);
+                RenderAction push = RenderAction(RenderAction::RenderActionType::PUSH);
+                _renderList.append(push);
+            }
+            RenderAction stackPosition = RenderAction(RenderAction::RenderActionType::MOVE);
+            stackPosition.movex = 0.0;
+            stackPosition.movey = p + (modifierStartIndices.indexOf(index) + 1 - (modifierStartIndices.size() + 1) / 2.0)
+                                  * cl->modifierMag()
+                                  * 10;
+            _renderList.append(stackPosition);
+        }
         if (found) {
             _renderList.append(rl);
         } else {
@@ -1758,6 +1799,13 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
             RenderAction a(RenderAction::RenderActionType::SET);
             a.text = tok.names.first();
             _renderList.append(a);
+        }
+        if (modifierStartIndices.contains(index)) {
+            RenderAction stackPosition = RenderAction(RenderAction::RenderActionType::MOVE);
+            stackPosition.movex = 0.0;
+            stackPosition.movey = -p - (modifierStartIndices.indexOf(index) - (qreal)(modifierStartIndices.size() + 1) / 2)
+                                  * cl->modifierMag();
+            _renderList.append(stackPosition);
         }
         if (p != 0.0) {
             RenderAction m2 = RenderAction(RenderAction::RenderActionType::MOVE);
