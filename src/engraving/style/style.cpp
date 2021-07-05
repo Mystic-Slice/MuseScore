@@ -121,7 +121,7 @@ void MStyle::checkChordList()
             m_chordList.read("chords.xml");
         }
         m_chordList.read(value(Sid::chordDescriptionFile).toString());
-        setUpQualitySymbols();
+        updateChordList();
     }
 }
 
@@ -333,7 +333,7 @@ void MStyle::load(XmlReader& e)
         } else if (tag == "ChordList") {
             m_chordList.unload();
             m_chordList.read(e);
-            setUpQualitySymbols();
+            updateChordList();
             m_customChordList = true;
             chordListTag = true;
         } else if (tag == "lyricsDashMaxLegth") { // pre-3.6 typo
@@ -371,7 +371,7 @@ void MStyle::load(XmlReader& e)
     }
 }
 
-void MStyle::setUpQualitySymbols()
+void MStyle::updateChordList()
 {
     m_chordList.qualitySymbols.clear();
     m_chordList.qualitySymbols.insert("major", "");
