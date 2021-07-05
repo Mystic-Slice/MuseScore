@@ -189,6 +189,7 @@ private:
     QList<int> skipList; // Indices to be skipped while rendering. (useful in cases like <minor>7b5 --> oslash)
     QList<int> removeAfterRenderList; // Indices of items that were added by respelling function. To be removed after rendering.
     QList<int> modifierStartIndices; // Starting indices of modifiers for stacking
+    int stackingEnd = -1;
     HChord chord;
     bool _parseable;
     bool _understandable;
@@ -274,6 +275,8 @@ public:
     QList<ChordToken> chordTokenList;
     QHash<QString, QString> qualitySymbols;
     static int privateID;
+
+    bool stackModifiers = false;
 
     bool autoAdjust() const { return _autoAdjust; }
     qreal nominalMag() const { return _nmag; }

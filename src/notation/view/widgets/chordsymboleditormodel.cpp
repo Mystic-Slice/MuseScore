@@ -140,6 +140,11 @@ int ChordSymbolEditorModel::diminishedIndex() const
     return m_diminishedIndex;
 }
 
+int ChordSymbolEditorModel::stackModifiersIndex() const
+{
+    return m_stackModifiersIndex;
+}
+
 int ChordSymbolEditorModel::omitIndex() const
 {
     return m_omitIndex;
@@ -225,6 +230,11 @@ void ChordSymbolEditorModel::initProperties()
     m_maxChordShiftAbove = globalContext()->currentNotation()->style()->styleValue(Ms::Sid::maxChordShiftAbove).toReal();
     m_maxChordShiftBelow = globalContext()->currentNotation()->style()->styleValue(Ms::Sid::maxChordShiftBelow).toReal();
     m_capoFretPosition = globalContext()->currentNotation()->style()->styleValue(Ms::Sid::capoPosition).toReal();
+    if (globalContext()->currentNotation()->style()->styleValue(Ms::Sid::stackModifiers).toBool()) {
+        m_stackModifiersIndex = 0;
+    } else {
+        m_stackModifiersIndex = 1;
+    }
 
     emit qualityMagChanged();
     emit qualityAdjustChanged();
@@ -237,6 +247,7 @@ void ChordSymbolEditorModel::initProperties()
     emit maxHarmonyBarDistanceChanged();
     emit maxChordShiftAboveChanged();
     emit maxChordShiftBelowChanged();
+    emit stackModifiersIndexChanged();
 }
 
 void ChordSymbolEditorModel::initCurrentStyleIndex()
@@ -515,6 +526,20 @@ void ChordSymbolEditorModel::setProperty(QString property, qreal val)
         globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::capoPosition, val);
         m_capoFretPosition = val;
         emit capoFretPositionChanged();
+    } else if (property == "stackModifiers") {
+        bool stackMod;
+        if (val == 1) {
+            stackMod = true;
+        } else {
+            stackMod = false;
+        }
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::stackModifiers, stackMod);
+        if (stackMod) {
+            m_stackModifiersIndex = 0;
+        } else {
+            m_stackModifiersIndex = 1;
+        }
+        emit stackModifiersIndexChanged();
     }
 }
 

@@ -1507,11 +1507,11 @@ qreal ChordList::position(const QStringList& names, ChordTokenClass ctc) const
 //---------------------------------------------------------
 void ParsedChord::findModifierStartIndices()
 {
-    if (!modifierStartIndices.empty()) {
-        modifierStartIndices.clear();
-    }
-    QStringList start = { "b", "bb", "#", "##", "natural", "omit", "no", "add", "sus", "alt", "altb", "alt#" };
+    QStringList start = { "b", "bb", "#", "##", "natural", "omit", "no", "add" };
     for (int index = 0; index < _tokenList.size(); index++) {
+        if (skipList.contains(index)) {
+            continue;
+        }
         const ChordToken& tok = _tokenList.at(index);
         if (tok.names.size() > 0) {
             if (start.contains(tok.names.first())) {
@@ -1519,6 +1519,14 @@ void ParsedChord::findModifierStartIndices()
             }
         }
         qDebug() << tok.names;
+    }
+    if (modifierStartIndices.size() > 0) {
+        stackingEnd = modifierStartIndices.last() + 2;
+    }
+    for (int i = 0; i < modifierStartIndices.size(); i++) {
+        if (modifierStartIndices.contains(modifierStartIndices[i] - 1)) {
+            modifierStartIndices.removeAt(i);
+        }
     }
 }
 
@@ -1719,13 +1727,23 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
     if (!_renderList.empty()) {
         _renderList.clear();
     }
+
+    if (!modifierStartIndices.empty()) {
+        modifierStartIndices.clear();
+    }
+    stackingEnd = -1;
+
     bool adjust = cl ? cl->autoAdjust() : false;
 
     stripParenthesis();
     respellQualitySymbols(cl);
-    findModifierStartIndices();
+    if (cl->stackModifiers) {
+        findModifierStartIndices();
+    }
     qDebug() << _modifierList;
     qDebug() << modifierStartIndices;
+    qDebug() << stackingEnd;
+    qDebug() << _quality;
 
     int index = 0;
     for (const ChordToken& tok : qAsConst(_tokenList)) {
@@ -1787,11 +1805,19 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
             }
             RenderAction stackPosition = RenderAction(RenderAction::RenderActionType::MOVE);
             stackPosition.movex = 0.0;
-            stackPosition.movey = p + (modifierStartIndices.indexOf(index) + 1 - (modifierStartIndices.size() + 1) / 2.0)
-                                  * cl->modifierMag()
-                                  * 10;
+            stackPosition.movey = (modifierStartIndices.indexOf(index) + 1 - (modifierStartIndices.size() + 1) / 2.0)
+                                  * cl->modifierMag() * 10;
             _renderList.append(stackPosition);
+        } else if (index == stackingEnd) {
+            // Modifiers like sus are not stacked and so must return to the normal height
+            RenderAction returnPosition = RenderAction(RenderAction::RenderActionType::MOVE);
+            returnPosition.movex = 0.0;
+            // y position of the last element of the last modifier
+            returnPosition.movey = -((modifierStartIndices.size() - 1) / 2.0)
+                                   * cl->modifierMag() * 10;
+            _renderList.append(returnPosition);
         }
+
         if (found) {
             _renderList.append(rl);
         } else {
@@ -1803,7 +1829,7 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
         if (modifierStartIndices.contains(index)) {
             RenderAction stackPosition = RenderAction(RenderAction::RenderActionType::MOVE);
             stackPosition.movex = 0.0;
-            stackPosition.movey = -p - (modifierStartIndices.indexOf(index) - (qreal)(modifierStartIndices.size() + 1) / 2)
+            stackPosition.movey = -(modifierStartIndices.indexOf(index) - (qreal)(modifierStartIndices.size() + 1) / 2)
                                   * cl->modifierMag();
             _renderList.append(stackPosition);
         }
