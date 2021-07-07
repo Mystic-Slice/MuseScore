@@ -321,6 +321,108 @@ Item {
             }
             Column{
                 id: rightColumn
+                CheckBox {
+                    width: 200
+                    property int autoCapital: -1
+                    checked: (editorModel.autoCapitalization === 1.0)
+
+                    text: "Automatic Capitalization"
+                    onClicked: {
+                        editorModel.setProperty("autoCapitalization", checked?0:1)
+                    }
+                }
+                RadioButtonGroup {
+                    id: minorRootCapitalization
+
+                    height: 30
+
+                    model: [
+                        { name: "Cmin", value: 1.0 },
+                        { name: "cmin", value: 0.0 },
+                    ]
+
+                    delegate: FlatRadioButton {
+                        ButtonGroup.group: minorRootCapitalizationList.radioButtonGroup
+
+                        StyledTextLabel{
+                            text: qsTrc("notation",modelData["name"])
+                        }
+                        checked: editorModel.minorRootCapitalization === modelData["value"]
+
+                        onToggled: {
+                            editorModel.setProperty("minorRootCapitalization", modelData["value"])
+                        }
+                    }
+                }
+                RadioButtonGroup {
+                    id: qualitySymbolsCapitalization
+
+                    height: 30
+
+                    model: [
+                        { name: "Maj", value: 1.0 },
+                        { name: "maj", value: 0.0 },
+                    ]
+
+                    delegate: FlatRadioButton {
+                        ButtonGroup.group: qualitySymbolsCapitalizationList.radioButtonGroup
+
+                        StyledTextLabel{
+                            text: qsTrc("notation",modelData["name"])
+                        }
+                        checked: editorModel.qualitySymbolsCapitalization === modelData["value"]
+
+                        onToggled: {
+                            editorModel.setProperty("qualitySymbolsCapitalization", modelData["value"])
+                        }
+                    }
+                }
+                RadioButtonGroup {
+                    id: bassNotesCapitalization
+
+                    height: 30
+
+                    model: [
+                        { name: "C/B", value: 1.0 },
+                        { name: "C/b", value: 0.0 },
+                    ]
+
+                    delegate: FlatRadioButton {
+                        ButtonGroup.group: bassNotesCapitalizationList.radioButtonGroup
+
+                        StyledTextLabel{
+                            text: qsTrc("notation",modelData["name"])
+                        }
+                        checked: editorModel.bassNotesCapitalization === modelData["value"]
+
+                        onToggled: {
+                            editorModel.setProperty("bassNotesCapitalization", modelData["value"])
+                        }
+                    }
+                }
+                RadioButtonGroup {
+                    id: solfegeNotesCapitalization
+
+                    height: 30
+
+                    model: [
+                        { name: "DO", value: 1.0 },
+                        { name: "Do", value: 0.0 },
+                    ]
+
+                    delegate: FlatRadioButton {
+                        ButtonGroup.group: solfegeNotesCapitalizationList.radioButtonGroup
+
+                        StyledTextLabel{
+                            text: qsTrc("notation",modelData["name"])
+                        }
+                        checked: editorModel.solfegeNotesCapitalization === modelData["value"]
+
+                        onToggled: {
+                            editorModel.setProperty("solfegeNotesCapitalization", modelData["value"])
+                        }
+                    }
+                }
             }
         }
     }

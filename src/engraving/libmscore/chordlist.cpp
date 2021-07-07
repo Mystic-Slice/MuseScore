@@ -1533,9 +1533,48 @@ void ParsedChord::findModifierStartIndices()
 }
 
 //---------------------------------------------------------
+//   checkQualitySymbolsLetterCase
+//---------------------------------------------------------
+void ParsedChord::checkQualitySymbolsLetterCase(const ChordList* cl)
+{
+    // Changes the letter case of the first letter in quality symbols
+    // Leaves untouched if there is no other replacement
+    if (cl->autoCapitalization) {
+        // It is important to have the lists synced
+        QStringList upperCase = { "Maj", "Ma", "Min", "Mi", "Aug", "Dim" };
+        QStringList lowerCase = { "maj", "ma", "min", "mi", "aug", "dim" };
+        for (int index = 0; index < _tokenList.size(); index++) {
+            const ChordToken& tok = _tokenList.at(index);
+            if (tok.tokenClass == ChordTokenClass::QUALITY) {
+                if (cl->lowerCaseQualitySymbols) {
+                    if (upperCase.contains(tok.names.first())) {
+                        // Replace by lowercase version
+                        ChordToken qualTok;
+                        qualTok.names += lowerCase.at(upperCase.indexOf(tok.names.first()));
+                        qualTok.tokenClass = ChordTokenClass::QUALITY;
+                        _tokenList.removeAt(index);
+                        _tokenList.insert(index, qualTok);
+                    }
+                } else {
+                    if (lowerCase.contains(tok.names.first())) {
+                        // Replace by uppercase version
+                        ChordToken qualTok;
+                        qualTok.names += upperCase.at(lowerCase.indexOf(tok.names.first()));
+                        qualTok.tokenClass = ChordTokenClass::QUALITY;
+                        _tokenList.removeAt(index);
+                        _tokenList.insert(index, qualTok);
+                    }
+                }
+                return; // Remove this when there could be more than one quality symbol
+            }
+        }
+    }
+}
+
+//---------------------------------------------------------
 //   stripParenthesis
 //---------------------------------------------------------
-void ParsedChord::stripParenthesis()
+void ParsedChord::stripParentheses()
 {
     QString special = "()[],";
     for (int index = 0; index < _tokenList.size(); index++) {
@@ -1736,8 +1775,9 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
     }
     stackingEnd = -1;
 
-    stripParenthesis();
+    stripParentheses();
     respellQualitySymbols(cl);
+    checkQualitySymbolsLetterCase(cl);
     if (cl->stackModifiers) {
         findModifierStartIndices();
     }

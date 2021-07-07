@@ -209,6 +209,31 @@ qreal ChordSymbolEditorModel::capoFretPosition() const
     return m_capoFretPosition;
 }
 
+qreal ChordSymbolEditorModel::autoCapitalization() const
+{
+    return m_autoCapitalization;
+}
+
+qreal ChordSymbolEditorModel::minorRootCapitalization() const
+{
+    return m_minorRootCapitalization;
+}
+
+qreal ChordSymbolEditorModel::qualitySymbolsCapitalization() const
+{
+    return m_qualitySymbolsCapitalization;
+}
+
+qreal ChordSymbolEditorModel::bassNotesCapitalization() const
+{
+    return m_bassNotesCapitalization;
+}
+
+qreal ChordSymbolEditorModel::solfegeNotesCapitalization() const
+{
+    return m_solfegeNotesCapitalization;
+}
+
 void ChordSymbolEditorModel::initProperties()
 {
     m_chordSpellingList << "Standard" << "German" << "German Full" << "Solfege" << "French";
@@ -229,6 +254,31 @@ void ChordSymbolEditorModel::initProperties()
     } else {
         m_stackModifiersIndex = 1;
     }
+    if (globalContext()->currentNotation()->style()->styleValue(Ms::Sid::automaticCapitalization).toBool()) {
+        m_autoCapitalization = 1.0;
+    } else {
+        m_autoCapitalization = 0.0;
+    }
+    if (globalContext()->currentNotation()->style()->styleValue(Ms::Sid::lowerCaseMinorChords).toBool()) {
+        m_minorRootCapitalization = 0.0;
+    } else {
+        m_minorRootCapitalization = 1.0;
+    }
+    if (globalContext()->currentNotation()->style()->styleValue(Ms::Sid::lowerCaseQualitySymbols).toBool()) {
+        m_qualitySymbolsCapitalization = 0.0;
+    } else {
+        m_qualitySymbolsCapitalization = 1.0;
+    }
+    if (globalContext()->currentNotation()->style()->styleValue(Ms::Sid::lowerCaseBassNotes).toBool()) {
+        m_bassNotesCapitalization = 0.0;
+    } else {
+        m_bassNotesCapitalization = 1.0;
+    }
+    if (globalContext()->currentNotation()->style()->styleValue(Ms::Sid::allCapsNoteNames).toBool()) {
+        m_solfegeNotesCapitalization = 1.0;
+    } else {
+        m_solfegeNotesCapitalization = 0.0;
+    }
 
     emit chordSpellingListChanged();
     emit qualityMagChanged();
@@ -243,6 +293,11 @@ void ChordSymbolEditorModel::initProperties()
     emit maxChordShiftAboveChanged();
     emit maxChordShiftBelowChanged();
     emit stackModifiersIndexChanged();
+    emit autoCapitalizationChanged();
+    emit minorRootCapitalizationChanged();
+    emit qualitySymbolsCapitalizationChanged();
+    emit bassNotesCapitalizationChanged();
+    emit solfegeNotesCapitalizationChanged();
 }
 
 void ChordSymbolEditorModel::initCurrentStyleIndex()
@@ -548,6 +603,31 @@ void ChordSymbolEditorModel::setProperty(QString property, qreal val)
         }
 
         emit stackModifiersIndexChanged();
+    } else if (property == "autoCapitalization") {
+        bool autoCapital = (val == 1);
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::automaticCapitalization, autoCapital);
+        m_autoCapitalization = val;
+        emit autoCapitalizationChanged();
+    } else if (property == "minorRootCapitalization") {
+        bool minorRootCapital = (val == 1);
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::lowerCaseMinorChords, !minorRootCapital);
+        m_minorRootCapitalization = val;
+        emit minorRootCapitalizationChanged();
+    } else if (property == "qualitySymbolsCapitalization") {
+        bool qualitySymbolsCapital = (val == 1);
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::lowerCaseQualitySymbols, !qualitySymbolsCapital);
+        m_qualitySymbolsCapitalization = val;
+        emit qualitySymbolsCapitalizationChanged();
+    } else if (property == "bassNotesCapitalization") {
+        bool bassCapital = (val == 1);
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::lowerCaseBassNotes, !bassCapital);
+        m_bassNotesCapitalization = val;
+        emit bassNotesCapitalizationChanged();
+    } else if (property == "solfegeNotesCapitalization") {
+        bool solfegeCapital = (val == 1);
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::allCapsNoteNames, solfegeCapital);
+        m_solfegeNotesCapitalization = val;
+        emit solfegeNotesCapitalizationChanged();
     }
 }
 

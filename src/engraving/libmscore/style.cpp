@@ -437,6 +437,7 @@ static const StyleType styleTypes[] {
     { Sid::useFrenchNoteNames,      "useFrenchNoteNames",      QVariant(false) },
     { Sid::automaticCapitalization, "automaticCapitalization", QVariant(true) },
     { Sid::lowerCaseMinorChords,    "lowerCaseMinorChords",    QVariant(false) },
+    { Sid::lowerCaseQualitySymbols, "lowerCaseQualitySymbols", QVariant(false) },
     { Sid::lowerCaseBassNotes,      "lowerCaseBassNotes",      QVariant(false) },
     { Sid::allCapsNoteNames,        "allCapsNoteNames",        QVariant(false) },
     { Sid::stackModifiers,          "stackModifiers",          QVariant(false) },
@@ -2854,6 +2855,8 @@ void MStyle::updateChordList()
     _chordList.qualitySymbols.insert("omit", value(Sid::chordModifierOmit).toString());
 
     _chordList.stackModifiers = value(Sid::stackModifiers).toBool();
+    _chordList.autoCapitalization = value(Sid::automaticCapitalization).toBool();
+    _chordList.lowerCaseQualitySymbols = value(Sid::lowerCaseQualitySymbols).toBool();
 }
 
 //---------------------------------------------------------

@@ -149,8 +149,9 @@ public:
     QString fromXml(const QString&, const QString&, const QString&, const QString&, const QList<HDegree>&, const ChordList*);
     const QList<RenderAction>& renderList(const ChordList*);
     void respellQualitySymbols(const ChordList* cl);
-    void stripParenthesis();
+    void stripParentheses();
     void findModifierStartIndices();
+    void checkQualitySymbolsLetterCase(const ChordList* cl);
     bool parseable() const { return _parseable; }
     bool understandable() const { return _understandable; }
     const QString& name() const { return _name; }
@@ -277,6 +278,8 @@ public:
     static int privateID;
 
     bool stackModifiers = false;
+    bool autoCapitalization = false;
+    bool lowerCaseQualitySymbols = false;
 
     bool autoAdjust() const { return _autoAdjust; }
     qreal nominalMag() const { return _nmag; }

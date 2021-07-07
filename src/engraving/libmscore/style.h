@@ -423,6 +423,7 @@ enum class Sid {
     useFrenchNoteNames,
     automaticCapitalization,
     lowerCaseMinorChords,
+    lowerCaseQualitySymbols,
     lowerCaseBassNotes,
     allCapsNoteNames,
     stackModifiers,
