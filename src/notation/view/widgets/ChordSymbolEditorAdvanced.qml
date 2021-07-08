@@ -342,7 +342,7 @@ Item {
                     ]
 
                     delegate: FlatRadioButton {
-                        ButtonGroup.group: minorRootCapitalizationList.radioButtonGroup
+                        ButtonGroup.group: minorRootCapitalization.radioButtonGroup
 
                         StyledTextLabel{
                             text: qsTrc("notation",modelData["name"])
@@ -365,7 +365,7 @@ Item {
                     ]
 
                     delegate: FlatRadioButton {
-                        ButtonGroup.group: qualitySymbolsCapitalizationList.radioButtonGroup
+                        ButtonGroup.group: qualitySymbolsCapitalization.radioButtonGroup
 
                         StyledTextLabel{
                             text: qsTrc("notation",modelData["name"])
@@ -388,7 +388,7 @@ Item {
                     ]
 
                     delegate: FlatRadioButton {
-                        ButtonGroup.group: bassNotesCapitalizationList.radioButtonGroup
+                        ButtonGroup.group: bassNotesCapitalization.radioButtonGroup
 
                         StyledTextLabel{
                             text: qsTrc("notation",modelData["name"])
@@ -411,7 +411,7 @@ Item {
                     ]
 
                     delegate: FlatRadioButton {
-                        ButtonGroup.group: solfegeNotesCapitalizationList.radioButtonGroup
+                        ButtonGroup.group: solfegeNotesCapitalization.radioButtonGroup
 
                         StyledTextLabel{
                             text: qsTrc("notation",modelData["name"])
@@ -420,6 +420,101 @@ Item {
 
                         onToggled: {
                             editorModel.setProperty("solfegeNotesCapitalization", modelData["value"])
+                        }
+                    }
+                }
+                StyledTextLabel{
+                    text: qsTrc("notation","Parentheses")
+                }
+                RadioButtonGroup {
+                    id: alterationsParentheses
+
+                    height: 30
+
+                    model: [
+                        { name: "(b5)", value: 1.0 },
+                        { name: "b5", value: 0.0 },
+                    ]
+
+                    delegate: FlatRadioButton {
+                        ButtonGroup.group: alterationsParentheses.radioButtonGroup
+
+                        StyledTextLabel{
+                            text: qsTrc("notation",modelData["name"])
+                        }
+                        checked: editorModel.alterationsParentheses === modelData["value"]
+
+                        onToggled: {
+                            editorModel.setProperty("alterationsParentheses", modelData["value"])
+                        }
+                    }
+                }
+                RadioButtonGroup {
+                    id: suspensionsParentheses
+
+                    height: 30
+
+                    model: [
+                        { name: "(sus)", value: 1.0 },
+                        { name: "sus", value: 0.0 },
+                    ]
+
+                    delegate: FlatRadioButton {
+                        ButtonGroup.group: suspensionsParentheses.radioButtonGroup
+
+                        StyledTextLabel{
+                            text: qsTrc("notation",modelData["name"])
+                        }
+                        checked: editorModel.suspensionsParentheses === modelData["value"]
+
+                        onToggled: {
+                            editorModel.setProperty("suspensionsParentheses", modelData["value"])
+                        }
+                    }
+                }
+                RadioButtonGroup {
+                    id: minMajParentheses
+
+                    height: 30
+
+                    model: [
+                        { name: "m(maj7)", value: 1.0 },
+                        { name: "mmaj7", value: 0.0 },
+                    ]
+
+                    delegate: FlatRadioButton {
+                        ButtonGroup.group: minMajParentheses.radioButtonGroup
+
+                        StyledTextLabel{
+                            text: qsTrc("notation",modelData["name"])
+                        }
+                        checked: editorModel.minMajParentheses === modelData["value"]
+
+                        onToggled: {
+                            editorModel.setProperty("minMajParentheses", modelData["value"])
+                        }
+                    }
+                }
+                RadioButtonGroup {
+                    id: addOmitParentheses
+
+                    height: 30
+
+                    model: [
+                        { name: "(add)", value: 1.0 },
+                        { name: "add", value: 0.0 },
+                    ]
+
+                    delegate: FlatRadioButton {
+                        ButtonGroup.group: addOmitParentheses.radioButtonGroup
+
+                        StyledTextLabel{
+                            text: qsTrc("notation",modelData["name"])
+                        }
+                        checked: editorModel.addOmitParentheses === modelData["value"]
+
+                        onToggled: {
+                            editorModel.setProperty("addOmitParentheses", modelData["value"])
                         }
                     }
                 }

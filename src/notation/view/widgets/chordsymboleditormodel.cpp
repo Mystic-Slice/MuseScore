@@ -234,6 +234,26 @@ qreal ChordSymbolEditorModel::solfegeNotesCapitalization() const
     return m_solfegeNotesCapitalization;
 }
 
+qreal ChordSymbolEditorModel::alterationsParentheses() const
+{
+    return m_alterationsParentheses;
+}
+
+qreal ChordSymbolEditorModel::suspensionsParentheses() const
+{
+    return m_suspensionsParentheses;
+}
+
+qreal ChordSymbolEditorModel::minMajParentheses() const
+{
+    return m_minMajParentheses;
+}
+
+qreal ChordSymbolEditorModel::addOmitParentheses() const
+{
+    return m_addOmitParentheses;
+}
+
 void ChordSymbolEditorModel::initProperties()
 {
     m_chordSpellingList << "Standard" << "German" << "German Full" << "Solfege" << "French";
@@ -279,6 +299,26 @@ void ChordSymbolEditorModel::initProperties()
     } else {
         m_solfegeNotesCapitalization = 0.0;
     }
+    if (globalContext()->currentNotation()->style()->styleValue(Ms::Sid::chordAlterationsParentheses).toBool()) {
+        m_alterationsParentheses = 1.0;
+    } else {
+        m_alterationsParentheses = 0.0;
+    }
+    if (globalContext()->currentNotation()->style()->styleValue(Ms::Sid::chordSuspensionsParentheses).toBool()) {
+        m_suspensionsParentheses = 1.0;
+    } else {
+        m_suspensionsParentheses = 0.0;
+    }
+    if (globalContext()->currentNotation()->style()->styleValue(Ms::Sid::chordMinMajParentheses).toBool()) {
+        m_minMajParentheses = 1.0;
+    } else {
+        m_minMajParentheses = 0.0;
+    }
+    if (globalContext()->currentNotation()->style()->styleValue(Ms::Sid::chordAddOmitParentheses).toBool()) {
+        m_addOmitParentheses = 1.0;
+    } else {
+        m_addOmitParentheses = 0.0;
+    }
 
     emit chordSpellingListChanged();
     emit qualityMagChanged();
@@ -298,6 +338,10 @@ void ChordSymbolEditorModel::initProperties()
     emit qualitySymbolsCapitalizationChanged();
     emit bassNotesCapitalizationChanged();
     emit solfegeNotesCapitalizationChanged();
+    emit alterationsParenthesesChanged();
+    emit suspensionsParenthesesChanged();
+    emit minMajParenthesesChanged();
+    emit addOmitParenthesesChanged();
 }
 
 void ChordSymbolEditorModel::initCurrentStyleIndex()
@@ -628,6 +672,26 @@ void ChordSymbolEditorModel::setProperty(QString property, qreal val)
         globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::allCapsNoteNames, solfegeCapital);
         m_solfegeNotesCapitalization = val;
         emit solfegeNotesCapitalizationChanged();
+    } else if (property == "alterationsParentheses") {
+        bool alterationsParentheses = (val == 1);
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordAlterationsParentheses, alterationsParentheses);
+        m_alterationsParentheses = val;
+        emit alterationsParenthesesChanged();
+    } else if (property == "suspensionsParentheses") {
+        bool suspensionsParentheses = (val == 1);
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordSuspensionsParentheses, suspensionsParentheses);
+        m_suspensionsParentheses = val;
+        emit suspensionsParenthesesChanged();
+    } else if (property == "minMajParentheses") {
+        bool minMajParentheses = (val == 1);
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordMinMajParentheses, minMajParentheses);
+        m_minMajParentheses = val;
+        emit minMajParenthesesChanged();
+    } else if (property == "addOmitParentheses") {
+        bool addOmitParentheses = (val == 1);
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordAddOmitParentheses, addOmitParentheses);
+        m_addOmitParentheses = val;
+        emit addOmitParenthesesChanged();
     }
 }
 
