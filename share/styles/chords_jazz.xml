@@ -105,14 +105,14 @@
   <!-- Major chords -->
     <sym value="maj" name="maj"/>
     <sym value="Maj" name="Maj"/>
-    <sym value="Ma" name="Ma"/>
-    <sym code="0xe180" name="ma"/>
+    <sym code="0xe180" name="Ma"/>
+    <sym value="ma" name="ma"/>
     <sym value="M" name="M"/>
     <sym code="0xe18a" name="triangle"/>
   <!-- Minor chords -->
     <sym value="min" name="min"/>
-    <sym code="0xe181" name="mi"/>
-    <sym value="Mi" name="Mi"/>
+    <sym value="mi" name="mi"/>
+    <sym code="0xe181" name="Mi"/>
     <sym value="m" name="m"/>
     <sym value="-" name="-"/>
   <!-- Augmented chords -->
