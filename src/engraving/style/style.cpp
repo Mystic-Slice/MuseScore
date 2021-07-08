@@ -381,6 +381,14 @@ void MStyle::updateChordList()
     m_chordList.qualitySymbols.insert("diminished", value(Sid::chordQualityDiminished).toString());
     m_chordList.qualitySymbols.insert("augmented", value(Sid::chordQualityAugmented).toString());
     m_chordList.qualitySymbols.insert("omit", value(Sid::chordModifierOmit).toString());
+
+    m_chordList.stackModifiers = value(Sid::stackModifiers).toBool();
+    m_chordList.autoCapitalization = value(Sid::automaticCapitalization).toBool();
+    m_chordList.lowerCaseQualitySymbols = value(Sid::lowerCaseQualitySymbols).toBool();
+    m_chordList.alterationsParentheses = value(Sid::chordAlterationsParentheses).toBool();
+    m_chordList.suspensionsParentheses = value(Sid::chordSuspensionsParentheses).toBool();
+    m_chordList.minMajParentheses = value(Sid::chordMinMajParentheses).toBool();
+    m_chordList.addOmitParentheses = value(Sid::chordAddOmitParentheses).toBool();
 }
 
 void MStyle::save(XmlWriter& xml, bool optimize)
