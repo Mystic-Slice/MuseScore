@@ -1812,6 +1812,12 @@ void ChangeStyleVal::flip(EditData*)
         case Sid::chordExtensionAdjust:
         case Sid::chordModifierMag:
         case Sid::chordModifierAdjust:
+        case Sid::chordAlterationsParentheses:
+        case Sid::chordSuspensionsParentheses:
+        case Sid::chordMinMajParentheses:
+        case Sid::chordAddOmitParentheses:
+        case Sid::automaticCapitalization:
+        case Sid::lowerCaseQualitySymbols:
         case Sid::chordDescriptionFile:
         case Sid::chordQualityMajorSeventh:
         case Sid::chordQualityHalfDiminished:
