@@ -437,6 +437,7 @@ static const StyleType styleTypes[] {
     { Sid::useFrenchNoteNames,      "useFrenchNoteNames",      QVariant(false) },
     { Sid::automaticCapitalization, "automaticCapitalization", QVariant(true) },
     { Sid::lowerCaseMinorChords,    "lowerCaseMinorChords",    QVariant(false) },
+    { Sid::lowerCaseQualitySymbols, "lowerCaseQualitySymbols", QVariant(false) },
     { Sid::lowerCaseBassNotes,      "lowerCaseBassNotes",      QVariant(false) },
     { Sid::allCapsNoteNames,        "allCapsNoteNames",        QVariant(false) },
     { Sid::stackModifiers,          "stackModifiers",          QVariant(false) },
@@ -449,6 +450,10 @@ static const StyleType styleTypes[] {
     { Sid::chordExtensionAdjust,    "chordExtensionAdjust",    QVariant(0.0) },
     { Sid::chordModifierMag,        "chordModifierMag",        QVariant(1.0) },
     { Sid::chordModifierAdjust,     "chordModifierAdjust",     QVariant(0.0) },
+    { Sid::chordAlterationsParentheses, "chordAlterationsParentheses", QVariant(true) },
+    { Sid::chordSuspensionsParentheses, "chordSuspensionsParentheses", QVariant(true) },
+    { Sid::chordMinMajParentheses,  "chordMinMajParentheses",  QVariant(true) },
+    { Sid::chordAddOmitParentheses, "chordAddOmitParentheses", QVariant(true) },
 
     { Sid::chordQualitySelectionHistory, "chordQualitySelectionHistory", QVariant(QString("Standard|maj 7,m 7 b5,mi,aug,dim,omit")) },
     { Sid::chordQualityMajorSeventh, "chordQualityMajorSeventh", QVariant(QString("maj 7")) },
@@ -456,7 +461,7 @@ static const StyleType styleTypes[] {
     { Sid::chordQualityMinor,       "chordQualityMinor",       QVariant(QString("mi")) },
     { Sid::chordQualityAugmented,   "chordQualityAugmented",   QVariant(QString("aug")) },
     { Sid::chordQualityDiminished,  "chordQualityDiminished",  QVariant(QString("dim")) },
-    { Sid::chordModifierOmit, "chordModifierOmit", QVariant(QString("omit")) },
+    { Sid::chordModifierOmit,       "chordModifierOmit",       QVariant(QString("omit")) },
 
     { Sid::concertPitch,            "concertPitch",            QVariant(false) },
     { Sid::createMultiMeasureRests, "createMultiMeasureRests", QVariant(false) },
@@ -2854,6 +2859,12 @@ void MStyle::updateChordList()
     _chordList.qualitySymbols.insert("omit", value(Sid::chordModifierOmit).toString());
 
     _chordList.stackModifiers = value(Sid::stackModifiers).toBool();
+    _chordList.autoCapitalization = value(Sid::automaticCapitalization).toBool();
+    _chordList.lowerCaseQualitySymbols = value(Sid::lowerCaseQualitySymbols).toBool();
+    _chordList.alterationsParentheses = value(Sid::chordAlterationsParentheses).toBool();
+    _chordList.suspensionsParentheses = value(Sid::chordSuspensionsParentheses).toBool();
+    _chordList.minMajParentheses = value(Sid::chordMinMajParentheses).toBool();
+    _chordList.addOmitParentheses = value(Sid::chordAddOmitParentheses).toBool();
 }
 
 //---------------------------------------------------------
