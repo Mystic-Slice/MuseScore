@@ -420,6 +420,7 @@ void ChordSymbolEditorModel::setPropertiesOnStyleChange()
         m_modifierAdjust = m_selectionHistory.value(currentStyle).value("modAdj").toReal();
         m_harmonyFretDistance = m_selectionHistory.value(currentStyle).value("hFretDist").toReal();
         m_minHarmonyDistance = m_selectionHistory.value(currentStyle).value("mnHDist").toReal();
+        m_maxHarmonyBarDistance = m_selectionHistory.value(currentStyle).value("mxHBarDist").toReal();
         m_maxChordShiftAbove = m_selectionHistory.value(currentStyle).value("mxSftAbv").toReal();
         m_maxChordShiftBelow = m_selectionHistory.value(currentStyle).value("mxSftBlw").toReal();
         m_capoFretPosition = m_selectionHistory.value(currentStyle).value("cpFretPos").toReal();
@@ -433,7 +434,8 @@ void ChordSymbolEditorModel::setPropertiesOnStyleChange()
         m_minMajParentheses = m_selectionHistory.value(currentStyle).value("minMajParen").toReal();
         m_addOmitParentheses = m_selectionHistory.value(currentStyle).value("addOmitParen").toReal();
     } else {
-        m_chordSpellingIndex = 0;
+        // Set the defaults
+        m_chordSpellingIndex = 0; // Standard
         m_qualityMag = 1.0;
         m_qualityAdjust = 0.0;
         m_extensionMag = 1.0;
@@ -448,17 +450,16 @@ void ChordSymbolEditorModel::setPropertiesOnStyleChange()
         m_capoFretPosition = 0.0;
         m_stackModifiers = 1.0;
         m_autoCapitalization = 1.0;
-        m_minorRootCapitalization = 0.0;
-        m_qualitySymbolsCapitalization = 0.0;
-        m_bassNotesCapitalization = 0.0;
-        m_solfegeNotesCapitalization = 1.0;
+        m_minorRootCapitalization = 1.0;
+        m_qualitySymbolsCapitalization = 1.0;
+        m_bassNotesCapitalization = 1.0;
+        m_solfegeNotesCapitalization = 0.0;
         m_alterationsParentheses = 1.0;
         m_suspensionsParentheses = 1.0;
         m_minMajParentheses = 1.0;
         m_addOmitParentheses = 1.0;
     }
     setChordSpelling(m_chordSpellingList[m_chordSpellingIndex]);
-    setStyleB(Ms::Sid::stackModifiers, (m_stackModifiers == 1));
     setStyleR(Ms::Sid::chordQualityMag, m_qualityMag);
     setStyleR(Ms::Sid::chordQualityAdjust, m_qualityAdjust);
     setStyleR(Ms::Sid::chordExtensionMag, m_extensionMag);
@@ -467,9 +468,11 @@ void ChordSymbolEditorModel::setPropertiesOnStyleChange()
     setStyleR(Ms::Sid::chordModifierAdjust, m_modifierAdjust);
     setStyleR(Ms::Sid::harmonyFretDist, m_harmonyFretDistance);
     setStyleR(Ms::Sid::minHarmonyDistance, m_minHarmonyDistance);
+    setStyleR(Ms::Sid::maxHarmonyBarDistance, m_maxHarmonyBarDistance);
     setStyleR(Ms::Sid::maxChordShiftAbove, m_maxChordShiftAbove);
     setStyleR(Ms::Sid::maxChordShiftBelow, m_maxChordShiftBelow);
     setStyleR(Ms::Sid::capoPosition, m_capoFretPosition);
+    setStyleB(Ms::Sid::stackModifiers, (m_stackModifiers == 1));
     setStyleB(Ms::Sid::automaticCapitalization, (m_autoCapitalization == 1));
     setStyleB(Ms::Sid::lowerCaseMinorChords, !(m_minorRootCapitalization == 1));
     setStyleB(Ms::Sid::lowerCaseQualitySymbols, !(m_qualitySymbolsCapitalization == 1));
@@ -492,6 +495,7 @@ void ChordSymbolEditorModel::setPropertiesOnStyleChange()
     emit maxHarmonyBarDistanceChanged();
     emit maxChordShiftAboveChanged();
     emit maxChordShiftBelowChanged();
+    emit capoFretPositionChanged();
     emit stackModifiersChanged();
     emit autoCapitalizationChanged();
     emit minorRootCapitalizationChanged();
@@ -709,7 +713,7 @@ void ChordSymbolEditorModel::stringifyAndSaveSelectionHistory()
 void ChordSymbolEditorModel::extractSelectionHistory(QString selectionHistory)
 {
     // The selection history is of the format
-    // "StyleName1|maj7th:xx,half-dim:xx,min:xx,aug:xx,dim:xx,omit:xx\nStyleName2...."
+    // "StyleName1|maj7th:xx,half-dim:xx,min:xx,aug:xx,dim:xx,omit:xx,.....\nStyleName2...."
     m_selectionHistory.clear();
     QStringList selectionHistoryList = selectionHistory.split("\n");
     for (auto style: selectionHistoryList) {
@@ -747,6 +751,7 @@ void ChordSymbolEditorModel::updateSelectionHistory(QString currentStyle)
     propMap.insert("modAdj", QVariant(m_modifierAdjust));
     propMap.insert("hFretDist", QVariant(m_harmonyFretDistance));
     propMap.insert("mnHDist", QVariant(m_minHarmonyDistance));
+    propMap.insert("mxHBarDist", QVariant(m_maxHarmonyBarDistance));
     propMap.insert("mxSftAbv", QVariant(m_maxChordShiftAbove));
     propMap.insert("mxSftBlw", QVariant(m_maxChordShiftBelow));
     propMap.insert("cpFretPos", QVariant(m_capoFretPosition));
