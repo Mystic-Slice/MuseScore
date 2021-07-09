@@ -131,7 +131,7 @@ void ChordSymbolStylesModel::updateQualitySymbols()
     Ms::Sid id = Ms::Sid::chordQualityMajorSeventh;
     if (m_selectionHistory.find(currentStyle) != m_selectionHistory.end()) {
         // check if current style present in m_selectionHistory
-        QString previousSelectedSymbol = m_selectionHistory.value(currentStyle).at(0);
+        QString previousSelectedSymbol = m_selectionHistory.value(currentStyle).value("maj7th").toString();
         globalContext()->currentNotation()->style()->setStyleValue(id, previousSelectedSymbol);
     } else {
         //set the default
@@ -143,7 +143,7 @@ void ChordSymbolStylesModel::updateQualitySymbols()
     id = Ms::Sid::chordQualityHalfDiminished;
     if (m_selectionHistory.find(currentStyle) != m_selectionHistory.end()) {
         // check if current style present in m_selectionHistory
-        QString previousSelectedSymbol = m_selectionHistory.value(currentStyle).at(1);
+        QString previousSelectedSymbol = m_selectionHistory.value(currentStyle).value("half-dim").toString();
         globalContext()->currentNotation()->style()->setStyleValue(id, previousSelectedSymbol);
     } else {
         //set the default
@@ -155,7 +155,7 @@ void ChordSymbolStylesModel::updateQualitySymbols()
     id = Ms::Sid::chordQualityMinor;
     if (m_selectionHistory.find(currentStyle) != m_selectionHistory.end()) {
         // check if current style present in m_selectionHistory
-        QString previousSelectedSymbol = m_selectionHistory.value(currentStyle).at(2);
+        QString previousSelectedSymbol = m_selectionHistory.value(currentStyle).value("min").toString();
         globalContext()->currentNotation()->style()->setStyleValue(id, previousSelectedSymbol);
     } else {
         //set the default
@@ -167,7 +167,7 @@ void ChordSymbolStylesModel::updateQualitySymbols()
     id = Ms::Sid::chordQualityAugmented;
     if (m_selectionHistory.find(currentStyle) != m_selectionHistory.end()) {
         // check if current style present in m_selectionHistory
-        QString previousSelectedSymbol = m_selectionHistory.value(currentStyle).at(3);
+        QString previousSelectedSymbol = m_selectionHistory.value(currentStyle).value("aug").toString();
         globalContext()->currentNotation()->style()->setStyleValue(id, previousSelectedSymbol);
     } else {
         //set the default
@@ -179,7 +179,7 @@ void ChordSymbolStylesModel::updateQualitySymbols()
     id = Ms::Sid::chordQualityDiminished;
     if (m_selectionHistory.find(currentStyle) != m_selectionHistory.end()) {
         // check if current style present in m_selectionHistory
-        QString previousSelectedSymbol = m_selectionHistory.value(currentStyle).at(4);
+        QString previousSelectedSymbol = m_selectionHistory.value(currentStyle).value("dim").toString();
         globalContext()->currentNotation()->style()->setStyleValue(id, previousSelectedSymbol);
     } else {
         //set the default
@@ -191,7 +191,7 @@ void ChordSymbolStylesModel::updateQualitySymbols()
     id = Ms::Sid::chordModifierOmit;
     if (m_selectionHistory.find(currentStyle) != m_selectionHistory.end()) {
         // check if current style present in m_selectionHistory
-        QString previousSelectedSymbol = m_selectionHistory.value(currentStyle).at(5);
+        QString previousSelectedSymbol = m_selectionHistory.value(currentStyle).value("omit").toString();
         globalContext()->currentNotation()->style()->setStyleValue(id, previousSelectedSymbol);
     } else {
         //set the default
@@ -204,8 +204,14 @@ void ChordSymbolStylesModel::extractSelectionHistory(QString selectionHistory)
 {
     m_selectionHistory.clear();
     QStringList selectionHistoryList = selectionHistory.split("\n");
-    for (auto s: selectionHistoryList) {
-        QStringList selectionHistoryOfStyle = s.split("|");
-        m_selectionHistory.insert(selectionHistoryOfStyle[0], selectionHistoryOfStyle[1].split(","));
+    for (auto style: selectionHistoryList) {
+        QStringList selectionHistoryOfStyle = style.split("|"); // { styleName, comma-separated properties }
+        QStringList properties = selectionHistoryOfStyle[1].split(",");
+        QHash<QString, QVariant> propHash;
+        for (auto prop: properties) {
+            QStringList keyValue = prop.split(":");
+            propHash.insert(keyValue[0], keyValue[1]);
+        }
+        m_selectionHistory.insert(selectionHistoryOfStyle[0], propHash);
     }
 }

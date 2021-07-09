@@ -64,7 +64,7 @@ private:
 
     QList<Ms::ChordSymbolStyle> m_styles;
     ChordSymbolStyleManager* styleManager;
-    QHash<QString, QStringList> m_selectionHistory;
+    QHash<QString, QHash<QString, QVariant>> m_selectionHistory;
 
     int m_currentStyleIndex;
 };
