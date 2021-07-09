@@ -124,7 +124,7 @@ public:
     qreal addOmitParentheses() const;
 
     void initCurrentStyleIndex();
-    void updateQualitySymbolsIndices(bool chordStyleChanged);
+    void setQualitySymbolsOnStyleChange();
     void setPropertiesOnStyleChange();
     void setQualitySymbolsLists();
     void stringifyAndSaveSelectionHistory();
