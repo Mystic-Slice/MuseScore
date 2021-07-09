@@ -52,8 +52,8 @@ class ChordSymbolEditorModel : public QAbstractListModel
     Q_PROPERTY(int augmentedIndex READ augmentedIndex NOTIFY augmentedIndexChanged)
     Q_PROPERTY(int diminishedIndex READ diminishedIndex NOTIFY diminishedIndexChanged)
     Q_PROPERTY(int omitIndex READ omitIndex NOTIFY omitIndexChanged)
-    Q_PROPERTY(int stackModifiersIndex READ stackModifiersIndex NOTIFY stackModifiersIndexChanged)
 
+    Q_PROPERTY(qreal stackModifiers READ stackModifiers NOTIFY stackModifiersChanged)
     Q_PROPERTY(qreal qualityMag READ qualityMag NOTIFY qualityMagChanged)
     Q_PROPERTY(qreal qualityAdjust READ qualityAdjust NOTIFY qualityAdjustChanged)
     Q_PROPERTY(qreal extensionMag READ extensionMag NOTIFY extensionMagChanged)
@@ -99,8 +99,8 @@ public:
     int augmentedIndex() const;
     int diminishedIndex() const;
     int omitIndex() const;
-    int stackModifiersIndex() const;
 
+    qreal stackModifiers() const;
     qreal qualityMag() const;
     qreal qualityAdjust() const;
     qreal extensionMag() const;
@@ -124,13 +124,14 @@ public:
     qreal addOmitParentheses() const;
 
     void initCurrentStyleIndex();
-    void initProperties();
-    void updatePropertyIndices();
     void updateQualitySymbolsIndices(bool chordStyleChanged);
+    void setPropertiesOnStyleChange();
     void setQualitySymbolsLists();
     void stringifyAndSaveSelectionHistory();
     void extractSelectionHistory(QString selectionHistory);
     void updateSelectionHistory(QString currentStyle);
+    void setStyleR(Ms::Sid id, qreal val);
+    void setStyleB(Ms::Sid id, bool val);
 
     Q_INVOKABLE void setChordStyle(QString styleName);
     Q_INVOKABLE void setChordSpelling(QString spelling);
@@ -154,8 +155,8 @@ signals:
     void augmentedIndexChanged();
     void diminishedIndexChanged();
     void omitIndexChanged();
-    void stackModifiersIndexChanged();
 
+    void stackModifiersChanged();
     void qualityMagChanged();
     void qualityAdjustChanged();
     void extensionMagChanged();
@@ -187,7 +188,7 @@ private:
     QList<Ms::ChordSymbolStyle> m_styles;
     ChordSymbolStyleManager* styleManager;
     QHash<QString, QStringList> m_qualitySymbols;
-    QHash<QString, QStringList> m_selectionHistory;
+    QHash<QString, QHash<QString, QVariant>> m_selectionHistory;
 
     QStringList m_chordSpellingList;
     QStringList m_majorSeventhList;
@@ -205,8 +206,8 @@ private:
     int m_augmentedIndex;
     int m_diminishedIndex;
     int m_omitIndex;
-    int m_stackModifiersIndex;
 
+    qreal m_stackModifiers;
     qreal m_qualityMag;
     qreal m_qualityAdjust;
     qreal m_extensionMag;

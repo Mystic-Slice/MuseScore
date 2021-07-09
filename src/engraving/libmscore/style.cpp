@@ -455,7 +455,9 @@ static const StyleType styleTypes[] {
     { Sid::chordMinMajParentheses,  "chordMinMajParentheses",  QVariant(true) },
     { Sid::chordAddOmitParentheses, "chordAddOmitParentheses", QVariant(true) },
 
-    { Sid::chordQualitySelectionHistory, "chordQualitySelectionHistory", QVariant(QString("Standard|maj 7,m 7 b5,mi,aug,dim,omit")) },
+    { Sid::chordQualitySelectionHistory, "chordQualitySelectionHistory",
+      QVariant(QString(
+                   "Standard|maj7th:maj 7,half-dim:m 7 b5,min:mi,aug:aug,dim:dim,omit:omit,chrdSpell:0,stkMod:1.0,qualMag:1.0,qualAdj:0.0,extMag:1.0,extAdj:0.0,modMag:1.0,modAdj:0.0,hFretDist:0.5,mnHDist:3.0,mxSftAbv:0.0,mxSftBlw:0.0,cpFretPos:0.0,autoCap:1.0,minRtCap:0.0,qualCap:0.0,bsNtCap:0.0,solNtCap:1.0,altParen:1.0,susParen:1.0,minMajParen:1.0,addOmitParen:1.0")) },
     { Sid::chordQualityMajorSeventh, "chordQualityMajorSeventh", QVariant(QString("maj 7")) },
     { Sid::chordQualityHalfDiminished, "chordQualityHalfDiminished", QVariant(QString("m 7 b5")) },
     { Sid::chordQualityMinor,       "chordQualityMinor",       QVariant(QString("mi")) },
