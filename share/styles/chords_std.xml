@@ -41,6 +41,8 @@
   <quality q = "augmented">
     <sym>aug</sym>
     <sym>+</sym>
+    <sym>+ 5</sym>
+    <sym>maj #5</sym>
   </quality>
 
   <quality q = "diminished">
