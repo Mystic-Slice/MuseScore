@@ -50,10 +50,13 @@
   <quality q = "augmented">
     <sym>aug</sym>
     <sym>+</sym>
+    <sym>+ 5</sym>
+    <sym>maj #5</sym>
   </quality>
   <quality q = "diminished">
     <sym>circle</sym>
     <sym>dim</sym>
+    <sym>min b5</sym>
   </quality>
   <quality q = "half-diminished">
     <sym>oslash</sym>
