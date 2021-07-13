@@ -1592,6 +1592,9 @@ void ParsedChord::addParentheses(const ChordList* cl)
     QStringList alterations = { "b", "bb", "#", "##", "natural" };
     QStringList addOmitSymbols = { "omit", "no", "add" };
     for (int index = 0; index < _tokenList.size(); index++) {
+        if (skipList.contains(index)) {
+            continue;
+        }
         const ChordToken& tok = _tokenList.at(index);
         if (tok.tokenClass == ChordTokenClass::MODIFIER) {
             if (tok.names.first() == "sus" && cl->suspensionsParentheses) {
@@ -1672,6 +1675,9 @@ void ParsedChord::addParentheses(const ChordList* cl)
 //---------------------------------------------------------
 void ParsedChord::sortModifiers()
 {
+    // TODO: Update skip list. It loses track in sorting and starts skipping wrong tokens
+    // Update also the remove after render list
+
     QStringList allModifiers = { "b", "bb", "#", "##", "natural", "sus", "alt", "alt#", "altb", "omit", "no", "add", "maj", "/" };
 
     QList<ChordToken> alterations;
@@ -1858,7 +1864,7 @@ void ParsedChord::respellQualitySymbols(const ChordList* cl)
         majTok.names += "Ma";
         majTok.tokenClass = ChordTokenClass::QUALITY;
         _tokenList.insert(0, majTok);
-        removeAfterRenderList.push_back(0);
+        removeAfterRenderList.push_back(majTok);
     }
 
     // Diminished chords with input: <minor>b5
@@ -1998,21 +2004,21 @@ void ParsedChord::respellQualitySymbols(const ChordList* cl)
                     sevenToken.names += "7";
                     sevenToken.tokenClass = ChordTokenClass::EXTENSION;
                     _tokenList.insert(index + 1, sevenToken);
-                    removeAfterRenderList.push_back(index + 1);
+                    removeAfterRenderList.push_back(sevenToken);
 
                     // insert modifier flat
                     ChordToken flatToken;
                     flatToken.names += "b";
                     flatToken.tokenClass = ChordTokenClass::MODIFIER;
                     _tokenList.insert(index + 2, flatToken);
-                    removeAfterRenderList.push_back(index + 2);
+                    removeAfterRenderList.push_back(flatToken);
 
                     // insert modifier 5
                     ChordToken fiveToken;
                     fiveToken.names += "5";
                     fiveToken.tokenClass = ChordTokenClass::MODIFIER;
                     _tokenList.insert(index + 3, fiveToken);
-                    removeAfterRenderList.push_back(index + 3);
+                    removeAfterRenderList.push_back(fiveToken);
                 }
             } else if (isDiminished) {
                 // This part of code is encountered when the input is <minor>b5.
@@ -2041,14 +2047,14 @@ void ParsedChord::respellQualitySymbols(const ChordList* cl)
                     flatToken.names += "b";
                     flatToken.tokenClass = ChordTokenClass::MODIFIER;
                     _tokenList.insert(index + 1, flatToken);
-                    removeAfterRenderList.push_back(index + 1);
+                    removeAfterRenderList.push_back(flatToken);
 
                     // insert modifier 5
                     ChordToken fiveToken;
                     fiveToken.names += "5";
                     fiveToken.tokenClass = ChordTokenClass::MODIFIER;
                     _tokenList.insert(index + 2, fiveToken);
-                    removeAfterRenderList.push_back(index + 2);
+                    removeAfterRenderList.push_back(fiveToken);
                 }
             } else if (isAugmented) {
                 // Augmented chords are handled slightly different than the other three chords
@@ -2070,7 +2076,7 @@ void ParsedChord::respellQualitySymbols(const ChordList* cl)
                     fiveToken.names += "5";
                     fiveToken.tokenClass = ChordTokenClass::EXTENSION;
                     _tokenList.insert(index + 1, fiveToken);
-                    removeAfterRenderList.push_back(index + 1);
+                    removeAfterRenderList.push_back(fiveToken);
                     index++; // Just to prevent this added 5 from being blocked
                 }
 
@@ -2080,14 +2086,14 @@ void ParsedChord::respellQualitySymbols(const ChordList* cl)
                     sharpToken.names += "#";
                     sharpToken.tokenClass = ChordTokenClass::MODIFIER;
                     _tokenList.insert(index + 1, sharpToken);
-                    removeAfterRenderList.push_back(index + 1);
+                    removeAfterRenderList.push_back(sharpToken);
 
                     // insert modifier 5
                     ChordToken fiveToken;
                     fiveToken.names += "5";
                     fiveToken.tokenClass = ChordTokenClass::MODIFIER;
                     _tokenList.insert(index + 2, fiveToken);
-                    removeAfterRenderList.push_back(index + 2);
+                    removeAfterRenderList.push_back(fiveToken);
                     index+=2; // Just to prevent this added #5 from being blocked
                 }
                 hasSharpFive = false;
@@ -2109,7 +2115,7 @@ void ParsedChord::respellQualitySymbols(const ChordList* cl)
                     fiveToken.names += "5";
                     fiveToken.tokenClass = ChordTokenClass::EXTENSION;
                     _tokenList.insert(index + 1, fiveToken);
-                    removeAfterRenderList.push_back(index + 1);
+                    removeAfterRenderList.push_back(fiveToken);
                     index++; // Just to prevent this added 5 from being blocked
                 }
 
@@ -2119,14 +2125,14 @@ void ParsedChord::respellQualitySymbols(const ChordList* cl)
                     sharpToken.names += "#";
                     sharpToken.tokenClass = ChordTokenClass::MODIFIER;
                     _tokenList.insert(index + 1, sharpToken);
-                    removeAfterRenderList.push_back(index + 1);
+                    removeAfterRenderList.push_back(sharpToken);
 
                     // insert modifier 5
                     ChordToken fiveToken;
                     fiveToken.names += "5";
                     fiveToken.tokenClass = ChordTokenClass::MODIFIER;
                     _tokenList.insert(index + 2, fiveToken);
-                    removeAfterRenderList.push_back(index + 2);
+                    removeAfterRenderList.push_back(fiveToken);
                     index+=2; // Just to prevent this added #5 from being blocked
                 }
                 hasSharpFive = false;
@@ -2247,6 +2253,8 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
     int index = 0;
     for (const ChordToken& tok : qAsConst(_tokenList)) {
         if (skipList.contains(index)) {
+            qDebug() << index;
+            qDebug() << tok.names.first();
             index++;
             continue;
         }
@@ -2396,12 +2404,19 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
         index++;
     }
 
+    // Remove all the added parentheses
+    stripParentheses();
     // The items added in the respelling function are removed here
     // to prevent multiple occurrences
-    stripParentheses(); // remove from render list contains indices from when there were no parentheses
-    for (int index = _tokenList.size(); index >= 0; index--) {
-        if (removeAfterRenderList.contains(index)) {
-            _tokenList.removeAt(index);
+    // remove from render list contains chord tokens to be removed
+    for (int j = 0; j < removeAfterRenderList.size(); j++) {
+        for (int i = 0; i < _tokenList.size(); i++) {
+            if (_tokenList.at(i).names.first() == removeAfterRenderList.at(j).names.first()) {
+                if (_tokenList.at(i).tokenClass == removeAfterRenderList.at(j).tokenClass) {
+                    _tokenList.removeAt(i);
+                    break;
+                }
+            }
         }
     }
 
