@@ -1682,6 +1682,8 @@ void ParsedChord::sortModifiers()
     QStringList allModifiers = { "b", "bb", "#", "##", "natural", "sus", "alt", "alt#", "altb", "omit", "no", "add", "maj", "/" };
 
     QList<ChordToken> alterations;
+    QList<bool> skip;
+    QList<bool> remove;
     QStringList alterationsList = { "b", "bb", "#", "##", "natural" };
 
     QList<ChordToken> suspension;
@@ -1695,6 +1697,7 @@ void ParsedChord::sortModifiers()
     QStringList altList = { "alt", "alt#", "altb" };
     int firstModifierIndex = -1;
     // Dismantle the list into the separate modifier categories
+    int cnt = 1;
     for (int index = 0; index < _tokenList.size(); index++) {
         ChordToken tok = _tokenList.at(index);
         if (tok.tokenClass == ChordTokenClass::MODIFIER) {
@@ -1715,6 +1718,7 @@ void ParsedChord::sortModifiers()
                         foundNextModifier = true;
                     }
                 }
+                index--;
             } else if (tok.names.first() == "maj") {
                 bool foundNextModifier = false;
                 while (!foundNextModifier) {
@@ -1729,10 +1733,13 @@ void ParsedChord::sortModifiers()
                         foundNextModifier = true;
                     }
                 }
+                index--;
             } else if (addOmitList.contains(tok.names.first())) {
+                // To skip the immediate next accidental if any
                 addOmit.push_back(tok);
                 removeIndices.push_back(index);
-                tok = _tokenList.at(index); // To skip the immediate next accidental if any
+                index++;
+                tok = _tokenList.at(index);
 
                 bool foundNextModifier = false;
                 while (!foundNextModifier) {
@@ -1747,18 +1754,24 @@ void ParsedChord::sortModifiers()
                         foundNextModifier = true;
                     }
                 }
+                index--;
             } else if (alterationsList.contains(tok.names.first())) {
                 bool foundNextModifier = false;
+                qDebug() << skipList;
                 while (!foundNextModifier) {
                     if (skipList.contains(index)) {
                         qDebug() << "skip " << index;
                         skipList.removeAll(index);
-                        tok.names.push_back("skip");
+                        skip.push_back(true);
+                    } else {
+                        skip.push_back(false);
                     }
                     if (removeAfterRenderList.contains(index)) {
                         qDebug() << "remove " << index;
                         removeAfterRenderList.removeAll(index);
-                        tok.names.push_back("remove");
+                        remove.push_back(true);
+                    } else {
+                        remove.push_back(false);
                     }
                     alterations.push_back(tok);
                     removeIndices.push_back(index);
@@ -1771,6 +1784,7 @@ void ParsedChord::sortModifiers()
                         foundNextModifier = true;
                     }
                 }
+                index--;
             } else if (altList.contains(tok.names.first())) {
                 bool foundNextModifier = false;
                 while (!foundNextModifier) {
@@ -1785,9 +1799,12 @@ void ParsedChord::sortModifiers()
                         foundNextModifier = true;
                     }
                 }
+                index--;
             }
         }
+        cnt++;
     }
+    qDebug() << "cnt: " << cnt;
     std::sort(removeIndices.begin(), removeIndices.end());
     for (int index = removeIndices.size() - 1; index >= 0; index--) {
         _tokenList.removeAt(removeIndices.at(index));
@@ -1799,39 +1816,47 @@ void ParsedChord::sortModifiers()
             if (alterations.at(2 * j + 1).names.first().toInt() > alterations.at(2 * (j + 1) + 1).names.first().toInt()) {
                 // Swap accidentals
                 alterations.swapItemsAt(2 * j, 2 * (j + 1));
+                skip.swapItemsAt(2 * j, 2 * (j + 1));
+                remove.swapItemsAt(2 * j, 2 * (j + 1));
 
                 //Swap note numbers
                 alterations.swapItemsAt(2 * j + 1, 2 * (j + 1) + 1);
+                skip.swapItemsAt(2 * j + 1, 2 * (j + 1) + 1);
+                remove.swapItemsAt(2 * j + 1, 2 * (j + 1) + 1);
             }
         }
     }
     // Rebuild the list in the correct order
+    int addedIndex = 0;
     for (int index = alterations.size() - 1; index >= 0; index--) {
         _tokenList.insert(firstModifierIndex, alterations.at(index));
     }
     for (int index = addOmit.size() - 1; index >= 0; index--) {
         _tokenList.insert(firstModifierIndex, addOmit.at(index));
+        addedIndex++;
     }
     for (int index = alt.size() - 1; index >= 0; index--) {
         _tokenList.insert(firstModifierIndex, alt.at(index));
+        addedIndex++;
     }
     for (int index = suspension.size() - 1; index >= 0; index--) {
         _tokenList.insert(firstModifierIndex, suspension.at(index));
+        addedIndex++;
     }
     for (int index = maj7.size() - 1; index >= 0; index--) {
         _tokenList.insert(firstModifierIndex, maj7.at(index));
+        addedIndex++;
     }
-    for (int index = 0; index < _tokenList.size(); index++) {
-        ChordToken tok = _tokenList.at(index);
-        if (tok.names.contains("skip")) {
-            qDebug() << "skip1 " << index;
-            skipList.push_back(index);
-            tok.names.removeAll("skip");
+    // Only preserves skipList and removeAfterRenderList for alterations
+    // Probably need to make it common(but is it needed though?...since only alterations are skipped)
+    for (int i = 0; i < skip.size(); i++) {
+        if (skip.at(i)) {
+            skipList.push_back(firstModifierIndex + addedIndex + i);
         }
-        if (tok.names.contains("remove")) {
-            qDebug() << "remove1 " << index;
-            removeAfterRenderList.push_back(index);
-            tok.names.removeAll("remove");
+    }
+    for (int i = 0; i < remove.size(); i++) {
+        if (remove.at(i)) {
+            removeAfterRenderList.push_back(firstModifierIndex + addedIndex + i);
         }
     }
 }
@@ -2188,6 +2213,7 @@ void ParsedChord::respellQualitySymbols(const ChordList* cl)
             }
         }
     }
+    qDebug() << skipList;
 }
 
 //---------------------------------------------------------
