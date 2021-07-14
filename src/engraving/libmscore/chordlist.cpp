@@ -2306,13 +2306,6 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
 
     int index = 0;
     for (const ChordToken& tok : qAsConst(_tokenList)) {
-        if (skipList.contains(index)) {
-            qDebug() << index;
-            qDebug() << tok.names.first();
-            index++;
-            continue;
-        }
-
         QString n = tok.names.first();
         QList<RenderAction> rl;
         QList<ChordToken> definedTokens;
@@ -2409,13 +2402,15 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
             }
         }
 
-        if (found) {
-            _renderList.append(rl);
-        } else {
-            // no definition for token, so render as literal
-            RenderAction a(RenderAction::RenderActionType::SET);
-            a.text = tok.names.first();
-            _renderList.append(a);
+        if (!skipList.contains(index)) {
+            if (found) {
+                _renderList.append(rl);
+            } else {
+                // no definition for token, so render as literal
+                RenderAction a(RenderAction::RenderActionType::SET);
+                a.text = tok.names.first();
+                _renderList.append(a);
+            }
         }
 
         if (index == alterationStackingEnd && alterationStackIndices.size() > 1) {
