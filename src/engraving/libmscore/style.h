@@ -1491,6 +1491,16 @@ struct ChordSymbolStyle {
     QString fileName;
 };
 
+struct QualitySymbol{
+    QString qualitySymbol = "";
+    qreal qualMag = 1.0;
+    qreal qualAdjust = 0.0;
+    qreal extMag = 1.0;
+    qreal extAdjust = 0.0;
+    qreal modMag = 1.0;
+    qreal modAdjust = 0.0;
+};
+
 //---------------------------------------------------------
 //   MStyle
 ///   \cond PLUGIN_API \private \endcond

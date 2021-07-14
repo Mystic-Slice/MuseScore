@@ -29,7 +29,7 @@
 
   <quality q = "major7th">
     <sym>maj 7</sym>
-    <sym>ma 7</sym>
+    <sym eMag="0.6" eAdj="-4">ma 7</sym>
   </quality>
 
   <quality q = "minor">
@@ -41,7 +41,7 @@
   <quality q = "augmented">
     <sym>aug</sym>
     <sym>+</sym>
-    <sym>+ 5</sym>
+    <sym eMag="0.6" eAdj="0">+ 5</sym>
     <sym>maj #5</sym>
   </quality>
 
