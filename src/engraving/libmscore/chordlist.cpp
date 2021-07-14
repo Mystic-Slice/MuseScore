@@ -1697,7 +1697,6 @@ void ParsedChord::sortModifiers()
     QStringList altList = { "alt", "alt#", "altb" };
     int firstModifierIndex = -1;
     // Dismantle the list into the separate modifier categories
-    int cnt = 1;
     for (int index = 0; index < _tokenList.size(); index++) {
         ChordToken tok = _tokenList.at(index);
         if (tok.tokenClass == ChordTokenClass::MODIFIER) {
@@ -1757,17 +1756,14 @@ void ParsedChord::sortModifiers()
                 index--;
             } else if (alterationsList.contains(tok.names.first())) {
                 bool foundNextModifier = false;
-                qDebug() << skipList;
                 while (!foundNextModifier) {
                     if (skipList.contains(index)) {
-                        qDebug() << "skip " << index;
                         skipList.removeAll(index);
                         skip.push_back(true);
                     } else {
                         skip.push_back(false);
                     }
                     if (removeAfterRenderList.contains(index)) {
-                        qDebug() << "remove " << index;
                         removeAfterRenderList.removeAll(index);
                         remove.push_back(true);
                     } else {
@@ -1802,9 +1798,7 @@ void ParsedChord::sortModifiers()
                 index--;
             }
         }
-        cnt++;
     }
-    qDebug() << "cnt: " << cnt;
     std::sort(removeIndices.begin(), removeIndices.end());
     for (int index = removeIndices.size() - 1; index >= 0; index--) {
         _tokenList.removeAt(removeIndices.at(index));
@@ -2213,7 +2207,6 @@ void ParsedChord::respellQualitySymbols(const ChordList* cl)
             }
         }
     }
-    qDebug() << skipList;
 }
 
 //---------------------------------------------------------
