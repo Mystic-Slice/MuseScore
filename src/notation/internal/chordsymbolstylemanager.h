@@ -39,7 +39,7 @@ public:
     void extractChordStyleInfo(mu::io::path& f);
 
     QList<Ms::ChordSymbolStyle> getChordStyles();
-    QHash<QString, QStringList> getQualitySymbols(QString path);
+    QHash < QString, QList<Ms::QualitySymbol>> getQualitySymbols(QString path);
 
 private:
     QList<Ms::ChordSymbolStyle> _chordStyles;
