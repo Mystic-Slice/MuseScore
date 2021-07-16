@@ -382,6 +382,7 @@ void MStyle::updateChordList()
     m_chordList.qualitySymbols.insert("augmented", value(Sid::chordQualityAugmented).toString());
     m_chordList.qualitySymbols.insert("omit", value(Sid::chordModifierOmit).toString());
 
+    m_chordList.usePresets = value(Sid::useChordSymbolPresets).toBool();
     m_chordList.stackModifiers = value(Sid::stackModifiers).toBool();
     m_chordList.autoCapitalization = value(Sid::automaticCapitalization).toBool();
     m_chordList.lowerCaseQualitySymbols = value(Sid::lowerCaseQualitySymbols).toBool();
