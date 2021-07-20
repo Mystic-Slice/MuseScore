@@ -13359,6 +13359,7 @@ By default, they will be placed such as that their right end are at the same lev
   <tabstop>buttonTogglePagelist</tabstop>
   <tabstop>resetStylesButton</tabstop>
  </tabstops>
- <resources/>
- <connections/>
+ <resources>
+  <include location="../../notationscene.qrc"/>
+ </resources>
 </ui>
