@@ -27,6 +27,7 @@
 #include "engraving/libmscore/xml.h"
 
 namespace mu::notation {
+// Probably have to rename. name already used in harmony.cpp
 struct ChordSymbolStyle {
     QString styleName;
     QString fileName;
