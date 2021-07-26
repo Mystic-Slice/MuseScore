@@ -79,6 +79,11 @@
     <sym>raised</sym>
     <sym>baseline</sym>
   </modifier>
+
+  <modifier m = "bassNote">
+    <sym>/</sym>
+    <sym>/lowered</sym>
+  </modifier>
 <!--
       Part I: font list
             associate symbols (code points) with names
@@ -579,6 +584,16 @@
   <token class="modifier">
     <name>su-</name>
     <render>m:0:-&susn; s- m:0:&susn;</render>
+    </token>
+
+  <token>
+    <name>/</name>
+    <render>m:-0.2:1 / m:0.2:1</render>
+    </token>
+
+  <token>
+    <name>/lowered</name>
+    <render>m:0:3 / m:0:6</render>
     </token>
 
   <renderRoot>:n :a m:0.5:0</renderRoot>

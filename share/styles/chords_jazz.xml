@@ -77,6 +77,10 @@
   <modifier m = "suspension">
     <sym>raised</sym>
     <sym>baseline</sym>
+  </modifier>  
+  <modifier m = "bassNote">
+    <sym>/</sym>
+    <sym>/lowered</sym>
   </modifier>
 
 <!--
@@ -625,6 +629,16 @@
   <token class="modifier">
     <name>su-</name>
     <render>m:0:-&susn; s- m:0:&susn;</render>
+    </token>
+
+  <token>
+    <name>/</name>
+    <render>m:0:2 s/ m:0:-2</render>
+    </token>
+
+  <token>
+    <name>/lowered</name>
+    <render>m:0:3 s/ m:0:6</render>
     </token>
 
   <renderRoot>:n :a </renderRoot>
