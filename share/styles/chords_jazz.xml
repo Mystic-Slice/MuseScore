@@ -32,6 +32,8 @@
   <!ENTITY mod "4.5">
 <!-- this is additional superscripting to apply to modifier digits -->
   <!ENTITY modn "1">
+<!-- this is additional superscripting to apply to suspension digits -->
+  <!ENTITY susn "7">
 
   ]>
 
@@ -63,9 +65,18 @@
     <sym>0</sym>
     <sym>min 7 b5</sym>
   </quality>
+  <extension e = "sixNine">
+    <sym>69</sym>
+    <sym>6,9</sym>
+    <sym>6/9</sym>
+  </extension>
   <modifier m = "omit">
     <sym>omit</sym>
     <sym>no</sym>
+  </modifier>
+  <modifier m = "suspension">
+    <sym>raised</sym>
+    <sym>baseline</sym>
   </modifier>
 
 <!--
@@ -150,6 +161,7 @@
     <sym code="0xe197" name="s7"/>
     <sym code="0xe198" name="s8"/>
     <sym code="0xe199" name="s9"/>
+    <sym value="-" name="s-"/>
 
     </font>
 
@@ -588,6 +600,31 @@
   <token class="modifier">
     <name>13</name>
     <render>m:0:-&modn; s1 s3 m:0:&modn;</render>
+    </token>
+
+  <token class="modifier">
+    <name>sus</name>
+    <render>m:0:-&modn; sus m:0:&modn;</render>
+    </token>
+  
+  <token class="modifier">
+    <name>su2</name>
+    <render>m:0:-&susn; s2 m:0:&susn;</render>
+    </token>
+
+  <token class="modifier">
+    <name>su3</name>
+    <render>m:0:-&susn; s3 m:0:&susn;</render>
+    </token>
+
+  <token class="modifier">
+    <name>su4</name>
+    <render>m:0:-&susn; s4 m:0:&susn;</render>
+    </token>
+
+  <token class="modifier">
+    <name>su-</name>
+    <render>m:0:-&susn; s- m:0:&susn;</render>
     </token>
 
   <renderRoot>:n :a </renderRoot>
