@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<!DOCTYPE museScore [
+<!-- MuseJazz Text extensions are already superscripted; this is how much to move them back down -->
+  <!ENTITY ext "2.5">
+<!-- MuseJazz Text modifier digits are already superscripted; this is how much to move everything else up to match -->
+  <!ENTITY mod "4.5">
+<!-- this is additional superscripting to apply to modifier digits -->
+  <!ENTITY modn "1">
+<!-- this is additional superscripting to apply to suspension digits -->
+  <!ENTITY susn "7">
+  ]>
 <!--
 =====================================================================
     MuseScore
@@ -55,9 +64,20 @@
     <sym>min 7 b5</sym>
   </quality>
 
+  <extension e = "sixNine">
+    <sym>69</sym>
+    <sym>6,9</sym>
+    <sym>6/9</sym>
+  </extension>
+
   <modifier m = "omit">
     <sym>omit</sym>
     <sym>no</sym>
+  </modifier>
+
+  <modifier m = "suspension">
+    <sym>raised</sym>
+    <sym>baseline</sym>
   </modifier>
 <!--
       Part I: font list
@@ -156,6 +176,7 @@
     <sym value="11" name="s11"/>
     <sym value="12" name="s12"/>
     <sym value="13" name="s13"/>
+    <sym value="-" name="s-"/>
     <sym value="(" name="s("/>
     <sym value=")" name="s)"/>
     <sym value="," name="s,"/>
@@ -292,6 +313,16 @@
   <token>
     <name>69</name>
     <render>:push m:0:-6 696 :pop m:0:2 699 m:0:-2</render>
+    </token>
+
+  <token class="extension">
+    <name>6,9</name>
+    <render>s6 m:0:-&mod; s, m:0:&mod; s9</render>
+    </token>
+
+  <token class="extension">
+    <name>6/9</name>
+    <render>m:1:-2 s6 m:-2.5:0 s/ m:-2:7 s9 m:0:-5</render>
     </token>
 
   <token class="extension">
@@ -523,6 +554,31 @@
     <name>t</name>
     <name>^</name>
     <render>striangle</render>
+    </token>
+
+  <token class="modifier">
+    <name>sus</name>
+    <render>m:0:-&modn; sus m:0:&modn;</render>
+    </token>
+  
+  <token class="modifier">
+    <name>su2</name>
+    <render>m:0:-&susn; s2 m:0:&susn;</render>
+    </token>
+
+  <token class="modifier">
+    <name>su3</name>
+    <render>m:0:-&susn; s3 m:0:&susn;</render>
+    </token>
+
+  <token class="modifier">
+    <name>su4</name>
+    <render>m:0:-&susn; s4 m:0:&susn;</render>
+    </token>
+
+  <token class="modifier">
+    <name>su-</name>
+    <render>m:0:-&susn; s- m:0:&susn;</render>
     </token>
 
   <renderRoot>:n :a m:0.5:0</renderRoot>
