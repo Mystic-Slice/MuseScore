@@ -22,37 +22,62 @@
 #ifndef MU_INSPECTOR_CHORDSYMBOLSETTINGSMODEL_H
 #define MU_INSPECTOR_CHORDSYMBOLSETTINGSMODEL_H
 
+#include <QObject>
+#include <QAbstractListModel>
+#include "modularity/ioc.h"
+#include "context/iglobalcontext.h"
+#include "notation/internal/chordsymbolstylemanager.h"
 #include "models/abstractinspectormodel.h"
-#include "chordsymbolstylesmodel.h"
 
 namespace mu::inspector {
-class ChordSymbolSettingsModel : public AbstractInspectorModel
+class ChordSymbolSettingsModel : public AbstractInspectorModel, public QAbstractListModel
 {
+    INJECT(inspector, context::IGlobalContext, globalContext)
+
     Q_OBJECT
 
-    Q_PROPERTY(ChordSymbolStylesModel * chordStylesModel READ chordStylesModel CONSTANT)
-    Q_PROPERTY(PropertyItem * isLiteral READ isLiteral CONSTANT)
-    Q_PROPERTY(PropertyItem * voicingType READ voicingType CONSTANT)
-    Q_PROPERTY(PropertyItem * durationType READ durationType CONSTANT)
+    Q_PROPERTY(int currentStyleIndex READ currentStyleIndex NOTIFY currentStyleIndexChanged)
 
 public:
     explicit ChordSymbolSettingsModel(QObject* parent, IElementRepositoryService* repository);
+
+    QVariant data(const QModelIndex& index, int role) const override;
+    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+    QHash<int, QByteArray> roleNames() const override;
 
     void createProperties() override;
     void requestElements() override;
     void loadProperties() override;
     void resetProperties() override;
 
-    ChordSymbolStylesModel* chordStylesModel() const;
-    PropertyItem* isLiteral() const;
-    PropertyItem* voicingType() const;
-    PropertyItem* durationType() const;
+    int currentStyleIndex() const;
+
+    void initCurrentStyleIndex();
+    void setQualitySymbolsOnStyleChange();
+    void setPropertiesOnStyleChange();
+    void setChordSpelling(QString newSpelling);
+    void extractSelectionHistory(QString selectionHistory);
+    void setStyleR(Ms::Sid id, qreal val);
+    void setStyleB(Ms::Sid id, bool val);
+
+    Q_INVOKABLE void setChordStyle(int index);
+
+signals:
+    void currentStyleIndexChanged();
 
 private:
-    ChordSymbolStylesModel* m_chordStylesModel = nullptr;
-    PropertyItem* m_isLiteral = nullptr;
-    PropertyItem* m_voicingType = nullptr;
-    PropertyItem* m_durationType = nullptr;
+    enum RoleNames {
+        StyleNameRole = Qt::UserRole + 1,
+        FileRole
+    };
+
+    QList<notation::ChordSymbolStyle> m_styles;
+    notation::ChordSymbolStyleManager* styleManager;
+    QHash<QString, QHash<QString, QVariant> > m_selectionHistory;
+
+    QStringList m_chordSpellingList;
+
+    int m_currentStyleIndex;
 };
 }
 
