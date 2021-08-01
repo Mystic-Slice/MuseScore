@@ -94,6 +94,14 @@ Item {
             navigation.row: root.navigationRow(5)
             model: proxyModel ? proxyModel.glissandoPlaybackModel : null
         }
+
+        ChordSymbolsExpandableBlank {
+            id: chordSymbolsExpandableBlank
+            navigation.panel: root.navigationPanel
+            navigation.column: root.navigationCol()
+            navigation.row: root.navigationRow(6)
+            model: proxyModel ? proxyModel.chordSymbolsPlaybackModel : null
+        }
     }
 }
 
