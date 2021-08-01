@@ -32,6 +32,7 @@
 #include "internal_models/glissandoplaybackmodel.h"
 #include "internal_models/dynamicplaybackmodel.h"
 #include "internal_models/hairpinplaybackmodel.h"
+#include "internal_models/chordsymbolsplaybackmodel.h"
 
 namespace mu::inspector {
 class PlaybackProxyModel : public AbstractInspectorModel
@@ -45,6 +46,7 @@ class PlaybackProxyModel : public AbstractInspectorModel
     Q_PROPERTY(QObject * glissandoPlaybackModel READ glissandoPlaybackModel NOTIFY glissandoPlaybackModelChanged)
     Q_PROPERTY(QObject * dynamicPlaybackModel READ dynamicPlaybackModel NOTIFY dynamicPlaybackModelChanged)
     Q_PROPERTY(QObject * hairpinPlaybackModel READ hairpinPlaybackModel NOTIFY hairpinPlaybackModelChanged)
+    Q_PROPERTY(QObject * chordSymbolsPlaybackModel READ chordSymbolsPlaybackModel NOTIFY chordSymbolsPlaybackModelChanged)
 
 public:
     explicit PlaybackProxyModel(QObject* parent, IElementRepositoryService* repository);
@@ -59,6 +61,7 @@ public:
     QObject* glissandoPlaybackModel() const;
     QObject* dynamicPlaybackModel() const;
     QObject* hairpinPlaybackModel() const;
+    QObject* chordSymbolsPlaybackModel() const;
 
 public slots:
     void setNotePlaybackModel(NotePlaybackModel* notePlaybackModel);
@@ -68,6 +71,7 @@ public slots:
     void setGlissandoPlaybackModel(GlissandoPlaybackModel* glissandoPlaybackModel);
     void setDynamicPlaybackModel(DynamicPlaybackModel* dynamicPlaybackModel);
     void setHairpinPlaybackModel(HairpinPlaybackModel* hairpinPlaybackModel);
+    void setChordSymbolsPlaybackModel(ChordSymbolsPlaybackModel* chordSymbolsPlaybackModel);
 
 signals:
     void notePlaybackModelChanged(QObject* notePlaybackModel);
@@ -77,6 +81,7 @@ signals:
     void glissandoPlaybackModelChanged(QObject* glissandoPlaybackModel);
     void dynamicPlaybackModelChanged(QObject* dynamicPlaybackModel);
     void hairpinPlaybackModelChanged(QObject* hairpinPlaybackModel);
+    void chordSymbolsPlaybackModelChanged(QObject* chordSymbolsPlaybackModel);
 
 private:
     void createProperties() override {}
@@ -91,6 +96,7 @@ private:
     GlissandoPlaybackModel* m_glissandoPlaybackModel = nullptr;
     DynamicPlaybackModel* m_dynamicPlaybackModel = nullptr;
     HairpinPlaybackModel* m_hairpinPlaybackModel = nullptr;
+    ChordSymbolsPlaybackModel* m_chordSymbolsPlaybackModel = nullptr;
 };
 }
 
