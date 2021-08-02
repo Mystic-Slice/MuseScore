@@ -2013,6 +2013,18 @@ void ParsedChord::respellQualitySymbols(const ChordList* cl)
                     _tokenList.removeAt(index);
                     _tokenList.insert(index, hdTok);
 
+                    // If of form <minor>7b5, switch the minor symbol to match the quality minor
+                    if (halfDiminishedTokens.contains("7") && halfDiminishedTokens.contains("b5")) {
+                        QString sym = cl->qualitySymbols.value("minor");
+                        if (sym != "-1") {
+                            ChordToken qualTok;
+                            qualTok.names += sym;
+                            qualTok.tokenClass = ChordTokenClass::QUALITY;
+                            _tokenList.removeAt(index);
+                            _tokenList.insert(index, qualTok);
+                        }
+                    }
+
                     // Here depending on the quality symbols set,
                     // decide whether or not to skip the 7 and b5.
                     hasSeven = halfDiminishedTokens.contains("7");
@@ -2027,6 +2039,18 @@ void ParsedChord::respellQualitySymbols(const ChordList* cl)
                     hdTok.tokenClass = ChordTokenClass::QUALITY;
                     _tokenList.removeAt(index);
                     _tokenList.insert(index, hdTok);
+
+                    // If of form <minor>7b5, switch the minor symbol to match the quality minor
+                    if (halfDiminishedTokens.contains("7") && halfDiminishedTokens.contains("b5")) {
+                        QString sym = cl->qualitySymbols.value("minor");
+                        if (sym != "-1") {
+                            ChordToken qualTok;
+                            qualTok.names += sym;
+                            qualTok.tokenClass = ChordTokenClass::QUALITY;
+                            _tokenList.removeAt(index);
+                            _tokenList.insert(index, qualTok);
+                        }
+                    }
 
                     if (halfDiminishedTokens.contains("7")) {
                         // insert extension 7
