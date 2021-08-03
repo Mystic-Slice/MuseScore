@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<!DOCTYPE museScore [
+<!-- MuseJazz Text extensions are already superscripted; this is how much to move them back down -->
+  <!ENTITY ext "2.5">
+<!-- MuseJazz Text modifier digits are already superscripted; this is how much to move everything else up to match -->
+  <!ENTITY mod "4.5">
+<!-- this is additional superscripting to apply to modifier digits -->
+  <!ENTITY modn "1">
+<!-- this is additional superscripting to apply to suspension digits -->
+  <!ENTITY susn "7">
+  ]>
 <!--
 =====================================================================
     MuseScore
@@ -25,8 +34,56 @@
 =====================================================================
 -->
 
-<museScore version="1.24">
+<museScore version="1.24" type="chordStyle" styleName="Standard" usePresets="true" description="This is Standard">
 
+  <quality q = "major7th">
+    <sym>maj 7</sym>
+    <sym eMag="0.6" eAdj="-4">ma 7</sym>
+  </quality>
+
+  <quality q = "minor">
+    <sym>mi</sym>
+    <sym>-</sym>
+    <sym>min</sym>
+  </quality>
+
+  <quality q = "augmented">
+    <sym>aug</sym>
+    <sym>+</sym>
+    <sym eMag="0.6" eAdj="0">+ 5</sym>
+    <sym>maj #5</sym>
+  </quality>
+
+  <quality q = "diminished">
+    <sym>dim</sym>
+    <sym>circle</sym>
+  </quality>
+
+  <quality q = "half-diminished">
+    <sym>m 7 b5</sym>
+    <sym>min 7 b5</sym>
+  </quality>
+
+  <extension e = "sixNine">
+    <sym>69</sym>
+    <sym>6,9</sym>
+    <sym>6/9</sym>
+  </extension>
+
+  <modifier m = "omit">
+    <sym>omit</sym>
+    <sym>no</sym>
+  </modifier>
+
+  <modifier m = "suspension">
+    <sym>raised</sym>
+    <sym>baseline</sym>
+  </modifier>
+
+  <modifier m = "bassNote">
+    <sym>/</sym>
+    <sym>/lowered</sym>
+  </modifier>
 <!--
       Part I: font list
             associate symbols (code points) with names
@@ -38,10 +95,6 @@
   <autoAdjust mag="0.8" adjust="-4.0">1</autoAdjust>
 
   <font>
-
-    <sym code="0x0394" name="triangle"/>
-    <sym code="0x03bf" name="circle"/>
-    <sym code="0x00f8" name="oslash"/>
 
     <sym code="0x266d" name="b"/>
     <sym code="0x266e" name="natural"/>
@@ -60,6 +113,33 @@
     <sym class="accidental" name="s"/>
 <!-- change value of "code" attribute to "0x200b" (zero width space) to force Bb to render as B in German -->
     <sym class="german_B" code="0x266d" name="b"/>
+
+    </font>
+
+  <font class="quality">
+  <!-- Major chords -->
+    <sym value="maj" name="maj"/>
+    <sym value="Maj" name="Maj"/>
+    <sym value="Ma" name="Ma"/>
+    <sym value="ma" name="ma"/>
+    <sym value="M" name="M"/>
+    <sym code="0x0394" name="triangle"/>
+  <!-- Minor chords -->
+    <sym value="min" name="min"/>
+    <sym value="mi" name="mi"/>
+    <sym value="Mi" name="Mi"/>
+    <sym value="m" name="m"/>
+    <sym value="-" name="-"/>
+  <!-- Augmented chords -->
+    <sym value="aug" name="aug"/>
+    <sym value="Aug" name="Aug"/>
+    <sym value="+" name="+"/>
+  <!-- Diminished chords -->
+    <sym code="0x03bf" name="circle"/>
+    <sym value="dim" name="dim"/>
+    <sym value="Dim" name="Dim"/>
+  <!-- Half-diminished -->
+    <sym code="0x00f8" name="oslash"/>
 
     </font>
 
@@ -101,6 +181,7 @@
     <sym value="11" name="s11"/>
     <sym value="12" name="s12"/>
     <sym value="13" name="s13"/>
+    <sym value="-" name="s-"/>
     <sym value="(" name="s("/>
     <sym value=")" name="s)"/>
     <sym value="," name="s,"/>
@@ -147,9 +228,106 @@
     <render>oslash</render>
     </token>
 
+  <token class="quality">
+    <name>maj</name>
+    <render>maj</render>
+    </token>
+
+  <token class="quality">
+    <name>Maj</name>
+    <render>Maj</render>
+    </token>
+
+  <token class="quality">
+    <name>Ma</name>
+    <render>Ma</render>
+    </token>
+
+  <token class="quality">
+    <name>ma</name>
+    <render>ma</render>
+    </token>
+
+  <token class="quality">
+    <name>M</name>
+    <render>M</render>
+    </token>
+
+  <token class="quality">
+    <name>t</name>
+    <name>^</name>
+    <name>triangle</name>
+    <render>triangle</render>
+    </token>
+
+  <token class="quality">
+    <name>min</name>
+    <render>min</render>
+    </token>
+
+  <token class="quality">
+    <name>mi</name>
+    <render>mi</render>
+    </token>
+
+  <token class="quality">
+    <name>m</name>
+    <render>m</render>
+    </token>
+
+  <token class="quality">
+    <name>-</name>
+    <render>-</render>
+    </token>
+
+  <token class="quality">
+    <name>aug</name>
+    <render>aug</render>
+    </token>
+
+  <token class="quality">
+    <name>Aug</name>
+    <render>Aug</render>
+    </token>
+
+  <token class="quality">
+    <name>+</name>
+    <render>+</render>
+    </token>
+
+  <token class="quality">
+    <name>o</name>
+    <render>circle</render>
+    </token>
+
+  <token class="quality">
+    <name>dim</name>
+    <render>dim</render>
+    </token>
+
+  <token class="quality">
+    <name>Dim</name>
+    <render>Dim</render>
+    </token>
+
+  <token class="quality">
+    <name>0</name>
+    <render>oslash</render>
+    </token>
+
   <token>
     <name>69</name>
     <render>:push m:0:-6 696 :pop m:0:2 699 m:0:-2</render>
+    </token>
+
+  <token class="extension">
+    <name>6,9</name>
+    <render>s6 m:0:-&mod; s, m:0:&mod; s9</render>
+    </token>
+
+  <token class="extension">
+    <name>6/9</name>
+    <render>m:1:-2 s6 m:-2.5:0 s/ m:-2:7 s9 m:0:-5</render>
     </token>
 
   <token class="extension">
@@ -381,6 +559,41 @@
     <name>t</name>
     <name>^</name>
     <render>striangle</render>
+    </token>
+
+  <token class="modifier">
+    <name>sus</name>
+    <render>m:0:-&modn; sus m:0:&modn;</render>
+    </token>
+  
+  <token class="modifier">
+    <name>su2</name>
+    <render>m:0:-&susn; s2 m:0:&susn;</render>
+    </token>
+
+  <token class="modifier">
+    <name>su3</name>
+    <render>m:0:-&susn; s3 m:0:&susn;</render>
+    </token>
+
+  <token class="modifier">
+    <name>su4</name>
+    <render>m:0:-&susn; s4 m:0:&susn;</render>
+    </token>
+
+  <token class="modifier">
+    <name>su-</name>
+    <render>m:0:-&susn; s- m:0:&susn;</render>
+    </token>
+
+  <token>
+    <name>/</name>
+    <render>m:-0.2:1 / m:0.2:1</render>
+    </token>
+
+  <token>
+    <name>/lowered</name>
+    <render>m:0:3 / m:0:6</render>
     </token>
 
   <renderRoot>:n :a m:0.5:0</renderRoot>

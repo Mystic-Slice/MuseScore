@@ -33,54 +33,47 @@
 <!-- this is additional superscripting to apply to modifier digits -->
   <!ENTITY modn "1">
 <!-- this is additional superscripting to apply to suspension digits -->
-  <!ENTITY susn "7">
+  <!ENTITY susn "2">
 
   ]>
 
 <museScore version="1.24" type="chordStyle" styleName="Jazz" usePresets="true" description="This is Jazz">
 
   <quality q = "major7th">
-    <sym>Maj 7</sym>
-    <sym>triangle 7</sym>
-    <sym>triangle</sym>
+    <sym eAdj = "-2">Ma 7</sym>
+    <sym>maj 7</sym>
   </quality>
+
   <quality q = "minor">
-    <sym>mi</sym>
-    <sym>-</sym>
+    <sym>Mi</sym>
+    <sym>m</sym>
     <sym>min</sym>
+    <sym>-</sym>
   </quality>
+
   <quality q = "augmented">
+    <sym qMag = "0.6" qAdj = "-4">+</sym>
     <sym>aug</sym>
-    <sym>+</sym>
-    <sym>+ 5</sym>
-    <sym>maj #5</sym>
   </quality>
+
   <quality q = "diminished">
-    <sym>circle</sym>
     <sym>dim</sym>
-    <sym>min b5</sym>
+    <sym>degree</sym>
   </quality>
-  <quality q = "half-diminished">
-    <sym>oslash</sym>
-    <sym>0</sym>
-    <sym>min 7 b5</sym>
-  </quality>
+
   <extension e = "sixNine">
-    <sym>69</sym>
-    <sym>6,9</sym>
     <sym>6/9</sym>
+    <sym>69</sym>
   </extension>
+
   <modifier m = "omit">
     <sym>omit</sym>
     <sym>no</sym>
   </modifier>
+
   <modifier m = "suspension">
-    <sym>raised</sym>
     <sym>baseline</sym>
-  </modifier>  
-  <modifier m = "bassNote">
-    <sym>/</sym>
-    <sym>/lowered</sym>
+    <sym>raised</sym>
   </modifier>
 
 <!--
@@ -557,8 +550,7 @@
 
   <token class="modifier">
     <name>4</name>
-    <!-- kludge: 4 used with sus mostly, so lower it accordingly -->
-    <render>m:0:0 s4 m:0:0</render>
+    <render>m:0:-&modn; s4 m:0:&modn;</render>
     </token>
 
   <token class="modifier">

@@ -33,6 +33,7 @@ PlaybackProxyModel::PlaybackProxyModel(QObject* parent, IElementRepositoryServic
     setGlissandoPlaybackModel(new GlissandoPlaybackModel(this, repository));
     setDynamicPlaybackModel(new DynamicPlaybackModel(this, repository));
     setHairpinPlaybackModel(new HairpinPlaybackModel(this, repository));
+    setChordSymbolsPlaybackModel(new ChordSymbolsPlaybackModel(this, repository));
 }
 
 void PlaybackProxyModel::requestResetToDefaults()
@@ -44,6 +45,7 @@ void PlaybackProxyModel::requestResetToDefaults()
     m_glissandoPlaybackModel->requestResetToDefaults();
     m_dynamicPlaybackModel->requestResetToDefaults();
     m_hairpinPlaybackModel->requestResetToDefaults();
+    m_chordSymbolsPlaybackModel->requestResetToDefaults();
 }
 
 bool PlaybackProxyModel::hasAcceptableElements() const
@@ -54,7 +56,8 @@ bool PlaybackProxyModel::hasAcceptableElements() const
            || m_breathPlaybackModel->hasAcceptableElements()
            || m_glissandoPlaybackModel->hasAcceptableElements()
            || m_dynamicPlaybackModel->hasAcceptableElements()
-           || m_hairpinPlaybackModel->hasAcceptableElements();
+           || m_hairpinPlaybackModel->hasAcceptableElements()
+           || m_chordSymbolsPlaybackModel->hasAcceptableElements();
 }
 
 QObject* PlaybackProxyModel::notePlaybackModel() const
@@ -85,6 +88,11 @@ QObject* PlaybackProxyModel::dynamicPlaybackModel() const
 QObject* PlaybackProxyModel::hairpinPlaybackModel() const
 {
     return m_hairpinPlaybackModel;
+}
+
+QObject* PlaybackProxyModel::chordSymbolsPlaybackModel() const
+{
+    return m_chordSymbolsPlaybackModel;
 }
 
 QObject* PlaybackProxyModel::arpeggioPlaybackModel() const
@@ -126,6 +134,12 @@ void PlaybackProxyModel::setHairpinPlaybackModel(HairpinPlaybackModel* hairpinPl
 {
     m_hairpinPlaybackModel = hairpinPlaybackModel;
     emit hairpinPlaybackModelChanged(m_hairpinPlaybackModel);
+}
+
+void PlaybackProxyModel::setChordSymbolsPlaybackModel(ChordSymbolsPlaybackModel* chordSymbolsPlaybackModel)
+{
+    m_chordSymbolsPlaybackModel = chordSymbolsPlaybackModel;
+    emit chordSymbolsPlaybackModelChanged(m_chordSymbolsPlaybackModel);
 }
 
 void PlaybackProxyModel::setArpeggioPlaybackModel(ArpeggioPlaybackModel* arpeggioPlaybackModel)
