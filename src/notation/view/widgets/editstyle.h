@@ -47,6 +47,8 @@ public:
     void gotoElement(Element* e);
     static bool elementHasPage(Element* e);
 
+    Q_INVOKABLE void goToChordTextSettings();
+
 public slots:
     void accept();
     void reject();
