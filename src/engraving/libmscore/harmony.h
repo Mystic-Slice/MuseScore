@@ -149,7 +149,6 @@ public:
     Segment* getParentSeg() const;
 
     const ChordDescription* descr() const;
-    const ChordDescription* descr(const QString&, const ParsedChord* pc = 0) const;
     const ChordDescription* getDescription();
     const ChordDescription* getDescription(const QString&, const ParsedChord* pc = 0);
     const ChordDescription* generateDescription();
