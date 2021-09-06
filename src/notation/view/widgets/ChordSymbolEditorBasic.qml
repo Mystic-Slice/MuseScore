@@ -113,9 +113,8 @@ Flickable {
 
                 ButtonGroup.group: bassNoteListView.children
 
-                StyledTextLabel {
-                    text: modelData
-                }
+                iconCode: root.editorModel.getIconFromText(modelData)
+                font.pointSize: 50
 
                 checked: (root.editorModel.bassNoteIndex === index) && root.editorModel.usePresets
 
@@ -151,9 +150,7 @@ Flickable {
 
                 ButtonGroup.group: majorSeventhListView.children
 
-                StyledTextLabel {
-                    text: modelData
-                }
+                iconCode: root.editorModel.getIconFromText(modelData)
 
                 checked: (root.editorModel.majorSeventhIndex === index) && root.editorModel.usePresets
 
@@ -189,9 +186,7 @@ Flickable {
 
                 ButtonGroup.group: halfDiminishedListView.children
 
-                StyledTextLabel {
-                    text: modelData
-                }
+                iconCode: root.editorModel.getIconFromText(modelData)
 
                 checked: (root.editorModel.halfDiminishedIndex === index) && root.editorModel.usePresets
 
@@ -227,9 +222,7 @@ Flickable {
 
                 ButtonGroup.group: minorListView.children
 
-                StyledTextLabel {
-                    text: modelData
-                }
+                iconCode: root.editorModel.getIconFromText(modelData)
 
                 checked: (root.editorModel.minorIndex === index) && root.editorModel.usePresets
 
@@ -265,9 +258,7 @@ Flickable {
 
                 ButtonGroup.group: augmentedListView.children
 
-                StyledTextLabel {
-                    text: modelData
-                }
+                iconCode: root.editorModel.getIconFromText(modelData)
 
                 checked: (root.editorModel.augmentedIndex === index) && root.editorModel.usePresets
 
@@ -303,9 +294,7 @@ Flickable {
 
                 ButtonGroup.group: diminishedListView.children
 
-                StyledTextLabel {
-                    text: modelData
-                }
+                iconCode: root.editorModel.getIconFromText(modelData)
 
                 checked: (root.editorModel.diminishedIndex === index) && root.editorModel.usePresets
 
@@ -341,9 +330,7 @@ Flickable {
 
                 ButtonGroup.group: sixNineListView.children
 
-                StyledTextLabel {
-                    text: modelData
-                }
+                iconCode: root.editorModel.getIconFromText(modelData)
 
                 checked: (root.editorModel.sixNineIndex === index) && root.editorModel.usePresets
 
@@ -379,9 +366,7 @@ Flickable {
 
                 ButtonGroup.group: omitListView.children
 
-                StyledTextLabel {
-                    text: modelData
-                }
+                iconCode: root.editorModel.getIconFromText(modelData)
 
                 checked: (root.editorModel.omitIndex === index) && root.editorModel.usePresets
 
@@ -417,9 +402,7 @@ Flickable {
 
                 ButtonGroup.group: suspensionListView.children
 
-                StyledTextLabel {
-                    text: modelData
-                }
+                iconCode: root.editorModel.getIconFromText(modelData)
 
                 checked: (root.editorModel.suspensionIndex === index) && root.editorModel.usePresets
 
@@ -456,9 +439,8 @@ Flickable {
 
                 ButtonGroup.group: stackModifiers.radioButtonGroup
 
-                StyledTextLabel{
-                    text: qsTrc("notation",modelData["name"])
-                }
+                iconCode: root.editorModel.getIconFromText(modelData["name"])
+
                 checked: (root.editorModel.stackModifiers === modelData["value"]) && root.editorModel.usePresets
 
                 onToggled: {

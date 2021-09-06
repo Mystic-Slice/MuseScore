@@ -104,6 +104,7 @@ RadioDelegate {
 
             StyledIconLabel {
                 iconCode: root.iconCode
+//                font.font.pointSize:50
             }
         }
 

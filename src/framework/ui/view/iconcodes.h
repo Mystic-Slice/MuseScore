@@ -323,7 +323,7 @@ public:
         JAZZ_MAJ7_SCMA7= 0xF3DC,
         JAZZ_MAJ7_MA7= 0xF3DD,
         JAZZ_MAJ7_MAJ7= 0xF3DE,
-        JAZZ_AUG_PLUS= 0xF3DF,
+        JAZZ_AUG_SPLUS= 0xF3DF,
         JAZZ_AUG_SAUG= 0xF3E0, // SAUG = Small aug
         JAZZ_AUG_AUG= 0xF3E1,
         JAZZ_DIM_DIM= 0xF3E2,
