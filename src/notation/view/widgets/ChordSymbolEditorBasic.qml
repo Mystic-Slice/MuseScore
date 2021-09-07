@@ -114,7 +114,7 @@ Flickable {
                 ButtonGroup.group: bassNoteListView.children
 
                 iconCode: root.editorModel.getIconFromText(modelData)
-                font.pointSize: 50
+                text: modelData
 
                 checked: (root.editorModel.bassNoteIndex === index) && root.editorModel.usePresets
 
@@ -151,6 +151,7 @@ Flickable {
                 ButtonGroup.group: majorSeventhListView.children
 
                 iconCode: root.editorModel.getIconFromText(modelData)
+                text: modelData
 
                 checked: (root.editorModel.majorSeventhIndex === index) && root.editorModel.usePresets
 
@@ -187,6 +188,7 @@ Flickable {
                 ButtonGroup.group: halfDiminishedListView.children
 
                 iconCode: root.editorModel.getIconFromText(modelData)
+                text: modelData
 
                 checked: (root.editorModel.halfDiminishedIndex === index) && root.editorModel.usePresets
 
@@ -223,6 +225,7 @@ Flickable {
                 ButtonGroup.group: minorListView.children
 
                 iconCode: root.editorModel.getIconFromText(modelData)
+                text: modelData
 
                 checked: (root.editorModel.minorIndex === index) && root.editorModel.usePresets
 
@@ -259,6 +262,7 @@ Flickable {
                 ButtonGroup.group: augmentedListView.children
 
                 iconCode: root.editorModel.getIconFromText(modelData)
+                text: modelData
 
                 checked: (root.editorModel.augmentedIndex === index) && root.editorModel.usePresets
 
@@ -295,6 +299,7 @@ Flickable {
                 ButtonGroup.group: diminishedListView.children
 
                 iconCode: root.editorModel.getIconFromText(modelData)
+                text: modelData
 
                 checked: (root.editorModel.diminishedIndex === index) && root.editorModel.usePresets
 
@@ -331,6 +336,7 @@ Flickable {
                 ButtonGroup.group: sixNineListView.children
 
                 iconCode: root.editorModel.getIconFromText(modelData)
+                text: modelData
 
                 checked: (root.editorModel.sixNineIndex === index) && root.editorModel.usePresets
 
@@ -367,6 +373,7 @@ Flickable {
                 ButtonGroup.group: omitListView.children
 
                 iconCode: root.editorModel.getIconFromText(modelData)
+                text: modelData
 
                 checked: (root.editorModel.omitIndex === index) && root.editorModel.usePresets
 
@@ -403,6 +410,7 @@ Flickable {
                 ButtonGroup.group: suspensionListView.children
 
                 iconCode: root.editorModel.getIconFromText(modelData)
+                text: modelData
 
                 checked: (root.editorModel.suspensionIndex === index) && root.editorModel.usePresets
 
@@ -440,6 +448,7 @@ Flickable {
                 ButtonGroup.group: stackModifiers.radioButtonGroup
 
                 iconCode: root.editorModel.getIconFromText(modelData["name"])
+                text: modelData["name"]
 
                 checked: (root.editorModel.stackModifiers === modelData["value"]) && root.editorModel.usePresets
 

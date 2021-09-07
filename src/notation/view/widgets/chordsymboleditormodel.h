@@ -308,7 +308,7 @@ private:
         { "French", Ms::Sid::useFrenchNoteNames }
     };
 
-    QStringList chordSymbolStyles = { "Pop/Contemporary", "Jazz", "Symbols" };
+    QStringList chordSymbolStyles = { "Pop/Contemporary", "Jazz", "Symbols", "No preset style" };
 };
 }
 #endif // CHORDSYMBOLEDITORMODEL_H

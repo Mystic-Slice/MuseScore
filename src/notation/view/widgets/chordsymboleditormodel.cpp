@@ -1351,8 +1351,19 @@ int ChordSymbolEditorModel::getIconFromText(QString qualSym)
     };
     mu::ui::IconCode::Code iconCode = mu::ui::IconCode::Code::NONE;
     QString currentStyle = m_styles.at(m_currentStyleIndex).styleName;
+
     if (stringToIconcode.find(currentStyle) != stringToIconcode.end()) {
         iconCode = stringToIconcode[currentStyle][qualSym];
+    } else {
+        QString descFileWithPresets
+            = globalContext()->currentNotation()->style()->styleValue(Ms::Sid::chordDescriptionFileWithPresets).toString();
+        for (auto style: m_styles) {
+            if (style.fileName == descFileWithPresets) {
+                if (stringToIconcode.find(style.styleName) != stringToIconcode.end()) {
+                    iconCode = stringToIconcode[currentStyle][qualSym];
+                }
+            }
+        }
     }
 
     return static_cast<int>(iconCode);
