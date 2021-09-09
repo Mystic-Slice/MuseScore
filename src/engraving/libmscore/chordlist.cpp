@@ -2194,30 +2194,35 @@ void ParsedChord::respellQualitySymbols(const ChordList* cl)
                 }
             } else if (tok.names.contains("sus")) {
                 QString sym = cl->qualitySymbols.value("suspension");
+                QString prefix;
                 if (sym == "raised") {
-                    QStringList allModifiers
-                        = { "b", "bb", "#", "##", "natural", "sus", "alt", "alt#", "altb", "omit", "no", "add", "maj", "/" };
-                    bool foundNextModifier = false;
-                    while (!foundNextModifier) {
-                        ChordToken susTok = _tokenList.at(index);
-                        if (susTok.names.first() != "sus") {
-                            ChordToken newTok;
-                            newTok.tokenClass = ChordTokenClass::MODIFIER;
-                            newTok.names += "su" + susTok.names.first();
-                            _tokenList.removeAt(index);
-                            _tokenList.insert(index, newTok);
-                        }
-                        index++;
-                        if (index >= _tokenList.size()) {
-                            break;
-                        }
-                        susTok = _tokenList.at(index);
-                        if (allModifiers.contains(susTok.names.first())) {
-                            foundNextModifier = true;
-                        }
-                    }
-                    index--;
+                    prefix = "su";
+                } else if (sym == "baseline") {
+                    prefix = "sd";
                 }
+                QStringList allModifiers
+                    = { "b", "bb", "#", "##", "natural", "sus", "alt", "alt#", "altb", "omit", "no", "add", "maj", "/" };
+                bool foundNextModifier = false;
+                while (!foundNextModifier) {
+                    ChordToken susTok = _tokenList.at(index);
+                    qDebug() << susTok.names;
+                    if (susTok.names.first() != "sus") {
+                        ChordToken newTok;
+                        newTok.tokenClass = ChordTokenClass::MODIFIER;
+                        newTok.names += prefix + susTok.names.first();
+                        _tokenList.removeAt(index);
+                        _tokenList.insert(index, newTok);
+                    }
+                    index++;
+                    if (index >= _tokenList.size()) {
+                        break;
+                    }
+                    susTok = _tokenList.at(index);
+                    if (allModifiers.contains(susTok.names.first())) {
+                        foundNextModifier = true;
+                    }
+                }
+                index--;
             }
         }
     }

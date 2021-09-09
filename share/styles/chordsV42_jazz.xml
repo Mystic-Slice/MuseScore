@@ -34,6 +34,8 @@
   <!ENTITY modn "1">
 <!-- this is additional superscripting to apply to suspension digits -->
   <!ENTITY susn "2">
+  <!ENTITY baseLine "4">
+  <!ENTITY baseLineMinus "2">
 
   ]>
 
@@ -627,27 +629,57 @@
 
   <token class="modifier">
     <name>sus</name>
-    <render>m:0:-&modn; sus m:0:&modn;</render>
+    <render>sus</render>
     </token>
   
   <token class="modifier">
     <name>su2</name>
-    <render>m:0:-&susn; s2 m:0:&susn;</render>
+    <render>m:0:&susn; s2 m:0:-&susn;</render>
     </token>
 
   <token class="modifier">
     <name>su3</name>
-    <render>m:0:-&susn; s3 m:0:&susn;</render>
+    <render>m:0:&susn; s3 m:0:-&susn;</render>
     </token>
 
   <token class="modifier">
     <name>su4</name>
-    <render>m:0:-&susn; s4 m:0:&susn;</render>
+    <render>m:0:&susn; s4 m:0:-&susn;</render>
     </token>
 
   <token class="modifier">
     <name>su-</name>
-    <render>m:0:-&susn; s- m:0:&susn;</render>
+    <render>s-</render>
+    </token>
+
+  <token class="modifier">
+    <name>sd2</name>
+    <render>m:0:&baseLine; s2 m:0:-&baseLine;</render>
+    </token>
+
+  <token class="modifier">
+    <name>sd3</name>
+    <render>m:0:&baseLine; s3 m:0:-&baseLine;</render>
+    </token>
+
+  <token class="modifier">
+    <name>sd4</name>
+    <render>m:0:&baseLine; s4 m:0:-&baseLine;</render>
+    </token>
+
+  <token class="modifier">
+    <name>sd-</name>
+    <render>m:0:&baseLineMinus; s- m:0:-&baseLineMinus;</render>
+    </token>
+
+  <token class="modifier">
+    <name>sus(</name>
+    <render>s(</render>
+    </token>
+
+  <token class="modifier">
+    <name>sus)</name>
+    <render>s)</render>
     </token>
 
   <token>
