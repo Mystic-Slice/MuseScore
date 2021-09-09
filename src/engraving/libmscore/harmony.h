@@ -45,6 +45,7 @@ struct TextSegment {
     bool select;
 
     qreal width() const;
+    qreal height() const;
     mu::RectF boundingRect() const;
     mu::RectF tightBoundingRect() const;
     mu::PointF pos() const { return mu::PointF(x, y) + offset; }
@@ -115,6 +116,8 @@ class Harmony final : public TextBase
     void render(const QString&, qreal&, qreal&);
     void render(const QList<RenderAction>& renderList, qreal&, qreal&, int tpc, NoteSpellingType noteSpelling = NoteSpellingType::STANDARD,
                 NoteCaseType noteCase = NoteCaseType::AUTO);
+    void renderWidth(const QList<RenderAction>& renderList, qreal&, qreal&, int tpc,
+                     NoteSpellingType noteSpelling = NoteSpellingType::STANDARD, NoteCaseType noteCase = NoteCaseType::AUTO);
     Sid getPropertyStyle(Pid) const override;
 
     Harmony* findInSeg(Segment* seg) const;

@@ -147,7 +147,7 @@
     </font>
 
   <font class="modifier" family="MuseJazz Text">
-
+    <mag>1.3</mag>
     <sym code="0xe188" name="sb"/>
     <sym code="0xe189" name="s#"/>
     <sym code="0xe18b" name="sadd"/>
