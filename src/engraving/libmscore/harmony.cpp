@@ -1519,6 +1519,7 @@ void Harmony::draw(mu::draw::Painter* painter) const
     painter->setBrush(BrushStyle::NoBrush);
     Color color = textColor();
     painter->setPen(color);
+    qreal maxHt = 0;
     for (const TextSegment* ts : textList) {
         mu::draw::Font f(ts->m_font);
         f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
@@ -1528,6 +1529,14 @@ void Harmony::draw(mu::draw::Painter* painter) const
         painter->setFont(f);
         painter->drawText(ts->pos(), ts->text);
 #endif
+        maxHt = ts->boundingRect().height() > maxHt ? ts->boundingRect().height() : maxHt;
+    }
+    if (score()->style().styleV(Ms::Sid::chordBassNote).toString() == "/stacked") {
+        Color color = textColor();
+        Pen pen(color, frameWidth().val() * spatium(), PenStyle::SolidLine,
+                PenCapStyle::SquareCap, PenJoinStyle::MiterJoin);
+        painter->setPen(pen);
+        painter->drawLine(0, bbox().height() * 0.1, bbox().width(), bbox().height() * 0.1);
     }
 }
 
@@ -1910,11 +1919,17 @@ void Harmony::render()
     // render bass
     if (_baseTpc != Tpc::TPC_INVALID) {
         if (score()->style().styleV(Ms::Sid::chordBassNote).toString() == "/stacked") {
+            qreal maxHt = 0;
+            for (const TextSegment* ts : textList) {
+                mu::draw::Font f(ts->m_font);
+                f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
+                maxHt = ts->boundingRect().height() > maxHt ? ts->boundingRect().height() : maxHt;
+            }
             qreal x0 = x / 2;
-            qreal y0 = y / 2;
+            qreal y0 = maxHt;
             renderWidth(chordList->renderListBase, x0, y0, _baseTpc, _baseSpelling, _baseRenderCase);
             x0 = x / 2 - (x0 - x / 2) / 2;
-            y0 = _harmonyHeight / 2;
+            y0 = maxHt;
             render(chordList->renderListBase, x0, y0, _baseTpc, _baseSpelling, _baseRenderCase);
         } else {
             render(chordList->renderListBase, x, y, _baseTpc, _baseSpelling, _baseRenderCase);
@@ -1957,11 +1972,17 @@ void Harmony::render()
 
         if (capoBassTpc != Tpc::TPC_INVALID) {
             if (score()->style().styleV(Ms::Sid::chordBassNote).toString() == "/stacked") {
+                qreal maxHt = 0;
+                for (const TextSegment* ts : textList) {
+                    mu::draw::Font f(ts->m_font);
+                    f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
+                    maxHt = ts->boundingRect().height() > maxHt ? ts->boundingRect().height() : maxHt;
+                }
                 qreal x0 = (3 * x) / 4;
-                qreal y0 = (3 * y) / 4;
+                qreal y0 = maxHt;
                 renderWidth(chordList->renderListBase, x0, y0, capoBassTpc, _baseSpelling, _baseRenderCase);
                 x0 = (3 * x) / 4 - (x0 - ((3 * x) / 4)) / 2;
-                y0 = _harmonyHeight / 2;
+                y0 = maxHt;
                 render(chordList->renderListBase, x0, y0, capoBassTpc, _baseSpelling, _baseRenderCase);
             } else {
                 render(chordList->renderListBase, x, y, capoBassTpc, _baseSpelling, _baseRenderCase);

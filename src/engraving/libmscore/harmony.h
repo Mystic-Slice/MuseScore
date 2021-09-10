@@ -45,7 +45,6 @@ struct TextSegment {
     bool select;
 
     qreal width() const;
-    qreal height() const;
     mu::RectF boundingRect() const;
     mu::RectF tightBoundingRect() const;
     mu::PointF pos() const { return mu::PointF(x, y) + offset; }
