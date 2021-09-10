@@ -1956,7 +1956,16 @@ void Harmony::render()
         }
 
         if (capoBassTpc != Tpc::TPC_INVALID) {
-            render(chordList->renderListBase, x, y, capoBassTpc, _baseSpelling, _baseRenderCase);
+            if (score()->style().styleV(Ms::Sid::chordBassNote).toString() == "/stacked") {
+                qreal x0 = (3 * x) / 4;
+                qreal y0 = (3 * y) / 4;
+                renderWidth(chordList->renderListBase, x0, y0, capoBassTpc, _baseSpelling, _baseRenderCase);
+                x0 = (3 * x) / 4 - (x0 - ((3 * x) / 4)) / 2;
+                y0 = _harmonyHeight / 2;
+                render(chordList->renderListBase, x0, y0, capoBassTpc, _baseSpelling, _baseRenderCase);
+            } else {
+                render(chordList->renderListBase, x, y, capoBassTpc, _baseSpelling, _baseRenderCase);
+            }
         }
         render(")", x, y);
     }
