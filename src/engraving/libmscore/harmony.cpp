@@ -1623,6 +1623,12 @@ void Harmony::render(const QString& s, qreal& x, qreal& y)
     if (!s.isEmpty()) {
         mu::draw::Font f = _harmonyType != HarmonyType::ROMAN ? fontList[fontIdx] : font();
         TextSegment* ts = new TextSegment(s, f, x, y);
+        if (s == ")big" || s == "(big") {
+            int ht = ts->boundingRect().height();
+            ts->m_font.setPointSizeF(2 * f.pointSizeF());
+            ts->text = s[0];
+            ts->y = ht * 0.75;
+        }
         textList.append(ts);
         x += ts->width();
     }
@@ -1917,8 +1923,9 @@ void Harmony::render()
     }
 
     // render bass
+    bool stackedBass = score()->style().styleV(Ms::Sid::chordBassNote).toString() == "/stacked";
     if (_baseTpc != Tpc::TPC_INVALID) {
-        if (score()->style().styleV(Ms::Sid::chordBassNote).toString() == "/stacked") {
+        if (stackedBass) {
             qreal maxHt = 0;
             for (const TextSegment* ts : textList) {
                 mu::draw::Font f(ts->m_font);
@@ -1961,7 +1968,11 @@ void Harmony::render()
             }
         }
 
-        render("(", x, y);
+        if (stackedBass) {
+            render("(big", x, y);
+        } else {
+            render("(", x, y);
+        }
         render(chordList->renderListRoot, x, y, capoRootTpc, _rootSpelling, _rootRenderCase);
 
         // render extension
@@ -1971,12 +1982,12 @@ void Harmony::render()
         }
 
         if (capoBassTpc != Tpc::TPC_INVALID) {
-            if (score()->style().styleV(Ms::Sid::chordBassNote).toString() == "/stacked") {
+            if (stackedBass) {
                 qreal maxHt = 0;
                 for (const TextSegment* ts : textList) {
                     mu::draw::Font f(ts->m_font);
                     f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
-                    maxHt = ts->boundingRect().height() > maxHt ? ts->boundingRect().height() : maxHt;
+                    maxHt = (ts->boundingRect().height() > maxHt) && (ts->text != "(") ? ts->boundingRect().height() : maxHt;
                 }
                 qreal x0 = (3 * x) / 4;
                 qreal y0 = maxHt;
@@ -1988,7 +1999,11 @@ void Harmony::render()
                 render(chordList->renderListBase, x, y, capoBassTpc, _baseSpelling, _baseRenderCase);
             }
         }
-        render(")", x, y);
+        if (stackedBass) {
+            render(")big", x, y);
+        } else {
+            render(")", x, y);
+        }
     }
 
     if (_rightParen) {
